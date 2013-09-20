@@ -23,18 +23,18 @@
 			this.x = x;
 			this.y = y;
 			parent.addChild(this);
-			_tx = Math.floor(x / 36)
-			_ty = Math.floor(y / 36)
+			_tx = Math.floor(x / 36);
+			_ty = Math.floor(y / 36);
 			_main = parent as Main;
 			updatePiece(type, black);
 		}
 		
-		public function updatePiece(type:int, black:Boolean) {
+		public function updatePiece(type:int, black:Boolean):void {
 			this.type = type;
 			if (black)
 				setBlack();
 			else
-				setWhite()
+				setWhite();
 		}
 		
 		private function set type(value:int):void {
@@ -351,6 +351,10 @@
 				}
 			}
 			return NUM;
+		}
+		
+		public function removeSelfFromStage():void {
+			parent.removeChild(this);
 		}
 	}
 }

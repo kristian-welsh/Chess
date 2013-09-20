@@ -77,7 +77,7 @@ package src {
 			addCursor();
 		}
 		
-		private function addPieces() {
+		private function addPieces():void {
 			for (var i:int = 0; i < boardData.length; i++)
 				addRowOfPieces(i);
 		}
@@ -97,7 +97,7 @@ package src {
 			return tileIndex * TILE_WIDTH + BORDER_WIDTH;
 		}
 		
-		private function addCursor() {
+		private function addCursor():void {
 			cursor = new Cursor(this);
 		}
 		

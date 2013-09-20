@@ -26,12 +26,9 @@
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
 		
-		public function moveCursor(event:MouseEvent) {
+		public function moveCursor(event:MouseEvent):void {
 			updatePositionVariables();
-			
 			moveFreelyIfNoSelection();
-			
-			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
 		
 		private function updatePositionVariables():void {
@@ -119,10 +116,9 @@
 			this.gotoAndStop(1);
 		}
 		
-		private function makeMove(event:MouseEvent) {
+		private function makeMove(event:MouseEvent):void {
 			removeLegalMoveIndicators();
 			updateMainData(event.target.x, event.target.y);
-			clearSelectedTile();
 			deselectTile();
 			updatePos();
 			delayNextClick();
@@ -133,21 +129,25 @@
 				_legalMoveIndicators[i].parent.removeChild(_legalMoveIndicators[i]);
 			_legalMoveIndicators = [];
 		}
-		
+		// some renaming needed with these
 		private function updateMainData(targetX:Number, targetY:Number):void {
-			var xIndex:int = tileIndexAt(targetX);
-			var yIndex:int = tileIndexAt(targetY);
-			_main._chessPieces[yIndex][xIndex].updatePiece(_selectedTile._type, false);
+			var xIndex:uint = tileIndexAt(targetX);
+			var yIndex:uint = tileIndexAt(targetY);
+			_main._chessPieces[yIndex][xIndex].updatePiece(_selectedTile._type, _selectedTile._black);
 			_main.boardData[yIndex][xIndex] = [_selectedTile._type, _selectedTile._black];
-			_main.boardData[tileIndexAt(_selectedTile.y)][tileIndexAt(_selectedTile.x)] = [0, 1];
+			clearSelectedTile(_selectedTile);
 		}
 		
-		private function clearSelectedTile():void {
-			_selectedTile.updatePiece(0, true);
+		private function clearSelectedTile(tile:ChessPiece):void {
+			var xIndex:uint = tileIndexAt(tile.x);
+			var yIndex:uint = tileIndexAt(tile.y);
+			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.makeChessPiece(tile.x, tile.y, 0, true, _main);
+			_main.boardData[yIndex][xIndex] = [0, 1];
+			tile.removeSelfFromStage();
 		}
 		
 		/**
-		 * Workarround for glitch(?) that re-selects chess-pieces after you move them.
+		 * Timers are a workaround for a glitch(?) that re-selects chess-pieces after you move them.
 		 */
 		private function delayNextClick():void {
 			_container.removeEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
@@ -156,7 +156,7 @@
 			tets.start();
 		}
 		
-		private function replenishClickListener(event:TimerEvent) {
+		private function replenishClickListener(event:TimerEvent):void {
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
 	}
