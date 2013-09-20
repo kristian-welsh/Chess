@@ -1,4 +1,4 @@
-﻿package {
+﻿package src {
 	import flash.display.*;
 	
 	/** @author kriswelsh@gmail.com */

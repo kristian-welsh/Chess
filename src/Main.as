@@ -27,7 +27,7 @@
 
 
 	 ERRORS TO WORK ON:
-	 I AM NOT EATING CAKE RIGHT NOW
+	 FIND A BETTER WORK AROUND FOR SINGLE CLICK RE-SELECTION IN CURSOR CLASS
 
 	 THINGS TO OPTIMISE:
 	 PIECE MOVEMENT FUNCTIONS
@@ -37,8 +37,7 @@
 	 I NEED TO START USING ASUNIT UNIT TESTS
 
  */
-package {
-	import ChessPiece;
+package src {
 	import flash.display.Sprite;
 	
 	public class Main extends Sprite {
@@ -61,6 +60,7 @@ package {
 		private var p10 = [4, 1];
 		private var p11 = [5, 1];
 		private var p12 = [6, 1];
+		
 		private var _boardData:Array = [
 		[p08, p09, p10, p11, p12, p10, p09, p08],
 		[p07, p07, p07, p07, p07, p07, p07, p07],
@@ -70,15 +70,6 @@ package {
 		[p00, p00, p00, p00, p00, p00, p00, p00],
 		[p01, p01, p01, p01, p01, p01, p01, p01],
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
-		/*private var _boardData:Array=[
-		[p00,p00,p00,p00,p12,p00,p00,p00],
-		[p00,p00,p00,p00,p00,p00,p00,p00],
-		[p00,p00,p00,p05,p00,p00,p00,p00],
-		[p00,p00,p00,p00,p00,p00,p00,p00],
-		[p00,p00,p00,p00,p00,p00,p04,p00],
-		[p00,p00,p00,p00,p00,p00,p00,p00],
-		[p00,p00,p00,p00,p00,p00,p00,p00],
-		[p00,p00,p00,p00,p00,p00,p00,p00]];*/
 		
 		public function Main():void {
 			addChild(new ChessBoard());
@@ -98,8 +89,7 @@ package {
 		}
 		
 		private function addPiece(i:int, j:int):void {
-			var curPiece:ChessPiece = new ChessPiece(tilePos(j),tilePos(i), boardData[i][j][0], boardData[i][j][1], this);
-			addChild(curPiece);
+			var curPiece:ChessPiece = ChessPieceFactory.makeChessPiece(tilePos(j), tilePos(i), boardData[i][j][0], boardData[i][j][1], this);
 			_chessPieces[i].push(curPiece);
 		}
 		

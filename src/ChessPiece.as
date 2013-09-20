@@ -1,14 +1,13 @@
-﻿package {
+﻿package src {
 	import flash.display.MovieClip;
 	
 	public class ChessPiece extends MovieClip {
-		
 		public var _black:Boolean;
 		public var _type:int;
 		public var _tx:int;
 		public var _ty:int;
 		
-		private var _par:Main;
+		private var _main:Main;
 		private var U_tiles:int;
 		private var D_tiles:int;
 		private var L_tiles:int;
@@ -20,11 +19,13 @@
 		private var i:int;
 		
 		public function ChessPiece(x:Number, y:Number, type:int, black:Boolean, parent:Main):void {
+			super();
 			this.x = x;
 			this.y = y;
+			parent.addChild(this);
 			_tx = Math.floor(x / 36)
 			_ty = Math.floor(y / 36)
-			_par = parent as Main;
+			_main = parent as Main;
 			updatePiece(type, black);
 		}
 		
@@ -55,17 +56,16 @@
 		}
 		
 		public function legalMoves():Array {
-			
 			//NEXT TO OPTIMISE: COMBINE ALL DIAGONAL AND NON-DIAGONAL CALCULATIONS IN ONE FUNCTION (SEPERATE) (ADDITIONAL UP FOR PAWN)
 			//knight if statement may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))
-			U_tiles = foward(7);
+			U_tiles = foward(9);
 			D_tiles = back(7);
 			L_tiles = left(7);
 			R_tiles = right(7);
 			UL_tiles = UL(7);
 			UR_tiles = UR(7);
 			DL_tiles = DL(7);
-			DR_tiles = DR(7);
+			DR_tiles = DR(10);
 			var VERTS:Array;
 			var DIAGS:Array;
 			var i:int;
@@ -76,28 +76,28 @@
 					break;
 				case 1: //PAWN
 					if (U_tiles > 1 && _ty == 6) {
-						if (_par.boardData[_ty - 2][_tx][0] == 0) {
+						if (_main.boardData[_ty - 2][_tx][0] == 0) {
 							return_me.push([_tx, _ty - 2]);
 						}
 					}
 					if (U_tiles > 0) {
-						if (_par.boardData[_ty - 1][_tx][0] == 0) {
+						if (_main.boardData[_ty - 1][_tx][0] == 0) {
 							return_me.push([_tx, _ty - 1]);
 						}
 					}
 					var returnvar:Array = []
-					var arrW:int = _par.boardData[0].length - 1;
+					var arrW:int = _main.boardData[0].length - 1;
 					if (_ty > 0) {
 						if (arrW >= _tx + 1) {
-							if (_par.boardData[_ty - 1][_tx + 1][1] == 1) {
-								if (_par.boardData[_ty - 1][_tx + 1][0] != 0) {
+							if (_main.boardData[_ty - 1][_tx + 1][1] == 1) {
+								if (_main.boardData[_ty - 1][_tx + 1][0] != 0) {
 									return_me.push([_tx + 1, _ty - 1]);
 								}
 							}
 						}
 						if (0 < _tx) {
-							if (_par.boardData[_ty - 1][_tx - 1][1] == 1) {
-								if (_par.boardData[_ty - 1][_tx - 1][0] != 0) {
+							if (_main.boardData[_ty - 1][_tx - 1][1] == 1) {
+								if (_main.boardData[_ty - 1][_tx - 1][0] != 0) {
 									return_me.push([_tx - 1, _ty - 1]);
 								}
 							}
@@ -209,10 +209,10 @@
 		
 		public function knightMove(A:int, B:int, C:Boolean, D:Boolean):Array {
 			var returnvar:Array = []
-			var arrL1:int = _par.boardData.length - 1;
-			var arrL2:int = _par.boardData[0].length - 1;
+			var arrL1:int = _main.boardData.length - 1;
+			var arrL2:int = _main.boardData[0].length - 1;
 			if (arrL1 >= (A) && arrL2 >= B && C && D) {
-				if (_par.boardData[A][B][1] == 1) {
+				if (_main.boardData[A][B][1] == 1) {
 					returnvar = [B, A];
 				} else {
 					return [];
@@ -221,14 +221,14 @@
 			return returnvar;
 		}
 		
-		public function foward(NUM):int {
+		public function foward(NUM:uint):uint {
 			var i:int;
 			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty - i - 1]) {
-					if (_par.boardData[_ty - i - 1][_tx][1] == 0) {
+				if (_main.boardData[_ty - i - 1]) {
+					if (_main.boardData[_ty - i - 1][_tx][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty - i - 1][_tx][1] == 1 && _par.boardData[_ty - i - 1][_tx][0] > 0) {
+					if (_main.boardData[_ty - i - 1][_tx][1] == 1 && _main.boardData[_ty - i - 1][_tx][0] > 0) {
 						return i + 1;
 					}
 				} else {
@@ -238,14 +238,14 @@
 			return NUM;
 		}
 		
-		public function back(NUM):int {
+		public function back(NUM:uint):uint {
 			var i:int;
 			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty + i + 1]) {
-					if (_par.boardData[_ty + i + 1][_tx][1] == 0) {
+				if (_main.boardData[_ty + i + 1]) {
+					if (_main.boardData[_ty + i + 1][_tx][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty + i + 1][_tx][1] == 1 && _par.boardData[_ty + i + 1][_tx][0] > 0) {
+					if (_main.boardData[_ty + i + 1][_tx][1] == 1 && _main.boardData[_ty + i + 1][_tx][0] > 0) {
 						return i + 1;
 					}
 				} else {
@@ -255,14 +255,14 @@
 			return NUM;
 		}
 		
-		public function left(NUM):int {
+		public function left(NUM:uint):uint {
 			var i:int;
 			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty][_tx - i - 1]) {
-					if (_par.boardData[_ty][_tx - i - 1][1] == 0) {
+				if (_main.boardData[_ty][_tx - i - 1]) {
+					if (_main.boardData[_ty][_tx - i - 1][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty][_tx - i - 1][1] == 1 && _par.boardData[_ty][_tx - i - 1][0] > 0) {
+					if (_main.boardData[_ty][_tx - i - 1][1] == 1 && _main.boardData[_ty][_tx - i - 1][0] > 0) {
 						return i + 1;
 					}
 				} else {
@@ -272,14 +272,14 @@
 			return NUM;
 		}
 		
-		public function right(NUM):int {
+		public function right(NUM:uint):uint {
 			var i:int;
 			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty][_tx + i + 1]) {
-					if (_par.boardData[_ty][_tx + i + 1][1] == 0) {
+				if (_main.boardData[_ty][_tx + i + 1]) {
+					if (_main.boardData[_ty][_tx + i + 1][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty][_tx + i + 1][1] == 1 && _par.boardData[_ty][_tx + i + 1][0] > 0) {
+					if (_main.boardData[_ty][_tx + i + 1][1] == 1 && _main.boardData[_ty][_tx + i + 1][0] > 0) {
 						return i + 1;
 					}
 				} else {
@@ -289,14 +289,14 @@
 			return NUM;
 		}
 		
-		public function UL(NUM):int {
+		public function UL(NUM:uint):uint {
 			var i:int;
 			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty - i - 1] && _par.boardData[_ty - i - 1][_tx - i - 1]) {
-					if (_par.boardData[_ty - i - 1][_tx - i - 1][1] == 0) {
+				if (_main.boardData[_ty - i - 1] && _main.boardData[_ty - i - 1][_tx - i - 1]) {
+					if (_main.boardData[_ty - i - 1][_tx - i - 1][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty - i - 1][_tx - i - 1][1] == 1 && _par.boardData[_ty - i - 1][_tx - i - 1][0] > 0) {
+					if (_main.boardData[_ty - i - 1][_tx - i - 1][1] == 1 && _main.boardData[_ty - i - 1][_tx - i - 1][0] > 0) {
 						return i + 1;
 					}
 				} else {
@@ -305,14 +305,14 @@
 			}
 			return NUM;
 		}
-		public function UR(NUM):int {
+		public function UR(NUM:uint):uint {
 			var i:int;
 			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty - i - 1] && _par.boardData[_ty - i - 1][_tx + i + 1]) {
-					if (_par.boardData[_ty - i - 1][_tx + i + 1][1] == 0) {
+				if (_main.boardData[_ty - i - 1] && _main.boardData[_ty - i - 1][_tx + i + 1]) {
+					if (_main.boardData[_ty - i - 1][_tx + i + 1][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty - i - 1][_tx + i + 1][1] == 1 && _par.boardData[_ty - i - 1][_tx + i + 1][0] > 0) {
+					if (_main.boardData[_ty - i - 1][_tx + i + 1][1] == 1 && _main.boardData[_ty - i - 1][_tx + i + 1][0] > 0) {
 						return i + 1;
 					}
 				} else {
@@ -321,14 +321,14 @@
 			}
 			return NUM;
 		}
-		public function DL(NUM):int {
+		public function DL(NUM:uint):uint {
 			var i:int;
 			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty + i + 1] && _par.boardData[_ty + i + 1][_tx - i - 1]) {
-					if (_par.boardData[_ty + i + 1][_tx - i - 1][1] == 0) {
+				if (_main.boardData[_ty + i + 1] && _main.boardData[_ty + i + 1][_tx - i - 1]) {
+					if (_main.boardData[_ty + i + 1][_tx - i - 1][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty + i + 1][_tx - i - 1][1] == 1 && _par.boardData[_ty + i + 1][_tx - i - 1][0] > 0) {
+					if (_main.boardData[_ty + i + 1][_tx - i - 1][1] == 1 && _main.boardData[_ty + i + 1][_tx - i - 1][0] > 0) {
 						return i + 1;
 					}
 				} else {
@@ -337,14 +337,13 @@
 			}
 			return NUM;
 		}
-		public function DR(NUM):int {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_par.boardData[_ty + i + 1] && _par.boardData[_ty + i + 1][_tx + i + 1]) {
-					if (_par.boardData[_ty + i + 1][_tx + i + 1][1] == 0) {
+		public function DR(NUM:uint):uint {
+			for (var i:int = 0; i < NUM; i++) {
+				if (_main.boardData[_ty + i + 1] && _main.boardData[_ty + i + 1][_tx + i + 1]) {
+					if (_main.boardData[_ty + i + 1][_tx + i + 1][1] == 0) {
 						return i;
 					}
-					if (_par.boardData[_ty + i + 1][_tx + i + 1][1] == 1 && _par.boardData[_ty + i + 1][_tx + i + 1][0] > 0) {
+					if (_main.boardData[_ty + i + 1][_tx + i + 1][1] == 1 && _main.boardData[_ty + i + 1][_tx + i + 1][0] > 0) {
 						return i + 1;
 					}
 				} else {

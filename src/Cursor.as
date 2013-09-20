@@ -1,5 +1,4 @@
-﻿package {
-	import ChessPiece;
+﻿package src {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.utils.Timer;
@@ -7,7 +6,7 @@
 	public class Cursor extends MovieClip {
 		private static const BORDER_SIZE:Number = Main.BORDER_WIDTH;
 		private static const TILE_WIDTH:Number = Main.TILE_WIDTH;
-		static private const NUM_TILES:Number = 8;
+		static private const BOARD_WIDTH:Number = 8;
 		
 		private var _main:Main;
 		private var _container:DisplayObjectContainer;
@@ -61,7 +60,7 @@
 		}
 		
 		private function cursorIsOnBoard():Boolean {
-			return _hoveredTileIndexY < NUM_TILES && _hoveredTileIndexX < NUM_TILES && _hoveredTileIndexY >= 0 && _hoveredTileIndexX >= 0;
+			return _hoveredTileIndexY < BOARD_WIDTH && _hoveredTileIndexX < BOARD_WIDTH && _hoveredTileIndexY >= 0 && _hoveredTileIndexX >= 0;
 		}
 		
 		private function updatePos():void {
@@ -147,8 +146,11 @@
 			_selectedTile.updatePiece(0, true);
 		}
 		
+		/**
+		 * Workarround for glitch(?) that re-selects chess-pieces after you move them.
+		 */
 		private function delayNextClick():void {
-			_container.removeEventListener(MouseEvent.CLICK, selectHoveredWhitePiece); //COMMENT OUT TO RESELECT PIECE ON MOVE
+			_container.removeEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 			var tets:Timer = new Timer(1);
 			tets.addEventListener(TimerEvent.TIMER, replenishClickListener);
 			tets.start();
