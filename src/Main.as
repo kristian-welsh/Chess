@@ -39,8 +39,9 @@
  */
 package {
 	import ChessPiece;
-	import flash.display.MovieClip;
-	public class Main extends MovieClip {
+	import flash.display.Sprite;
+	
+	public class Main extends Sprite {
 		static public const TILE_WIDTH:Number = 36;
 		static public const BORDER_WIDTH:Number = 12;
 		
@@ -80,6 +81,7 @@ package {
 		[p00,p00,p00,p00,p00,p00,p00,p00]];*/
 		
 		public function Main():void {
+			addChild(new ChessBoard());
 			addPieces();
 			addCursor();
 		}
@@ -106,9 +108,7 @@ package {
 		}
 		
 		private function addCursor() {
-			cursor = new Cursor(this.stage);
-			addChild(cursor);
-			cursor.visible = false;
+			cursor = new Cursor(this);
 		}
 		
 		public function get boardData():Array {
