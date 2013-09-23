@@ -1,16 +1,13 @@
-package src.pieces {
-	import src.Main;
+package pieces {
 	
 	/** @author Kristian Welsh */
-	public class NullChessPiece extends ChessPiece {
+	public class NullChessPiece extends ChessPiece implements IChessPiece {
 		public function NullChessPiece(x:Number, y:Number, type:int, black:Boolean, parent:Main):void {
-			trace("foo");
 			super(x, y, type, black, parent);
 		}
 		
-		public override function updatePiece(type:int, black:Boolean):void {
-			trace("bar");
-			super.updatePiece(type, black);
+		public function legalMoves():Array {
+			return [];
 		}
 	}
 }

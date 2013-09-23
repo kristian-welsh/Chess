@@ -1,9 +1,10 @@
-﻿package src {
+﻿package {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.utils.Timer;
-	import src.pieces.ChessPiece;
-	import src.pieces.ChessPieceFactory;
+	import pieces.ChessPiece;
+	import pieces.ChessPieceFactory;
+	import pieces.IChessPiece;
 	
 	public class Cursor extends MovieClip {
 		private static const BORDER_SIZE:Number = Main.BORDER_WIDTH;
@@ -12,7 +13,7 @@
 		
 		private var _main:Main;
 		private var _container:DisplayObjectContainer;
-		private var _selectedTile:ChessPiece;
+		private var _selectedTile:IChessPiece;
 		private var _legalMoveIndicators:Array = [];
 		private var _hoveredTileX:int;
 		private var _hoveredTileY:int;
@@ -120,7 +121,7 @@
 		
 		private function makeMove(event:MouseEvent):void {
 			removeLegalMoveIndicators();
-			updateMainData(event.target.x, event.target.y);
+			updateNewTile(event.target.x, event.target.y);
 			deselectTile();
 			updatePos();
 			delayNextClick();
@@ -131,16 +132,20 @@
 				_legalMoveIndicators[i].parent.removeChild(_legalMoveIndicators[i]);
 			_legalMoveIndicators = [];
 		}
-		// some renaming needed with these
-		private function updateMainData(targetX:Number, targetY:Number):void {
+		
+		private function updateNewTile(targetX:Number, targetY:Number):void {
 			var xIndex:uint = tileIndexAt(targetX);
 			var yIndex:uint = tileIndexAt(targetY);
-			_main._chessPieces[yIndex][xIndex].updatePiece(_selectedTile._type, _selectedTile._black);
-			_main.boardData[yIndex][xIndex] = [_selectedTile._type, _selectedTile._black];
-			clearSelectedTile(_selectedTile);
+			clearOldTile(_selectedTile);
+			_main.boardData[yIndex][xIndex] = [_selectedTile.type, _selectedTile.black];
+			
+			var newPositionPiece:IChessPiece = _main._chessPieces[yIndex][xIndex];
+			newPositionPiece.updatePiece(_selectedTile.type, _selectedTile.black);
+			newPositionPiece.removeSelfFromStage();
+			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.makeChessPiece(newPositionPiece.x, newPositionPiece.y, newPositionPiece.type, newPositionPiece.black, _main);
 		}
 		
-		private function clearSelectedTile(tile:ChessPiece):void {
+		private function clearOldTile(tile:IChessPiece):void {
 			var xIndex:uint = tileIndexAt(tile.x);
 			var yIndex:uint = tileIndexAt(tile.y);
 			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.makeChessPiece(tile.x, tile.y, 0, true, _main);

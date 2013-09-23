@@ -14,7 +14,7 @@
  * KEYBOARD CONTROL
  *
  * Could:
- * BLACK AI (A*)
+ * BLACK AI (A*, heuristics, neural networks)
  * AUTOMATED GAME RECORDING (example line: T1: Rh5xe5, Qc7xe5)
  * STALEMATE DETECTION
  * CHESS BASED MINIGAMES
@@ -35,10 +35,11 @@
  * NOTES:
  * I NEED TO START USING UNIT TESTS
  */
-package src {
-	import src.pieces.ChessPiece;
-	import src.pieces.ChessPieceFactory;
+package {
+	import pieces.ChessPiece;
+	import pieces.ChessPieceFactory;
 	import flash.display.Sprite;
+	import pieces.IChessPiece;
 	
 	public class Main extends Sprite {
 		static public const TILE_WIDTH:Number = 36;
@@ -89,7 +90,7 @@ package src {
 		}
 		
 		private function addPiece(i:int, j:int):void {
-			var curPiece:ChessPiece = ChessPieceFactory.makeChessPiece(tilePos(j), tilePos(i), boardData[i][j][0], boardData[i][j][1], this);
+			var curPiece:IChessPiece = ChessPieceFactory.makeChessPiece(tilePos(j), tilePos(i), boardData[i][j][0], boardData[i][j][1], this);
 			_chessPieces[i].push(curPiece);
 		}
 		
