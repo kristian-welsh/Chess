@@ -2,6 +2,8 @@
 	import flash.display.*;
 	import flash.events.*;
 	import flash.utils.Timer;
+	import src.pieces.ChessPiece;
+	import src.pieces.ChessPieceFactory;
 	
 	public class Cursor extends MovieClip {
 		private static const BORDER_SIZE:Number = Main.BORDER_WIDTH;
