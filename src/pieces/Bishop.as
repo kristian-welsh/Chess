@@ -7,10 +7,10 @@ package pieces {
 		}
 		
 		public function legalMoves():Array {
-			UL_tiles = UL(7);
-			UR_tiles = UR(7);
-			DL_tiles = DL(7);
-			DR_tiles = DR(7);
+			_upLeftTiles = upLeft(7);
+			_upRightTiles = upRight(7);
+			_downLeftTiles = downLeft(7);
+			_downRightTiles = downRight(7);
 			return loopDIAGS(7);
 		}
 	}

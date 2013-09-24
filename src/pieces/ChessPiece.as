@@ -12,10 +12,10 @@
 		protected var _downTiles:int;
 		protected var _leftTiles:int;
 		protected var _rightTiles:int;
-		protected var UL_tiles:int;
-		protected var UR_tiles:int;
-		protected var DL_tiles:int;
-		protected var DR_tiles:int;
+		protected var _upLeftTiles:int;
+		protected var _upRightTiles:int;
+		protected var _downLeftTiles:int;
+		protected var _downRightTiles:int;
 		protected var i:int;
 		
 		//NEXT TO OPTIMISE: COMBINE ALL DIAGONAL AND NON-DIAGONAL CALCULATIONS IN ONE FUNCTION (SEPERATE) (ADDITIONAL UP FOR PAWN)
@@ -87,16 +87,16 @@
 		protected function loopDIAGS(I:int):Array {
 			var returnvar:Array = []
 			for (i = 1; i < I + 1; i++) {
-				if (UL_tiles >= i) {
+				if (_upLeftTiles >= i) {
 					returnvar.push([_tx - i, _ty - i]);
 				}
-				if (UR_tiles >= i) {
+				if (_upRightTiles >= i) {
 					returnvar.push([_tx + i, _ty - i]);
 				}
-				if (DL_tiles >= i) {
+				if (_downLeftTiles >= i) {
 					returnvar.push([_tx - i, _ty + i]);
 				}
-				if (DR_tiles >= i) {
+				if (_downRightTiles >= i) {
 					returnvar.push([_tx + i, _ty + i]);
 				}
 			}
@@ -171,71 +171,36 @@
 			return NUM;
 		}
 		
-		protected function UL(NUM:uint):uint {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_main.boardData[_ty - i - 1] && _main.boardData[_ty - i - 1][_tx - i - 1]) {
-					if (_main.boardData[_ty - i - 1][_tx - i - 1][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty - i - 1][_tx - i - 1][1] == 1 && _main.boardData[_ty - i - 1][_tx - i - 1][0] > 0) {
-						return i + 1;
-					}
-				} else {
-					return i;
-				}
-			}
-			return NUM;
+		protected function upLeft(NUM:uint):uint {
+			return diagonalPathLength(NUM, -1, -1);
 		}
 		
-		protected function UR(NUM:uint):uint {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_main.boardData[_ty - i - 1] && _main.boardData[_ty - i - 1][_tx + i + 1]) {
-					if (_main.boardData[_ty - i - 1][_tx + i + 1][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty - i - 1][_tx + i + 1][1] == 1 && _main.boardData[_ty - i - 1][_tx + i + 1][0] > 0) {
-						return i + 1;
-					}
-				} else {
-					return i;
-				}
-			}
-			return NUM;
+		protected function upRight(NUM:uint):uint {
+			return diagonalPathLength(NUM, 1, -1);
 		}
 		
-		protected function DL(NUM:uint):uint {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_main.boardData[_ty + i + 1] && _main.boardData[_ty + i + 1][_tx - i - 1]) {
-					if (_main.boardData[_ty + i + 1][_tx - i - 1][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty + i + 1][_tx - i - 1][1] == 1 && _main.boardData[_ty + i + 1][_tx - i - 1][0] > 0) {
-						return i + 1;
-					}
-				} else {
-					return i;
-				}
-			}
-			return NUM;
+		protected function downLeft(NUM:uint):uint {
+			return diagonalPathLength(NUM, -1, 1);
 		}
 		
-		protected function DR(NUM:uint):uint {
-			for (var i:int = 0; i < NUM; i++) {
-				if (_main.boardData[_ty + i + 1] && _main.boardData[_ty + i + 1][_tx + i + 1]) {
-					if (_main.boardData[_ty + i + 1][_tx + i + 1][1] == 0) {
+		protected function downRight(NUM:uint):uint {
+			return diagonalPathLength(NUM, 1, 1);
+		}
+		
+		private function diagonalPathLength(limit:uint, barX:Number, barY:Number):uint {
+			for (var i:int = 0; i < limit; i++) {
+				if (_main.boardData[_ty + i * barY + barY] && _main.boardData[_ty + i * barY + barY][_tx + i * barX + barX]) {
+					if (_main.boardData[_ty + i * barY + barY][_tx + i * barX + barX][1] == 0) {
 						return i;
 					}
-					if (_main.boardData[_ty + i + 1][_tx + i + 1][1] == 1 && _main.boardData[_ty + i + 1][_tx + i + 1][0] > 0) {
+					if (_main.boardData[_ty + i * barY + barY][_tx + i * barX + barX][1] == 1 && _main.boardData[_ty + i * barY + barY][_tx + i * barX + barX][0] > 0) {
 						return i + 1;
 					}
 				} else {
 					return i;
 				}
 			}
-			return NUM;
+			return limit;
 		}
 		
 		public function removeSelfFromStage():void {
