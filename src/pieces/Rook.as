@@ -7,11 +7,11 @@ package pieces {
 		}
 		
 		public function legalMoves():Array {
-			_upTiles = foward(7);
-			_downTiles = back(7);
+			_upTiles = up(7);
+			_downTiles = down(7);
 			_leftTiles = left(7);
 			_rightTiles = right(7);
-			return loopVERTS(7);
+			return loopVerticals(7);
 		}
 	}
 }

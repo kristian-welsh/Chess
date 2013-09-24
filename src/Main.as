@@ -30,7 +30,7 @@
  *
  * THINGS TO OPTIMISE:
  * PIECE MOVEMENT FUNCTIONS
- *
+ * Extract the board data into an object
  *
  * NOTES:
  * I NEED TO START USING UNIT TESTS

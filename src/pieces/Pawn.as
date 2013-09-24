@@ -9,10 +9,10 @@ package pieces {
 		public function legalMoves():Array {
 			var return_me:Array = [];
 			
-			if (foward(9) > 1 && _ty == 6 && _main.boardData[_ty - 2][_tx][0] == 0)
+			if (up(9) > 1 && _ty == 6 && _main.boardData[_ty - 2][_tx][0] == 0)
 				return_me.push([_tx, _ty - 2]);
 			
-			if (foward(9) > 0 && _main.boardData[_ty - 1][_tx][0] == 0) {
+			if (up(9) > 0 && _main.boardData[_ty - 1][_tx][0] == 0) {
 				return_me.push([_tx, _ty - 1]);
 			}
 			

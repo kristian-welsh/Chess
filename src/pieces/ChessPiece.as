@@ -1,5 +1,6 @@
 ﻿package pieces {
 	import flash.display.MovieClip;
+	import flash.geom.Point;
 	
 	public class ChessPiece extends MovieClip {
 		public var _black:Boolean;
@@ -16,7 +17,6 @@
 		protected var _upRightTiles:int;
 		protected var _downLeftTiles:int;
 		protected var _downRightTiles:int;
-		protected var i:int;
 		
 		//NEXT TO OPTIMISE: COMBINE ALL DIAGONAL AND NON-DIAGONAL CALCULATIONS IN ONE FUNCTION (SEPERATE) (ADDITIONAL UP FOR PAWN)
 		public function ChessPiece(x:Number, y:Number, type:int, black:Boolean, parent:Main):void {
@@ -65,142 +65,97 @@
 			this.gotoAndStop(_type * 2 - 1)
 		}
 		
-		protected function loopVERTS(I:int):Array {
+		protected function loopVerticals(limit:int):Array {
 			var returnvar:Array = []
-			for (i = 1; i < I + 1; i++) {
-				if (_leftTiles >= i) {
+			for (var i:uint = 1; i < limit + 1; i++) {
+				if (_leftTiles >= i)
 					returnvar.push([_tx - i, _ty]);
-				}
-				if (_upTiles >= i) {
+				if (_upTiles >= i)
 					returnvar.push([_tx, _ty - i]);
-				}
-				if (_rightTiles >= i) {
+				if (_rightTiles >= i)
 					returnvar.push([_tx + i, _ty]);
-				}
-				if (_downTiles >= i) {
+				if (_downTiles >= i)
 					returnvar.push([_tx, _ty + i]);
-				}
 			}
 			return returnvar;
 		}
 		
-		protected function loopDIAGS(I:int):Array {
+		protected function loopDiagonals(limit:int):Array {
 			var returnvar:Array = []
-			for (i = 1; i < I + 1; i++) {
-				if (_upLeftTiles >= i) {
+			for (var i:uint = 1; i < limit + 1; i++) {
+				if (_upLeftTiles >= i)
 					returnvar.push([_tx - i, _ty - i]);
-				}
-				if (_upRightTiles >= i) {
+				if (_upRightTiles >= i)
 					returnvar.push([_tx + i, _ty - i]);
-				}
-				if (_downLeftTiles >= i) {
+				if (_downLeftTiles >= i)
 					returnvar.push([_tx - i, _ty + i]);
-				}
-				if (_downRightTiles >= i) {
+				if (_downRightTiles >= i)
 					returnvar.push([_tx + i, _ty + i]);
-				}
 			}
 			return returnvar;
 		}
 		
-		protected function foward(NUM:uint):uint {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_main.boardData[_ty - i - 1]) {
-					if (_main.boardData[_ty - i - 1][_tx][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty - i - 1][_tx][1] == 1 && _main.boardData[_ty - i - 1][_tx][0] > 0) {
-						return i + 1;
-					}
-				} else {
-					return i;
-				}
-			}
-			return NUM;
+		protected function up(limit:uint):uint {
+			return pathLength(limit, 0, -1);
 		}
 		
-		protected function back(NUM:uint):uint {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_main.boardData[_ty + i + 1]) {
-					if (_main.boardData[_ty + i + 1][_tx][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty + i + 1][_tx][1] == 1 && _main.boardData[_ty + i + 1][_tx][0] > 0) {
-						return i + 1;
-					}
-				} else {
-					return i;
-				}
-			}
-			return NUM;
+		protected function down(limit:uint):uint {
+			return pathLength(limit, 0, 1);
 		}
 		
-		protected function left(NUM:uint):uint {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_main.boardData[_ty][_tx - i - 1]) {
-					if (_main.boardData[_ty][_tx - i - 1][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty][_tx - i - 1][1] == 1 && _main.boardData[_ty][_tx - i - 1][0] > 0) {
-						return i + 1;
-					}
-				} else {
-					return i;
-				}
-			}
-			return NUM;
+		protected function left(limit:uint):uint {
+			return pathLength(limit, -1, 0);
 		}
 		
-		protected function right(NUM:uint):uint {
-			var i:int;
-			for (i = 0; i < NUM; i++) {
-				if (_main.boardData[_ty][_tx + i + 1]) {
-					if (_main.boardData[_ty][_tx + i + 1][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty][_tx + i + 1][1] == 1 && _main.boardData[_ty][_tx + i + 1][0] > 0) {
-						return i + 1;
-					}
-				} else {
-					return i;
-				}
-			}
-			return NUM;
+		protected function right(limit:uint):uint {
+			return pathLength(limit, 1, 0);
 		}
 		
-		protected function upLeft(NUM:uint):uint {
-			return diagonalPathLength(NUM, -1, -1);
+		protected function upLeft(limit:uint):uint {
+			return pathLength(limit, -1, -1);
 		}
 		
-		protected function upRight(NUM:uint):uint {
-			return diagonalPathLength(NUM, 1, -1);
+		protected function upRight(limit:uint):uint {
+			return pathLength(limit, 1, -1);
 		}
 		
-		protected function downLeft(NUM:uint):uint {
-			return diagonalPathLength(NUM, -1, 1);
+		protected function downLeft(limit:uint):uint {
+			return pathLength(limit, -1, 1);
 		}
 		
-		protected function downRight(NUM:uint):uint {
-			return diagonalPathLength(NUM, 1, 1);
+		protected function downRight(limit:uint):uint {
+			return pathLength(limit, 1, 1);
 		}
 		
-		private function diagonalPathLength(limit:uint, barX:Number, barY:Number):uint {
+		/**
+		 * Inspects each tile in a perfectly diagonal or perfectly straight line to decide how many tiles this piece can move in the specified direction.
+		 * @param	xDirection Should be -1 for left, 0 for no x direction, or 1 for right.
+		 * @param	yDirection Should be -1 for up, 0 for no y direction, or 1 for down.
+		 * @return The number of spaces that can be moved by this peice in that direction,
+		 */
+		private function pathLength(limit:uint, xDirection:Number, yDirection:Number):uint {
 			for (var i:int = 0; i < limit; i++) {
-				if (_main.boardData[_ty + i * barY + barY] && _main.boardData[_ty + i * barY + barY][_tx + i * barX + barX]) {
-					if (_main.boardData[_ty + i * barY + barY][_tx + i * barX + barX][1] == 0) {
-						return i;
-					}
-					if (_main.boardData[_ty + i * barY + barY][_tx + i * barX + barX][1] == 1 && _main.boardData[_ty + i * barY + barY][_tx + i * barX + barX][0] > 0) {
-						return i + 1;
-					}
-				} else {
+				var inspectedPosition:Point = new Point(_tx + i * xDirection + xDirection, _ty + i * yDirection + yDirection);
+				if (!tileExistsAt(inspectedPosition))
 					return i;
-				}
+				if (tileIsWhiteAt(inspectedPosition))
+					return i;
+				if (tileIsOccupiedAt(inspectedPosition))
+					return i + 1;
 			}
 			return limit;
+		}
+		
+		private function tileExistsAt(point:Point):Boolean {
+			return _main.boardData[point.y] != null && _main.boardData[point.y][point.x] != null;
+		}
+		
+		private function tileIsWhiteAt(point:Point):Boolean {
+			return _main.boardData[point.y][point.x][1] == 0
+		}
+		
+		private function tileIsOccupiedAt(point:Point):void {
+			_main.boardData[point.y][point.x][0] != 0
 		}
 		
 		public function removeSelfFromStage():void {

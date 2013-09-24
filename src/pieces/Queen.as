@@ -7,15 +7,15 @@ package pieces {
 		}
 		
 		public function legalMoves():Array {
-			_upTiles = foward(7);
-			_downTiles = back(7);
+			_upTiles = up(7);
+			_downTiles = down(7);
 			_leftTiles = left(7);
 			_rightTiles = right(7);
 			_upLeftTiles = upLeft(7);
 			_upRightTiles = upRight(7);
 			_downLeftTiles = downLeft(7);
 			_downRightTiles = downRight(7);
-			return loopVERTS(7).concat(loopDIAGS(7));
+			return loopVerticals(7).concat(loopDiagonals(7));
 		}
 	}
 }
