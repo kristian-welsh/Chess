@@ -1,31 +1,27 @@
 package pieces {
+	import flash.geom.Point;
 	
 	/** @author Kristian Welsh */
 	public class Pawn extends ChessPiece implements IChessPiece {
 		public function Pawn(x:Number, y:Number, black:Boolean, parent:Main):void {
 			super(x, y, 1, black, parent);
 		}
-		
 		public function legalMoves():Array {
-			var return_me:Array = [];
+			var returnMe:Array = [];
 			
-			if (up(9) > 1 && _ty == 6 && _main.boardData[_ty - 2][_tx][0] == 0)
-				return_me.push([_tx, _ty - 2]);
+			if (upMovement(2) == 2 && !tileIsOccupiedAt(new Point(_tx, _ty - upMovement(2))) && _ty == 6)
+				returnMe.push(new Point(_tx, _ty - upMovement(2)));
 			
-			if (up(9) > 0 && _main.boardData[_ty - 1][_tx][0] == 0) {
-				return_me.push([_tx, _ty - 1]);
-			}
+			if (upMovement(1) > 0 && !tileIsOccupiedAt(new Point(_tx, _ty - upMovement(1))))
+				returnMe.push(new Point(_tx, _ty - upMovement(1)));
 			
-			if (_ty <= 0)
-				return return_me;
+			if (tileIsOccupiedAt(new Point(_tx - 1, _ty - 1)) && !tileIsWhiteAt(new Point(_tx - 1, _ty - 1)))
+				returnMe.push(new Point(_tx - 1, _ty - 1));
 			
-			if (_main.boardData[0].length - 1 >= _tx + 1 && _main.boardData[_ty - 1][_tx + 1][1] == 1 && _main.boardData[_ty - 1][_tx + 1][0] != 0)
-				return_me.push([_tx + 1, _ty - 1]);
+			if (tileIsOccupiedAt(new Point(_tx + 1, _ty - 1)) && !tileIsWhiteAt(new Point(_tx + 1, _ty - 1)))
+				returnMe.push(new Point(_tx + 1, _ty - 1));
 			
-			if (0 < _tx && _main.boardData[_ty - 1][_tx - 1][1] == 1 && _main.boardData[_ty - 1][_tx - 1][0] != 0)
-				return_me.push([_tx - 1, _ty - 1]);
-			
-			return return_me;
+			return returnMe;
 		}
 	}
 }

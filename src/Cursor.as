@@ -6,6 +6,7 @@
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
 	
+	// BUG: you can deselect a piece by clicking on another firendly piece
 	public class Cursor extends MovieClip {
 		private static const BORDER_SIZE:Number = Main.BORDER_WIDTH;
 		private static const TILE_WIDTH:Number = Main.TILE_WIDTH;
@@ -92,11 +93,11 @@
 		
 		private function selectHoveredPiece():void {
 			selectHoveredTile();
-			var legal_moves:Array = _selectedTile.legalMoves();
-			for (var i:uint = 0; i < legal_moves.length; i++) {
+			var legalMoves:Array = _selectedTile.legalMoves();
+			for (var i:uint = 0; i < legalMoves.length; i++) {
 				_legalMoveIndicators[i] = new validMove();
-				_legalMoveIndicators[i].x = legal_moves[i][0] * 36 + BORDER_SIZE;
-				_legalMoveIndicators[i].y = legal_moves[i][1] * 36 + BORDER_SIZE;
+				_legalMoveIndicators[i].x = legalMoves[i].x * 36 + BORDER_SIZE;
+				_legalMoveIndicators[i].y = legalMoves[i].y * 36 + BORDER_SIZE;
 				_legalMoveIndicators[i].addEventListener(MouseEvent.CLICK, makeMove);
 				_main.addChild(_legalMoveIndicators[i]);
 			}
@@ -164,6 +165,7 @@
 		}
 		
 		private function replenishClickListener(event:TimerEvent):void {
+			freelyMoveCursor();
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
 	}

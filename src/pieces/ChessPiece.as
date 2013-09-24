@@ -65,65 +65,73 @@
 			this.gotoAndStop(_type * 2 - 1)
 		}
 		
-		protected function loopVerticals(limit:int):Array {
-			var returnvar:Array = []
+		protected function axisMovement(limit:int):Array {
+			var upTiles:int = upMovement(limit);
+			var downTiles:int = downMovement(limit);
+			var leftTiles:int = leftMovement(limit);
+			var rightTiles:int = rightMovement(limit);
+			var returnMe:Array = []
 			for (var i:uint = 1; i < limit + 1; i++) {
-				if (_leftTiles >= i)
-					returnvar.push([_tx - i, _ty]);
-				if (_upTiles >= i)
-					returnvar.push([_tx, _ty - i]);
-				if (_rightTiles >= i)
-					returnvar.push([_tx + i, _ty]);
-				if (_downTiles >= i)
-					returnvar.push([_tx, _ty + i]);
+				if (leftTiles >= i)
+					returnMe.push(new Point(_tx - i, _ty));
+				if (upTiles >= i)
+					returnMe.push(new Point(_tx, _ty - i));
+				if (rightTiles >= i)
+					returnMe.push(new Point(_tx + i, _ty));
+				if (downTiles >= i)
+					returnMe.push(new Point(_tx, _ty + i));
 			}
-			return returnvar;
+			return returnMe;
 		}
 		
-		protected function loopDiagonals(limit:int):Array {
-			var returnvar:Array = []
+		protected function diagonalMovement(limit:int):Array {
+			var upLeftTiles:int = upLeftMovement(limit);
+			var upRightTiles:int = upRightMovement(limit);
+			var downLeftTiles:int = downLeftMovement(limit);
+			var downRightTiles:int = downRightMovement(limit);
+			var returnMe:Array = []
 			for (var i:uint = 1; i < limit + 1; i++) {
-				if (_upLeftTiles >= i)
-					returnvar.push([_tx - i, _ty - i]);
-				if (_upRightTiles >= i)
-					returnvar.push([_tx + i, _ty - i]);
-				if (_downLeftTiles >= i)
-					returnvar.push([_tx - i, _ty + i]);
-				if (_downRightTiles >= i)
-					returnvar.push([_tx + i, _ty + i]);
+				if (upLeftTiles >= i)
+					returnMe.push(new Point(_tx - i, _ty - i));
+				if (upRightTiles >= i)
+					returnMe.push(new Point(_tx + i, _ty - i));
+				if (downLeftTiles >= i)
+					returnMe.push(new Point(_tx - i, _ty + i));
+				if (downRightTiles >= i)
+					returnMe.push(new Point(_tx + i, _ty + i));
 			}
-			return returnvar;
+			return returnMe;
 		}
 		
-		protected function up(limit:uint):uint {
+		protected function upMovement(limit:uint):uint {
 			return pathLength(limit, 0, -1);
 		}
 		
-		protected function down(limit:uint):uint {
+		private function downMovement(limit:uint):uint {
 			return pathLength(limit, 0, 1);
 		}
 		
-		protected function left(limit:uint):uint {
+		private function leftMovement(limit:uint):uint {
 			return pathLength(limit, -1, 0);
 		}
 		
-		protected function right(limit:uint):uint {
+		private function rightMovement(limit:uint):uint {
 			return pathLength(limit, 1, 0);
 		}
 		
-		protected function upLeft(limit:uint):uint {
+		private function upLeftMovement(limit:uint):uint {
 			return pathLength(limit, -1, -1);
 		}
 		
-		protected function upRight(limit:uint):uint {
+		private function upRightMovement(limit:uint):uint {
 			return pathLength(limit, 1, -1);
 		}
 		
-		protected function downLeft(limit:uint):uint {
+		private function downLeftMovement(limit:uint):uint {
 			return pathLength(limit, -1, 1);
 		}
 		
-		protected function downRight(limit:uint):uint {
+		private function downRightMovement(limit:uint):uint {
 			return pathLength(limit, 1, 1);
 		}
 		
@@ -150,12 +158,12 @@
 			return _main.boardData[point.y] != null && _main.boardData[point.y][point.x] != null;
 		}
 		
-		private function tileIsWhiteAt(point:Point):Boolean {
-			return _main.boardData[point.y][point.x][1] == 0
+		protected function tileIsWhiteAt(point:Point):Boolean {
+			return tileExistsAt(point) && _main.boardData[point.y][point.x][1] == 0
 		}
 		
-		private function tileIsOccupiedAt(point:Point):void {
-			_main.boardData[point.y][point.x][0] != 0
+		protected function tileIsOccupiedAt(point:Point):Boolean {
+			return tileExistsAt(point) && _main.boardData[point.y][point.x][0] != 0;
 		}
 		
 		public function removeSelfFromStage():void {
