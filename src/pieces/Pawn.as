@@ -2,8 +2,8 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Pawn extends ChessPiece implements IChessPiece {
-		public function Pawn(x:Number, y:Number, type:int, black:Boolean, parent:Main):void {
-			super(x, y, type, black, parent);
+		public function Pawn(x:Number, y:Number, black:Boolean, parent:Main):void {
+			super(x, y, 1, black, parent);
 		}
 		
 		public function legalMoves():Array {

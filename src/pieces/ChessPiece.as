@@ -8,10 +8,10 @@
 		public var _ty:int;
 		
 		protected var _main:Main;
-		protected var U_tiles:int;
-		protected var D_tiles:int;
-		protected var L_tiles:int;
-		protected var R_tiles:int;
+		protected var _upTiles:int;
+		protected var _downTiles:int;
+		protected var _leftTiles:int;
+		protected var _rightTiles:int;
 		protected var UL_tiles:int;
 		protected var UR_tiles:int;
 		protected var DL_tiles:int;
@@ -68,16 +68,16 @@
 		protected function loopVERTS(I:int):Array {
 			var returnvar:Array = []
 			for (i = 1; i < I + 1; i++) {
-				if (L_tiles >= i) {
+				if (_leftTiles >= i) {
 					returnvar.push([_tx - i, _ty]);
 				}
-				if (U_tiles >= i) {
+				if (_upTiles >= i) {
 					returnvar.push([_tx, _ty - i]);
 				}
-				if (R_tiles >= i) {
+				if (_rightTiles >= i) {
 					returnvar.push([_tx + i, _ty]);
 				}
-				if (D_tiles >= i) {
+				if (_downTiles >= i) {
 					returnvar.push([_tx, _ty + i]);
 				}
 			}
