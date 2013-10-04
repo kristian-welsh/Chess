@@ -7,7 +7,7 @@ package pieces {
 		}
 		
 		public function legalMoves():Array {
-			return axisMovement(7);
+			return nonDiagonalMovement(7);
 		}
 	}
 }

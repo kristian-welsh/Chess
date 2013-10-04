@@ -65,11 +65,11 @@
 			this.gotoAndStop(_type * 2 - 1)
 		}
 		
-		protected function axisMovement(limit:int):Array {
-			var upTiles:int = upMovement(limit);
-			var downTiles:int = downMovement(limit);
-			var leftTiles:int = leftMovement(limit);
-			var rightTiles:int = rightMovement(limit);
+		protected function nonDiagonalMovement(limit:int):Array {
+			var upTiles:uint = upMovement(limit);
+			var downTiles:uint = downMovement(limit);
+			var leftTiles:uint = leftMovement(limit);
+			var rightTiles:uint = rightMovement(limit);
 			var returnMe:Array = []
 			for (var i:uint = 1; i < limit + 1; i++) {
 				if (leftTiles >= i)
@@ -85,10 +85,10 @@
 		}
 		
 		protected function diagonalMovement(limit:int):Array {
-			var upLeftTiles:int = upLeftMovement(limit);
-			var upRightTiles:int = upRightMovement(limit);
-			var downLeftTiles:int = downLeftMovement(limit);
-			var downRightTiles:int = downRightMovement(limit);
+			var upLeftTiles:uint = upLeftMovement(limit);
+			var upRightTiles:uint = upRightMovement(limit);
+			var downLeftTiles:uint = downLeftMovement(limit);
+			var downRightTiles:uint = downRightMovement(limit);
 			var returnMe:Array = []
 			for (var i:uint = 1; i < limit + 1; i++) {
 				if (upLeftTiles >= i)
@@ -140,6 +140,7 @@
 		 * @param	xDirection Should be -1 for left, 0 for no x direction, or 1 for right.
 		 * @param	yDirection Should be -1 for up, 0 for no y direction, or 1 for down.
 		 * @return The number of spaces that can be moved by this peice in that direction,
+		 * @example pathLength(3, 1, -1); looks 3 spaces towards the upper-right of the piece's position.
 		 */
 		private function pathLength(limit:uint, xDirection:Number, yDirection:Number):uint {
 			for (var i:int = 0; i < limit; i++) {

@@ -7,7 +7,7 @@ package pieces {
 		}
 		
 		public function legalMoves():Array {
-			return axisMovement(1).concat(diagonalMovement(1));
+			return nonDiagonalMovement(1).concat(diagonalMovement(1));
 		}
 	}
 }
