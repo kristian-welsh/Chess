@@ -2,7 +2,10 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class ChessPieceFactory {
-		public static function makeChessPiece(x:Number, y:Number, type:int, black:Boolean, parent:Main):IChessPiece {
+		
+		// todo: replace type with enumerated string constants
+		
+		public static function makeChessPiece(type:int, x:Number, y:Number, black:Boolean, parent:Main):IChessPiece {
 			switch(type) {
 				default:
 				case 0:
@@ -21,6 +24,10 @@ package pieces {
 					return new King(x, y, black, parent);
 			}
 			throw new Error("Should Not Reach This Point");
+		}
+		
+		public static function cloneChessPiece(source:IChessPiece, parent:Main):IChessPiece {
+			return makeChessPiece(source.type, source.x, source.y, source.black, parent);
 		}
 	}
 }

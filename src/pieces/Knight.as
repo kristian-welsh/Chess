@@ -1,4 +1,5 @@
 package pieces {
+	import flash.geom.Point;
 	
 	/** @author Kristian Welsh */
 	public class Knight extends ChessPiece implements IChessPiece {
@@ -6,39 +7,30 @@ package pieces {
 			super(x, y, 3, black, parent);
 		}
 		
-		//if statements may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))
+		// if statements may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))
 		public function legalMoves():Array {
 			var possibleMoves:Array = [];
-			possibleMoves.push(knightMove(_ty - 1, _tx - 2, _ty - 1 >= 0, _tx - 2 >= 0));
-			possibleMoves.push(knightMove(_ty - 1, _tx + 2, _ty - 1 >= 0, true));
-			possibleMoves.push(knightMove(_ty + 1, _tx - 2, true, _tx - 2 >= 0));
-			possibleMoves.push(knightMove(_ty + 1, _tx + 2, true, true));
-			possibleMoves.push(knightMove(_ty - 2, _tx - 1, _ty - 2 >= 0, _tx - 1 >= 0));
-			possibleMoves.push(knightMove(_ty - 2, _tx + 1, _ty - 2 >= 0, true));
-			possibleMoves.push(knightMove(_ty + 2, _tx - 1, true, _tx - 1 >= 0));
-			possibleMoves.push(knightMove(_ty + 2, _tx + 1, true, true));
+			pushIfValid(possibleMoves, knightMove(_ty - 1, _tx - 2, _ty - 1 >= 0, _tx - 2 >= 0));
+			pushIfValid(possibleMoves, knightMove(_ty - 1, _tx + 2, _ty - 1 >= 0, true));
+			pushIfValid(possibleMoves, knightMove(_ty + 1, _tx - 2, true, _tx - 2 >= 0));
+			pushIfValid(possibleMoves, knightMove(_ty + 1, _tx + 2, true, true));
+			pushIfValid(possibleMoves, knightMove(_ty - 2, _tx - 1, _ty - 2 >= 0, _tx - 1 >= 0));
+			pushIfValid(possibleMoves, knightMove(_ty - 2, _tx + 1, _ty - 2 >= 0, true));
+			pushIfValid(possibleMoves, knightMove(_ty + 2, _tx - 1, true, _tx - 1 >= 0));
+			pushIfValid(possibleMoves, knightMove(_ty + 2, _tx + 1, true, true));
 			
-			var validMoves:Array = [];
-			for (var i:uint = 0; i < possibleMoves.length; i++) {
-				if (possibleMoves[i] != 0) {
-					validMoves.push(possibleMoves[i]);
-				}
-			}
-			return validMoves;
+			return possibleMoves;
 		}
 		
-		private function knightMove(A:int, B:int, C:Boolean, D:Boolean):Array {
-			var returnvar:Array = []
-			var arrL1:int = _main.boardData.length - 1;
-			var arrL2:int = _main.boardData[0].length - 1;
-			if (arrL1 >= (A) && arrL2 >= B && C && D) {
-				if (_main.boardData[A][B][1] == 1) {
-					returnvar = [B, A];
-				} else {
-					return [];
-				}
-			}
-			return returnvar;
+		private function pushIfValid(list:Array, move:Point):void {
+			if (!move.equals(new Point( -1, -1)))
+				list.push(move);
+		}
+		
+		private function knightMove(y:int, x:int, c:Boolean, d:Boolean):Point {
+			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _main._chessPieces[y][x].black == true)
+				return new Point(x, y);
+			return new Point(-1, -1);
 		}
 	}
 }

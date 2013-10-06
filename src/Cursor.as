@@ -122,7 +122,7 @@
 		
 		private function makeMove(event:MouseEvent):void {
 			removeLegalMoveIndicators();
-			updateNewTile(event.target.x, event.target.y);
+			updateNewTile(tileIndexAt(event.target.x), tileIndexAt(event.target.y));
 			deselectTile();
 			updatePos();
 			delayNextClick();
@@ -134,22 +134,20 @@
 			_legalMoveIndicators = [];
 		}
 		
-		private function updateNewTile(targetX:Number, targetY:Number):void {
-			var xIndex:uint = tileIndexAt(targetX);
-			var yIndex:uint = tileIndexAt(targetY);
+		private function updateNewTile(xIndex:uint, yIndex:uint):void {
 			clearOldTile(_selectedTile);
 			_main.boardData[yIndex][xIndex] = [_selectedTile.type, _selectedTile.black];
 			
 			var newPositionPiece:IChessPiece = _main._chessPieces[yIndex][xIndex];
 			newPositionPiece.updatePiece(_selectedTile.type, _selectedTile.black);
 			newPositionPiece.removeSelfFromStage();
-			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.makeChessPiece(newPositionPiece.x, newPositionPiece.y, newPositionPiece.type, newPositionPiece.black, _main);
+			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.cloneChessPiece(newPositionPiece, _main);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
 			var xIndex:uint = tileIndexAt(tile.x);
 			var yIndex:uint = tileIndexAt(tile.y);
-			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.makeChessPiece(tile.x, tile.y, 0, true, _main);
+			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true, _main);
 			_main.boardData[yIndex][xIndex] = [0, 1];
 			tile.removeSelfFromStage();
 		}

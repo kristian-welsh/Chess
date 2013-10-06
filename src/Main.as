@@ -42,25 +42,28 @@ package {
 	import pieces.IChessPiece;
 	
 	public class Main extends Sprite {
+		static public const BOARD_WIDTH:uint = 8;
+		static public const BOARD_HEIGHT:uint = 8;
+		
 		static public const TILE_WIDTH:Number = 36;
 		static public const BORDER_WIDTH:Number = 12;
 		
 		private var cursor:Cursor;
 		
 		public var _chessPieces:Array = [];
-		private var p00 = [0, 1];
-		private var p01 = [1, 0];
-		private var p02 = [2, 0];
-		private var p03 = [3, 0];
-		private var p04 = [4, 0];
-		private var p05 = [5, 0];
-		private var p06 = [6, 0];
-		private var p07 = [1, 1];
-		private var p08 = [2, 1];
-		private var p09 = [3, 1];
-		private var p10 = [4, 1];
-		private var p11 = [5, 1];
-		private var p12 = [6, 1];
+		private var p00 = [0, true];
+		private var p01 = [1, false];
+		private var p02 = [2, false];
+		private var p03 = [3, false];
+		private var p04 = [4, false];
+		private var p05 = [5, false];
+		private var p06 = [6, false];
+		private var p07 = [1, true];
+		private var p08 = [2, true];
+		private var p09 = [3, true];
+		private var p10 = [4, true];
+		private var p11 = [5, true];
+		private var p12 = [6, true]
 		
 		private var _boardData:Array = [
 		[p08, p09, p10, p11, p12, p10, p09, p08],
@@ -90,7 +93,7 @@ package {
 		}
 		
 		private function addPiece(i:int, j:int):void {
-			var curPiece:IChessPiece = ChessPieceFactory.makeChessPiece(tilePos(j), tilePos(i), boardData[i][j][0], boardData[i][j][1], this);
+			var curPiece:IChessPiece = ChessPieceFactory.makeChessPiece(boardData[i][j][0], tilePos(j), tilePos(i), boardData[i][j][1], this);
 			_chessPieces[i].push(curPiece);
 		}
 		
