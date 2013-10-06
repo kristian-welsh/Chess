@@ -28,7 +28,7 @@ package pieces {
 		}
 		
 		private function knightMove(y:int, x:int, c:Boolean, d:Boolean):Point {
-			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _main._chessPieces[y][x].black == true)
+			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _main.chessPieces[y][x].black == true)
 				return new Point(x, y);
 			return new Point(-1, -1);
 		}

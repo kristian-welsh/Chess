@@ -156,15 +156,15 @@
 		}
 		
 		private function tileExistsAt(point:Point):Boolean {
-			return _main.boardData[point.y] != null && _main.boardData[point.y][point.x] != null;
+			return _main.chessPieces[point.y] != null && _main.chessPieces[point.y][point.x] != null;
 		}
 		
 		protected function tileIsWhiteAt(point:Point):Boolean {
-			return tileExistsAt(point) && _main.boardData[point.y][point.x][1] == 0
+			return tileExistsAt(point) && _main.chessPieces[point.y][point.x].black == 0
 		}
 		
 		protected function tileIsOccupiedAt(point:Point):Boolean {
-			return tileExistsAt(point) && _main.boardData[point.y][point.x][0] != 0;
+			return tileExistsAt(point) && _main.chessPieces[point.y][point.x].type != 0;
 		}
 		
 		public function removeSelfFromStage():void {

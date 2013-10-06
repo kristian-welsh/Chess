@@ -84,7 +84,7 @@
 		}
 		
 		private function hoveredChessPieceIsWhite():Boolean {
-			return !_main._chessPieces[_hoveredTileIndexY][_hoveredTileIndexX]._black;
+			return !_main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX]._black;
 		}
 		
 		private function noPieceSelected():Boolean {
@@ -104,7 +104,7 @@
 		}
 		
 		private function selectHoveredTile():void {
-			_selectedTile = _main._chessPieces[_hoveredTileIndexY][_hoveredTileIndexX];
+			_selectedTile = _main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX];
 			this.gotoAndStop(2);
 		}
 		
@@ -136,19 +136,15 @@
 		
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
 			clearOldTile(_selectedTile);
-			_main.boardData[yIndex][xIndex] = [_selectedTile.type, _selectedTile.black];
 			
-			var newPositionPiece:IChessPiece = _main._chessPieces[yIndex][xIndex];
+			var newPositionPiece:IChessPiece = _main.chessPieces[yIndex][xIndex];
 			newPositionPiece.updatePiece(_selectedTile.type, _selectedTile.black);
 			newPositionPiece.removeSelfFromStage();
-			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.cloneChessPiece(newPositionPiece, _main);
+			_main.chessPieces[yIndex][xIndex] = ChessPieceFactory.cloneChessPiece(newPositionPiece, _main);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var xIndex:uint = tileIndexAt(tile.x);
-			var yIndex:uint = tileIndexAt(tile.y);
-			_main._chessPieces[yIndex][xIndex] = ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true, _main);
-			_main.boardData[yIndex][xIndex] = [0, 1];
+			_main.chessPieces[tileIndexAt(tile.y)][tileIndexAt(tile.x)] = ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true, _main);
 			tile.removeSelfFromStage();
 		}
 		
