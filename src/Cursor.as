@@ -30,7 +30,7 @@
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
 		
-		public function moveCursor(event:MouseEvent):void {
+		private function moveCursor(event:MouseEvent):void {
 			updatePositionVariables();
 			moveFreelyIfNoSelection();
 		}
@@ -72,9 +72,9 @@
 		private function selectHoveredWhitePiece(event:MouseEvent):void {
 			_main = this.parent as Main;
 			
-			if (!cursorIsOnBoard())
+			if (cursorIsOffBoard())
 				return;
-			if (!hoveredChessPieceIsWhite())
+			if (hoveredChessPieceIsBlack())
 				return;
 			
 			if (noPieceSelected())
@@ -83,8 +83,12 @@
 				deselectHoveredPiece();
 		}
 		
-		private function hoveredChessPieceIsWhite():Boolean {
-			return !_main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX]._black;
+		private function cursorIsOffBoard():Boolean {
+			return !cursorIsOnBoard();
+		}
+		
+		private function hoveredChessPieceIsBlack():Boolean {
+			return _main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX].black;
 		}
 		
 		private function noPieceSelected():Boolean {
@@ -149,7 +153,7 @@
 		}
 		
 		/**
-		 * Timers are a workaround for a glitch(?) that re-selects chess-pieces after you move them.
+		 * Timers are a workaround for a bug(?) that re-selects chess-pieces after you move them.
 		 */
 		private function delayNextClick():void {
 			_container.removeEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);

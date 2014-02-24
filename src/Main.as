@@ -36,12 +36,14 @@
  * I NEED TO START USING UNIT TESTS
  */
 package {
-	import pieces.ChessPiece;
-	import pieces.ChessPieceFactory;
+	import asunit.textui.TestRunner;
 	import flash.display.Sprite;
+	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
 	
 	public class Main extends Sprite {
+		static public const TEST_RUN:Boolean = true;
+		
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
 		
@@ -76,6 +78,19 @@ package {
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
 		
 		public function Main():void {
+			if (TEST_RUN)
+				startTests();
+			else
+				startGame();
+		}
+		
+		private function startTests():void {
+			var testRunner:TestRunner = new TestRunner();
+			stage.addChild(testRunner)
+			testRunner.start(AllTests);
+		}
+		
+		private function startGame():void {
 			addChild(new ChessBoard());
 			addPieces();
 			addCursor();
