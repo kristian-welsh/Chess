@@ -44,8 +44,6 @@ package {
 	import test.FakeSprite;
 	
 	public class Main extends FakeSprite {
-		static public const TEST_RUN:Boolean = true;
-		
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
 		
@@ -80,28 +78,16 @@ package {
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
 		
 		public function Main():void {
-			if (TEST_RUN)
-				startTests();
-			else
-				startGame();
+			startGame();
 		}
 		
-		private function startTests():void {
-			// Other classes rely on _chessPieces on main being set up by addPieces before receiving main as a parameter
-			addPieces();
-			AllTests.mainReferance = this;
-			var testRunner:TestRunner = new TestRunner();
-			stage.addChild(testRunner)
-			testRunner.start(AllTests);
-		}
-		
-		private function startGame():void {
+		protected function startGame():void {
 			addChild(new ChessBoard());
 			addPieces();
 			addCursor();
 		}
 		
-		private function addPieces():void {
+		protected function addPieces():void {
 			for (var i:int = 0; i < boardData.length; i++)
 				addRowOfPieces(i);
 		}

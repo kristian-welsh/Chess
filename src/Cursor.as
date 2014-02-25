@@ -24,9 +24,13 @@
 		
 		public function Cursor(container:DisplayObjectContainer):void {//
 			super();
+			visible = false;
 			_container = container;
 			_container.addChild(this);
-			visible = false;
+			addListeners();
+		}
+		
+		private function addListeners():void {//
 			_container.addEventListener(MouseEvent.MOUSE_MOVE, moveCursor);
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
@@ -66,7 +70,11 @@
 		}
 		
 		private function cursorIsOnBoard():Boolean {//
-			return _hoveredTileIndexY < BOARD_WIDTH && _hoveredTileIndexX < BOARD_WIDTH && _hoveredTileIndexY >= 0 && _hoveredTileIndexX >= 0;
+			if (_hoveredTileIndexX < 0) return false;
+			if (_hoveredTileIndexX >= BOARD_WIDTH) return false;
+			if (_hoveredTileIndexY < 0) return false;
+			if (_hoveredTileIndexY >= BOARD_WIDTH) return false;
+			return true;
 		}
 		
 		private function updatePos():void {//
@@ -85,58 +93,77 @@
 			if (noPieceSelected())
 				selectHoveredPiece();
 			else
-				deselectHoveredPiece();
+				deselectSelectedPiece();
 		}
 		
-		private function cursorIsOffBoard():Boolean {
+		private function cursorIsOffBoard():Boolean {//
 			return !cursorIsOnBoard();
 		}
 		
-		private function hoveredChessPieceIsBlack():Boolean {
+		private function hoveredChessPieceIsBlack():Boolean {//
 			return _main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX].black;
 		}
 		
-		private function selectHoveredPiece():void {
+		private function selectHoveredPiece():void {//
 			selectHoveredTile();
-			var legalMoves:Array = _selectedTile.legalMoves();
-			for (var i:uint = 0; i < legalMoves.length; i++) {
-				_legalMoveIndicators[i] = new validMove();
-				_legalMoveIndicators[i].x = legalMoves[i].x * 36 + BORDER_SIZE;
-				_legalMoveIndicators[i].y = legalMoves[i].y * 36 + BORDER_SIZE;
-				_legalMoveIndicators[i].addEventListener(MouseEvent.CLICK, makeMove);
-				_main.addChild(_legalMoveIndicators[i]);
-			}
+			showLegalMoves();
 		}
 		
-		private function selectHoveredTile():void {
+		private function showLegalMoves():void {
+			for (var i:uint = 0; i < legalMoves().length; i++)
+				showLegalMove(i);
+		}
+		
+		private function legalMoves():Array {
+			return _selectedTile.legalMoves();
+		}
+		
+		private function showLegalMove(index:uint):void {
+			_legalMoveIndicators[index] = new validMove();
+			positionLegalMove(index);
+			enableLegalMove(index);
+			displayLegalMove(index);
+		}
+		
+		private function positionLegalMove(index:uint):void {
+			_legalMoveIndicators[index].x = legalMoves()[index].x * TILE_WIDTH + BORDER_SIZE;
+			_legalMoveIndicators[index].y = legalMoves()[index].y * TILE_WIDTH + BORDER_SIZE;
+		}
+		
+		private function enableLegalMove(index:uint):void {
+			_legalMoveIndicators[index].addEventListener(MouseEvent.CLICK, makeMove);
+		}
+		
+		private function displayLegalMove(index:uint):void {
+			_main.addChild(_legalMoveIndicators[index]);
+		}
+		
+		private function selectHoveredTile():void {//
 			_selectedTile = _main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX];
 			this.gotoAndStop(2);
 		}
 		
-		private function deselectHoveredPiece():void {
+		private function deselectSelectedPiece():void {//
 			deselectTile();
-			for (var i:uint = 0; i < _legalMoveIndicators.length; i++)
+			removeLegalMoveIndicators();
+		}
+		
+		private function deselectTile():void {//
+			_selectedTile = null;
+			this.gotoAndStop(1);
+			updatePos();
+		}
+		
+		private function removeLegalMoveIndicators():void {//
+			for (var i:int = 0; i < _legalMoveIndicators.length; i++)
 				_main.removeChild(_legalMoveIndicators[i]);
 			_legalMoveIndicators = [];
 		}
 		
-		private function deselectTile():void {
-			_selectedTile = null;
-			this.gotoAndStop(1);
-		}
-		
 		private function makeMove(event:MouseEvent):void {
-			removeLegalMoveIndicators();
 			updateNewTile(tileIndexAt(event.target.x), tileIndexAt(event.target.y));
-			deselectTile();
-			updatePos();
+			deselectSelectedPiece();
 			delayNextClick();
-		}
-		
-		private function removeLegalMoveIndicators():void {
-			for (var i:int = 0; i < _legalMoveIndicators.length; i++)
-				_legalMoveIndicators[i].parent.removeChild(_legalMoveIndicators[i]);
-			_legalMoveIndicators = [];
 		}
 		
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
@@ -153,9 +180,7 @@
 			tile.removeSelfFromStage();
 		}
 		
-		/**
-		 * delayNextClick() and replenishClickListener() are a workaround for a bug that re-selects chess-pieces after you move them.
-		 */
+		// delayNextClick() and replenishClickListener() are a workaround for a bug that re-selects chess-pieces after you move them.
 		private function delayNextClick():void {
 			_container.removeEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 			_stopReselectTimer.addEventListener(TimerEvent.TIMER, replenishClickListener);
