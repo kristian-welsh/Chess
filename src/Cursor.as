@@ -10,7 +10,7 @@
 	public class Cursor extends MovieClip {
 		private static const BORDER_SIZE:Number = Main.BORDER_WIDTH;
 		private static const TILE_WIDTH:Number = Main.TILE_WIDTH;
-		static private const BOARD_WIDTH:Number = 8;
+		private static const BOARD_WIDTH:Number = 8;
 		
 		private var _main:Main;
 		private var _container:DisplayObjectContainer;
@@ -21,7 +21,7 @@
 		private var _hoveredTileIndexY:int;
 		private var _hoveredTileIndexX:int;
 		
-		public function Cursor(container:DisplayObjectContainer):void {
+		public function Cursor(container:DisplayObjectContainer):void {//
 			super();
 			_container = container;
 			_container.addChild(this);
@@ -42,29 +42,33 @@
 			_hoveredTileY = _hoveredTileIndexY * TILE_WIDTH + BORDER_SIZE;
 		}
 		
-		private function tileIndexAt(number:Number):int {
+		private function tileIndexAt(number:Number):int {//
 			return Math.floor(number / TILE_WIDTH);
 		}
 		
-		private function moveFreelyIfNoSelection():void {
+		private function moveFreelyIfNoSelection():void {//
 			if (noPieceSelected())
 				freelyMoveCursor();
 		}
 		
-		private function freelyMoveCursor():void {
+		private function noPieceSelected():Boolean {//
+			return this.currentFrame == 1;
+		}
+		
+		private function freelyMoveCursor():void {//
 			updateCursorVisibility();
 			updatePos();
 		}
 		
-		private function updateCursorVisibility():void {
+		private function updateCursorVisibility():void {//
 			this.visible = cursorIsOnBoard() ? true : false;
 		}
 		
-		private function cursorIsOnBoard():Boolean {
+		private function cursorIsOnBoard():Boolean {//
 			return _hoveredTileIndexY < BOARD_WIDTH && _hoveredTileIndexX < BOARD_WIDTH && _hoveredTileIndexY >= 0 && _hoveredTileIndexX >= 0;
 		}
 		
-		private function updatePos():void {
+		private function updatePos():void {//
 			this.x = _hoveredTileX;
 			this.y = _hoveredTileY;
 		}
@@ -89,10 +93,6 @@
 		
 		private function hoveredChessPieceIsBlack():Boolean {
 			return _main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX].black;
-		}
-		
-		private function noPieceSelected():Boolean {
-			return this.currentFrame == 1;
 		}
 		
 		private function selectHoveredPiece():void {

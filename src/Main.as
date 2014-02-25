@@ -40,8 +40,10 @@ package {
 	import flash.display.Sprite;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
+	import test.AllTests;
+	import test.FakeSprite;
 	
-	public class Main extends Sprite {
+	public class Main extends FakeSprite {
 		static public const TEST_RUN:Boolean = true;
 		
 		static public const BOARD_WIDTH:uint = 8;
@@ -85,6 +87,7 @@ package {
 		}
 		
 		private function startTests():void {
+			AllTests.mainReferance = this;
 			var testRunner:TestRunner = new TestRunner();
 			stage.addChild(testRunner)
 			testRunner.start(AllTests);
