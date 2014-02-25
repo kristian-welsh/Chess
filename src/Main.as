@@ -87,6 +87,8 @@ package {
 		}
 		
 		private function startTests():void {
+			// Other classes rely on _chessPieces on main being set up by addPieces before receiving main as a parameter
+			addPieces();
 			AllTests.mainReferance = this;
 			var testRunner:TestRunner = new TestRunner();
 			stage.addChild(testRunner)

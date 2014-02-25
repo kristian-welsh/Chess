@@ -20,6 +20,7 @@
 		private var _hoveredTileY:int;
 		private var _hoveredTileIndexY:int;
 		private var _hoveredTileIndexX:int;
+		private var _stopReselectTimer:Timer = new Timer(1);
 		
 		public function Cursor(container:DisplayObjectContainer):void {//
 			super();
@@ -153,17 +154,16 @@
 		}
 		
 		/**
-		 * Timers are a workaround for a bug(?) that re-selects chess-pieces after you move them.
+		 * delayNextClick() and replenishClickListener() are a workaround for a bug that re-selects chess-pieces after you move them.
 		 */
 		private function delayNextClick():void {
 			_container.removeEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
-			var tets:Timer = new Timer(1);
-			tets.addEventListener(TimerEvent.TIMER, replenishClickListener);
-			tets.start();
+			_stopReselectTimer.addEventListener(TimerEvent.TIMER, replenishClickListener);
+			_stopReselectTimer.start();
 		}
 		
 		private function replenishClickListener(event:TimerEvent):void {
-			freelyMoveCursor();
+			_stopReselectTimer.removeEventListener(TimerEvent.TIMER, replenishClickListener);
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
 	}
