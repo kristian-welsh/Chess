@@ -75,7 +75,7 @@ package {
 		
 		public function test_make_move():void {
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(cursor.legalMoveIndicators[1]);
+			click(cursor.legalMoveIndicators[1]); // one space in front
 			assertEquals(0, cursor.legalMoveIndicators.length);
 			assertEquals("[object Pawn]", main.chessPieces[5][0].toString());
 			assertEquals("[object NullChessPiece]", main.chessPieces[6][0].toString());
@@ -105,6 +105,34 @@ package {
 			assertNoPieceSelected();
 			clickBoardTile(0, 0); // black piece
 			assertNoPieceSelected();
+		}
+		
+		// This is a bug, but is here for characterization perposes.
+		public function test_soon_after_movement_select_piece_fails():void {
+			clickBoardTile(0, 6); // white piece (pawn)
+			click(cursor.legalMoveIndicators[1]); // one space in front
+			clickBoardTile(0, 5); // white piece (pawn)
+			assertNoPieceSelected();
+		}
+		
+		public function test_second_move_after_while_succeeds():void {
+			clickBoardTile(0, 6); // white piece (pawn)
+			click(cursor.legalMoveIndicators[1]); // one space in front
+			
+			callFunctionAfterTimeout(1, function():void {
+					clickBoardTile(0, 5); // white piece (pawn)
+					assertTrue(cursorPieceSelected());
+				});
+		}
+		
+		private function callFunctionAfterTimeout(timeout:uint, functionToCall:Function):void {
+			var timer:Timer = new Timer(timeout, 1);
+			var handler:Function = addAsync(function(e:Event) {
+					timer.removeEventListener(TimerEvent.TIMER_COMPLETE, handler);
+					functionToCall();
+				}, timeout + 1);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, handler);
+			timer.start();
 		}
 		
 		private function cursorPieceSelected():Boolean {

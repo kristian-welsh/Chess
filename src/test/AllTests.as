@@ -13,6 +13,8 @@ package test {
 			addTest(new CursorTest("test_make_move", mainReferance));
 			addTest(new CursorTest("test_mid_selection_interactions", mainReferance));
 			addTest(new CursorTest("test_invalid_piece_selection", mainReferance));
+			addTest(new CursorTest("test_soon_after_movement_select_piece_fails", mainReferance));
+			addTest(new CursorTest("test_second_move_after_while_succeeds", mainReferance));
 		}
 	}
 }
