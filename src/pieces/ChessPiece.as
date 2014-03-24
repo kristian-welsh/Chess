@@ -143,6 +143,7 @@
 		 * @example pathLength(3, 1, -1); looks 3 spaces towards the upper-right of the piece's position.
 		 */
 		private function pathLength(limit:uint, xDirection:Number, yDirection:Number):uint {
+			invalidatePathLengthInputs(xDirection, yDirection);
 			for (var i:int = 0; i < limit; i++) {
 				var inspectedPosition:Point = new Point(_tx + i * xDirection + xDirection, _ty + i * yDirection + yDirection);
 				if (!tileExistsAt(inspectedPosition))
@@ -153,6 +154,13 @@
 					return i + 1;
 			}
 			return limit;
+		}
+		
+		private function invalidatePathLengthInputs(xDirection:Number, yDirection:Number):void {
+			if (xDirection != -1 && xDirection != 0 && xDirection != 1)
+				throw new Error("xDirection needs to be either -1, 0, or 1. xDirection was:" + xDirection);
+			if (yDirection != -1 && yDirection != 0 && yDirection != 1)
+				throw new Error("yDirection needs to be either -1, 0, or 1. yDirection was:" + yDirection);
 		}
 		
 		private function tileExistsAt(point:Point):Boolean {

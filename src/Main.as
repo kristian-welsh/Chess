@@ -38,6 +38,7 @@
 package {
 	import asunit.textui.TestRunner;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
 	import test.AllTests;
@@ -53,21 +54,21 @@ package {
 		private var cursor:Cursor;
 		
 		private var _chessPieces:Array = [];
-		private var p00:Array = [0, true];
-		private var p01:Array = [1, false];
+		protected var p00:Array = [0, true];
+		protected var p01:Array = [1, false];
 		private var p02:Array = [2, false];
 		private var p03:Array = [3, false];
 		private var p04:Array = [4, false];
 		private var p05:Array = [5, false];
 		private var p06:Array = [6, false];
-		private var p07:Array = [1, true];
+		protected var p07:Array = [1, true];
 		private var p08:Array = [2, true];
 		private var p09:Array = [3, true];
 		private var p10:Array = [4, true];
 		private var p11:Array = [5, true];
 		private var p12:Array = [6, true]
 		
-		private var _boardData:Array = [
+		protected var _boardData:Array = [
 		[p08, p09, p10, p11, p12, p10, p09, p08],
 		[p07, p07, p07, p07, p07, p07, p07, p07],
 		[p00, p00, p00, p00, p00, p00, p00, p00],
@@ -78,10 +79,13 @@ package {
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
 		
 		public function Main():void {
-			startGame();
+			if(stage)
+				startGame();
+			else
+				addEventListener(Event.ADDED_TO_STAGE, startGame);
 		}
 		
-		protected function startGame():void {
+		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard());
 			addPieces();
 			addCursor();

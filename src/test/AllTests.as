@@ -2,7 +2,7 @@ package test {
 	import asunit.framework.TestSuite;
 	
 	public class AllTests extends TestSuite {
-		static public var mainReferance:Main;
+		static public var mainReferance:TestingMain;
 		public function AllTests() {
 			mainReferance.enableFakeMousePosition();
 			addTest(new CursorTest("test_construction", mainReferance));
