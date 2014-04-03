@@ -6,6 +6,9 @@ package {
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.utils.Timer;
+	import pieces.ChessPiece;
+	import pieces.IChessPiece;
+	import pieces.Pawn;
 	
 	public class CursorTest extends TestCase {
 		private static const TILE_QUANTATY_WIDTH:Number = 8
@@ -65,6 +68,7 @@ package {
 		
 		public function test_legal_move_indicator_state():void {
 			clickBoardTile(0, 6); // white piece (pawn)
+			
 			var validMove1:DisplayObject = main.getChildAt(main.numChildren - 1);
 			assertEquals(worldPosition(0), validMove1.x);
 			assertEquals(worldPosition(5), validMove1.y);
@@ -74,11 +78,21 @@ package {
 		}
 		
 		public function test_make_move():void {
+			var originalEmptySpace:ChessPiece = main.chessPieces[5][0] as ChessPiece;
+			var originalChessPiece:ChessPiece = main.chessPieces[6][0] as ChessPiece;
+			assertTrue(originalChessPiece.parent);
+			
 			clickBoardTile(0, 6); // white piece (pawn)
 			click(cursor.legalMoveIndicators[1]); // one space in front
 			assertEquals(0, cursor.legalMoveIndicators.length);
-			assertEquals("[object Pawn]", main.chessPieces[5][0].toString());
-			assertEquals("[object NullChessPiece]", main.chessPieces[6][0].toString());
+			assertFalse(originalEmptySpace.parent);
+			assertFalse(originalChessPiece.parent);
+			var newEmptySpace:ChessPiece = main.chessPieces[5][0] as ChessPiece;
+			var newChessPiece:ChessPiece = main.chessPieces[6][0] as ChessPiece;
+			assertEquals(1, newEmptySpace.type);
+			assertEquals(0, newChessPiece.type);
+			assertFalse(newEmptySpace.black);
+			assertTrue(newChessPiece.black);
 		}
 		
 		private function click(object:DisplayObject):void {
@@ -119,7 +133,7 @@ package {
 			clickBoardTile(0, 6); // white piece (pawn)
 			click(cursor.legalMoveIndicators[1]); // one space in front
 			
-			callFunctionAfterTimeout(1, function():void {
+			callFunctionAfterTimeout(1, function() {
 					clickBoardTile(0, 5); // white piece (pawn)
 					assertTrue(cursorPieceSelected());
 				});
@@ -127,10 +141,11 @@ package {
 		
 		private function callFunctionAfterTimeout(timeout:uint, functionToCall:Function):void {
 			var timer:Timer = new Timer(timeout, 1);
-			var handler:Function = addAsync(function(e:Event) {
-					timer.removeEventListener(TimerEvent.TIMER_COMPLETE, handler);
-					functionToCall();
-				}, timeout + 1);
+			var callIt:Function = function(e:Event) {
+				timer.removeEventListener(TimerEvent.TIMER_COMPLETE, handler);
+				functionToCall();
+			}
+			var handler:Function = addAsync(callIt, timeout + 1);
 			timer.addEventListener(TimerEvent.TIMER_COMPLETE, handler);
 			timer.start();
 		}

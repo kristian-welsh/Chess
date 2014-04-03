@@ -5,9 +5,8 @@ package pieces {
 		
 		// todo: replace type with enumerated string constants
 		
-		public static function makeChessPiece(type:int, x:Number, y:Number, black:Boolean, parent:Main):IChessPiece {
+		public static function makeChessPiece(type:uint, x:Number, y:Number, black:Boolean, parent:Main):IChessPiece {
 			switch(type) {
-				default:
 				case 0:
 					return new NullChessPiece(x, y, black, parent);
 				case 1:
@@ -22,8 +21,10 @@ package pieces {
 					return new Queen(x, y, black, parent);
 				case 6:
 					return new King(x, y, black, parent);
+				default:
+					throw new Error("Invalid value in parameter \"type\" in method makeChessPiece. Valid values are integers from 0 to 6, value found to be: " + type);
 			}
-			throw new Error("Should Not Reach This Point");
+			throw new Error("Should not reach this statement in method makeChessPiece");
 		}
 		
 		public static function cloneChessPiece(source:IChessPiece, parent:Main):IChessPiece {
