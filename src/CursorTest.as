@@ -25,7 +25,7 @@ package {
 		
 		protected override function setUp():void {
 			main.resetChessPieces();
-			cursor = new Cursor(main);
+			cursor = new Cursor(main, main);
 		}
 		
 		public function test_construction():void {

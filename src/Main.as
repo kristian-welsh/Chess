@@ -79,6 +79,7 @@ package {
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
 		
 		public function Main():void {
+			ChessPieceFactory.MAIN = this;
 			if(stage)
 				startGame();
 			else
@@ -103,8 +104,12 @@ package {
 		}
 		
 		private function addPiece(i:int, j:int):void {
-			var curPiece:IChessPiece = ChessPieceFactory.makeChessPiece(boardData[i][j][0], tilePos(j), tilePos(i), boardData[i][j][1], this);
-			_chessPieces[i].push(curPiece);
+			validateTileIndexes(i, j);
+			var type:uint = boardData[i][j][0];
+			var black:Boolean = boardData[i][j][1];
+			var x:Number = tilePos(j);
+			var y:Number = tilePos(i);
+			_chessPieces[i].push(ChessPieceFactory.makeChessPiece(type, x, y, black));
 		}
 		
 		private function tilePos(tileIndex:int):Number {
@@ -112,7 +117,7 @@ package {
 		}
 		
 		private function addCursor():void {
-			cursor = new Cursor(this);
+			cursor = new Cursor(this, this);
 		}
 		
 		public function get boardData():Array {
@@ -124,13 +129,22 @@ package {
 		}
 		
 		public function getChessPieceAt(y:uint, x:uint):IChessPiece {
-			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH) throw new Error("Invalid input");
+			validateTileIndexes(y, x);
 			return _chessPieces[y][x] as IChessPiece;
 		}
 		
 		public function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void {
-			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH) throw new Error("Invalid input");
+			validateTileIndexes(y, x);
 			_chessPieces[y][x] = newChessPiece;
+		}
+		
+		private function validateTileIndexes(y:uint, x:uint):void {
+			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH)
+				throwInvalidInputsError(y, x);
+		}
+		
+		private function throwInvalidInputsError(y:uint, x:uint):String {
+			throw new Error("y: " + y + ", x: " + x + " are invalid inputs, valid inputs are integers between 0 and BOARD_WIDTH - 1");
 		}
 	}
 }

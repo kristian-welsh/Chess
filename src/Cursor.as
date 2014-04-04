@@ -12,7 +12,7 @@
 		private static const TILE_WIDTH:Number = Main.TILE_WIDTH;
 		private static const BOARD_WIDTH:Number = 8;
 		
-		private var _main:Main;
+		private var _boardData:BoardData;
 		private var _container:DisplayObjectContainer;
 		private var _selectedTile:IChessPiece;
 		private var _legalMoveIndicators:Array = [];
@@ -21,13 +21,11 @@
 		private var _hoveredTileIndexY:int;
 		private var _hoveredTileIndexX:int;
 		private var _stopReselectTimer:Timer = new Timer(1, 1);
-		private var _boardData:BoardData;
 		
-		public function Cursor(container:Main):void {
+		public function Cursor(boardData:BoardData, container:DisplayObjectContainer):void {
 			super();
-			_main = container as Main;
-			_boardData = _main as BoardData;
-			_container = _main as DisplayObjectContainer;
+			_boardData = boardData;
+			_container = container;
 			visible = false;
 			_container.addChild(this);
 			addListeners();
@@ -138,7 +136,7 @@
 		}
 		
 		private function displayLegalMove(index:uint):void {
-			_main.addChild(_legalMoveIndicators[index]);
+			_container.addChild(_legalMoveIndicators[index]);
 		}
 		
 		private function selectHoveredTile():void {
@@ -159,7 +157,7 @@
 		
 		private function removeLegalMoveIndicators():void {
 			for (var i:int = 0; i < _legalMoveIndicators.length; i++)
-				_main.removeChild(_legalMoveIndicators[i]);
+				_container.removeChild(_legalMoveIndicators[i]);
 			_legalMoveIndicators = [];
 		}
 		
@@ -174,11 +172,11 @@
 			var newPositionPiece:IChessPiece = _boardData.getChessPieceAt(yIndex, xIndex);
 			newPositionPiece.updatePiece(_selectedTile.type, _selectedTile.black);
 			newPositionPiece.removeSelfFromStage();
-			_main.setChessPieceAt(yIndex, xIndex, ChessPieceFactory.cloneChessPiece(newPositionPiece, _main));
+			_boardData.setChessPieceAt(yIndex, xIndex, ChessPieceFactory.cloneChessPiece(newPositionPiece));
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			_main.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true, _main));
+			_boardData.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true));
 			tile.removeSelfFromStage();
 		}
 		
