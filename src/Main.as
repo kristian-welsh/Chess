@@ -90,13 +90,13 @@ package {
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard());
 			organizeChessData();
+			_boardData = new InMemoryBoardData(_chessPieces);
 			addCursor();
 		}
 		
 		protected function organizeChessData():void {
 			for (var i:int = 0; i < boardData.length; i++)
 				addRowOfPieces(i);
-			_boardData = new InMemoryBoardData(_chessPieces);
 		}
 		
 		private function addRowOfPieces(i:int):void {
