@@ -13,15 +13,7 @@ package  {
 		}
 		
 		private function initTestingData():void {
-			_rawBoardData = [
-			[p07, p00, p00, p00, p00, p00, p00, p00],
-			[p00, p00, p00, p00, p00, p00, p00, p00],
-			[p00, p00, p00, p00, p00, p00, p00, p00],
-			[p00, p00, p00, p00, p00, p00, p00, p00],
-			[p00, p00, p00, p00, p00, p00, p00, p00],
-			[p00, p00, p00, p00, p00, p00, p00, p00],
-			[p01, p01, p00, p00, p00, p00, p00, p00],
-			[p00, p00, p00, p00, p00, p00, p00, p00]];
+			_rawBoardData = RawTestData.data
 		}
 		
 		public function resetChessPieces():void {

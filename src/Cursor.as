@@ -26,8 +26,8 @@
 			super();
 			_boardData = boardData;
 			_container = container;
-			visible = false;
 			_container.addChild(this);
+			visible = false;
 			addListeners();
 		}
 		
