@@ -18,7 +18,7 @@ package  {
 		}
 		
 		private function initTestingData():void {
-			_boardData = [
+			_rawBoardData = [
 			[p07, p00, p00, p00, p00, p00, p00, p00],
 			[p00, p00, p00, p00, p00, p00, p00, p00],
 			[p00, p00, p00, p00, p00, p00, p00, p00],
@@ -33,7 +33,7 @@ package  {
 			for each(var row:Array in chessPieces)
 				for each (var piece:DisplayObject in row)
 					removeChild(piece);
-			super.addPieces()
+			super.organizeChessData()
 		}
 		
 		private function runTests():void {

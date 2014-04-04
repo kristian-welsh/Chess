@@ -53,7 +53,6 @@ package {
 		
 		private var cursor:Cursor;
 		
-		private var _chessPieces:Array = [];
 		protected var p00:Array = [0, true];
 		protected var p01:Array = [1, false];
 		private var p02:Array = [2, false];
@@ -68,7 +67,7 @@ package {
 		private var p11:Array = [5, true];
 		private var p12:Array = [6, true]
 		
-		protected var _boardData:Array = [
+		protected var _rawBoardData:Array = [
 		[p08, p09, p10, p11, p12, p10, p09, p08],
 		[p07, p07, p07, p07, p07, p07, p07, p07],
 		[p00, p00, p00, p00, p00, p00, p00, p00],
@@ -77,6 +76,8 @@ package {
 		[p00, p00, p00, p00, p00, p00, p00, p00],
 		[p01, p01, p01, p01, p01, p01, p01, p01],
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
+		private var _chessPieces:Array = [];
+		private var _boardData:BoardData;
 		
 		public function Main():void {
 			ChessPieceFactory.MAIN = this;
@@ -88,13 +89,14 @@ package {
 		
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard());
-			addPieces();
+			organizeChessData();
 			addCursor();
 		}
 		
-		protected function addPieces():void {
+		protected function organizeChessData():void {
 			for (var i:int = 0; i < boardData.length; i++)
 				addRowOfPieces(i);
+			_boardData = new InMemoryBoardData(_chessPieces);
 		}
 		
 		private function addRowOfPieces(i:int):void {
@@ -121,7 +123,7 @@ package {
 		}
 		
 		public function get boardData():Array {
-			return _boardData;
+			return _rawBoardData;
 		}
 		
 		public function get chessPieces():Array {
@@ -139,12 +141,11 @@ package {
 		}
 		
 		private function validateTileIndexes(y:uint, x:uint):void {
-			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH)
-				throwInvalidInputsError(y, x);
+			assert(y < BOARD_HEIGHT && x < BOARD_WIDTH, invalidInputsMessage(y, x))
 		}
 		
-		private function throwInvalidInputsError(y:uint, x:uint):String {
-			throw new Error("y: " + y + ", x: " + x + " are invalid inputs, valid inputs are integers between 0 and BOARD_WIDTH - 1");
+		private function invalidInputsMessage(y:uint, x:uint):String {
+			return "y: " + y + ", x: " + x + " are invalid inputs, valid inputs are integers between 0 and BOARD_WIDTH - 1";
 		}
 	}
 }
