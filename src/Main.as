@@ -44,7 +44,7 @@ package {
 	import test.AllTests;
 	import test.FakeSprite;
 	
-	public class Main extends FakeSprite {
+	public class Main extends FakeSprite implements BoardData {
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
 		
@@ -121,6 +121,16 @@ package {
 		
 		public function get chessPieces():Array {
 			return _chessPieces;
+		}
+		
+		public function getChessPieceAt(y:uint, x:uint):IChessPiece {
+			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH) throw new Error("Invalid input");
+			return _chessPieces[y][x] as IChessPiece;
+		}
+		
+		public function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void {
+			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH) throw new Error("Invalid input");
+			_chessPieces[y][x] = newChessPiece;
 		}
 	}
 }

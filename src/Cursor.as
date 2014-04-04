@@ -21,13 +21,15 @@
 		private var _hoveredTileIndexY:int;
 		private var _hoveredTileIndexX:int;
 		private var _stopReselectTimer:Timer = new Timer(1, 1);
+		private var _boardData:BoardData;
 		
 		public function Cursor(container:Main):void {
 			super();
-			visible = false;
-			_container = container;
-			_container.addChild(this);
 			_main = container as Main;
+			_boardData = _main as BoardData;
+			_container = _main as DisplayObjectContainer;
+			visible = false;
+			_container.addChild(this);
 			addListeners();
 		}
 		
@@ -102,7 +104,7 @@
 		}
 		
 		private function hoveredChessPieceIsBlack():Boolean {
-			return _main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX].black;
+			return _boardData.getChessPieceAt(_hoveredTileIndexY, _hoveredTileIndexX).black;
 		}
 		
 		private function selectHoveredPiece():void {
@@ -140,7 +142,7 @@
 		}
 		
 		private function selectHoveredTile():void {
-			_selectedTile = _main.chessPieces[_hoveredTileIndexY][_hoveredTileIndexX];
+			_selectedTile = _boardData.getChessPieceAt(_hoveredTileIndexY, _hoveredTileIndexX);
 			this.gotoAndStop(2);
 		}
 		
@@ -169,14 +171,14 @@
 		
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
 			clearOldTile(_selectedTile);
-			var newPositionPiece:IChessPiece = _main.chessPieces[yIndex][xIndex];
+			var newPositionPiece:IChessPiece = _boardData.getChessPieceAt(yIndex, xIndex);
 			newPositionPiece.updatePiece(_selectedTile.type, _selectedTile.black);
 			newPositionPiece.removeSelfFromStage();
-			_main.chessPieces[yIndex][xIndex] = ChessPieceFactory.cloneChessPiece(newPositionPiece, _main);
+			_main.setChessPieceAt(yIndex, xIndex, ChessPieceFactory.cloneChessPiece(newPositionPiece, _main));
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			_main.chessPieces[tileIndexAt(tile.y)][tileIndexAt(tile.x)] = ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true, _main);
+			_main.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true, _main));
 			tile.removeSelfFromStage();
 		}
 		

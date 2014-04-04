@@ -145,7 +145,7 @@ package {
 				timer.removeEventListener(TimerEvent.TIMER_COMPLETE, handler);
 				functionToCall();
 			}
-			var handler:Function = addAsync(callIt, timeout + 1);
+			var handler:Function = addAsync(callIt, timeout + 10);
 			timer.addEventListener(TimerEvent.TIMER_COMPLETE, handler);
 			timer.start();
 		}
