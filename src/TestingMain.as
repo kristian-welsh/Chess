@@ -7,14 +7,9 @@ package  {
 	
 	public class TestingMain extends Main {
 		protected override function startGame(e:Event = null):void {
-			initSuperClass();
-			runTests();
-		}
-		
-		// Other classes rely on data on main being set up before receiving main in it's constructor.
-		private function initSuperClass():void {
 			initTestingData();
-			resetChessPieces();
+			organizeChessData();
+			runTests();
 		}
 		
 		private function initTestingData():void {
@@ -41,6 +36,10 @@ package  {
 			var testRunner:TestRunner = new TestRunner();
 			stage.addChild(testRunner)
 			testRunner.start(AllTests);
+		}
+		
+		public function get rawData():Array {
+			return _rawBoardData;
 		}
 	}
 }

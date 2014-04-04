@@ -75,7 +75,6 @@ package {
 		[p00, p00, p00, p00, p00, p00, p00, p00],
 		[p01, p01, p01, p01, p01, p01, p01, p01],
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
-		private var _chessPieces:Array = [];
 		private var _boardData:InMemoryBoardData;
 		
 		public function Main():void {
@@ -89,36 +88,16 @@ package {
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard());
 			organizeChessData();
-			cursor = new Cursor(this, this);
+			cursor = new Cursor(_boardData, this);
 		}
 		
 		protected function organizeChessData():void {
-			_boardData = new InMemoryBoardData(_chessPieces);
-			for (var i:int = 0; i < _rawBoardData.length; i++)
-				addRowOfPieces(i);
-		}
-		
-		private function addRowOfPieces(i:int):void {
-			_boardData.data[i] = [];
-			for (var j:int = 0; j < _rawBoardData[i].length; j++)
-				addPiece(i, j);
-		}
-		
-		private function addPiece(i:int, j:int):void {
-			//validateTileIndexes(i, j);
-			var type:uint = _rawBoardData[i][j][0];
-			var black:Boolean = _rawBoardData[i][j][1];
-			var x:Number = tilePos(j);
-			var y:Number = tilePos(i);
-			_boardData.data[i].push(ChessPieceFactory.makeChessPiece(type, x, y, black));
-		}
-		
-		private function tilePos(tileIndex:int):Number {
-			return tileIndex * TILE_WIDTH + BORDER_WIDTH;
+			_boardData = new InMemoryBoardData(_rawBoardData);
+			_boardData.organizeRawChessData();
 		}
 		
 		public function get chessPieces():Array {
-			return _chessPieces;
+			return _boardData.chessPieces;
 		}
 		
 		public function getChessPieceAt(y:uint, x:uint):IChessPiece {

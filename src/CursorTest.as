@@ -25,6 +25,7 @@ package {
 		
 		protected override function setUp():void {
 			main.resetChessPieces();
+			//todo: replace first main referance with an in memory board data object or some kind of fake.
 			cursor = new Cursor(main, main);
 		}
 		
