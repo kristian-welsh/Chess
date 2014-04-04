@@ -47,7 +47,6 @@ package {
 	public class Main extends FakeSprite implements BoardData {
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
-		
 		static public const TILE_WIDTH:Number = 36;
 		static public const BORDER_WIDTH:Number = 12;
 		
@@ -77,7 +76,7 @@ package {
 		[p01, p01, p01, p01, p01, p01, p01, p01],
 		[p02, p03, p04, p05, p06, p04, p03, p02]];
 		private var _chessPieces:Array = [];
-		private var _boardData:BoardData;
+		private var _boardData:InMemoryBoardData;
 		
 		public function Main():void {
 			ChessPieceFactory.MAIN = this;
@@ -90,40 +89,32 @@ package {
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard());
 			organizeChessData();
-			_boardData = new InMemoryBoardData(_chessPieces);
-			addCursor();
+			cursor = new Cursor(this, this);
 		}
 		
 		protected function organizeChessData():void {
-			for (var i:int = 0; i < boardData.length; i++)
+			_boardData = new InMemoryBoardData(_chessPieces);
+			for (var i:int = 0; i < _rawBoardData.length; i++)
 				addRowOfPieces(i);
 		}
 		
 		private function addRowOfPieces(i:int):void {
-			_chessPieces[i] = [];
-			for (var j:int = 0; j < boardData[i].length; j++)
+			_boardData.data[i] = [];
+			for (var j:int = 0; j < _rawBoardData[i].length; j++)
 				addPiece(i, j);
 		}
 		
 		private function addPiece(i:int, j:int):void {
-			validateTileIndexes(i, j);
-			var type:uint = boardData[i][j][0];
-			var black:Boolean = boardData[i][j][1];
+			//validateTileIndexes(i, j);
+			var type:uint = _rawBoardData[i][j][0];
+			var black:Boolean = _rawBoardData[i][j][1];
 			var x:Number = tilePos(j);
 			var y:Number = tilePos(i);
-			_chessPieces[i].push(ChessPieceFactory.makeChessPiece(type, x, y, black));
+			_boardData.data[i].push(ChessPieceFactory.makeChessPiece(type, x, y, black));
 		}
 		
 		private function tilePos(tileIndex:int):Number {
 			return tileIndex * TILE_WIDTH + BORDER_WIDTH;
-		}
-		
-		private function addCursor():void {
-			cursor = new Cursor(this, this);
-		}
-		
-		public function get boardData():Array {
-			return _rawBoardData;
 		}
 		
 		public function get chessPieces():Array {
@@ -131,21 +122,11 @@ package {
 		}
 		
 		public function getChessPieceAt(y:uint, x:uint):IChessPiece {
-			validateTileIndexes(y, x);
-			return _chessPieces[y][x] as IChessPiece;
+			return _boardData.getChessPieceAt(y, x);
 		}
 		
 		public function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void {
-			validateTileIndexes(y, x);
-			_chessPieces[y][x] = newChessPiece;
-		}
-		
-		private function validateTileIndexes(y:uint, x:uint):void {
-			assert(y < BOARD_HEIGHT && x < BOARD_WIDTH, invalidInputsMessage(y, x))
-		}
-		
-		private function invalidInputsMessage(y:uint, x:uint):String {
-			return "y: " + y + ", x: " + x + " are invalid inputs, valid inputs are integers between 0 and BOARD_WIDTH - 1";
+			_boardData.setChessPieceAt(y, x, newChessPiece);
 		}
 	}
 }
