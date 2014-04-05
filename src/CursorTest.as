@@ -9,6 +9,7 @@ package {
 	import pieces.ChessPiece;
 	import pieces.IChessPiece;
 	import pieces.Pawn;
+	import test.FakeSprite;
 	
 	public class CursorTest extends TestCase {
 		private static const TILE_QUANTATY_WIDTH:Number = 8
@@ -17,6 +18,7 @@ package {
 		
 		private var main:TestingMain;
 		private var cursor:Cursor;
+		private var container:FakeSprite;
 		
 		public function CursorTest(testName:String, main:TestingMain) {
 			this.main = main;
@@ -25,12 +27,15 @@ package {
 		
 		protected override function setUp():void {
 			main.resetChessPieces();
-			//todo: replace first main referance with an in memory board data object or some kind of fake.
-			cursor = new Cursor(main, main);
+			//TODO: replace first main referance with an in memory board data object or some kind of fake.
+			container = new FakeSprite();
+			container.addChild(new ChessBoard());//blows up if this isn't added
+			container.enableFakeMousePosition();
+			cursor = new Cursor(main, container);
 		}
 		
 		public function test_construction():void {
-			assertTrue(main.contains(cursor));
+			assertTrue(container.contains(cursor));
 			assertFalse(cursor.visible);
 		}
 		
@@ -61,19 +66,19 @@ package {
 			setPieceSelectedFalse();
 			clickBoardTile(0, 6); // white piece
 			assertTileSelected(0, 6);
-			assertEquals(74, main.numChildren);
+			assertEquals(4, container.numChildren);
 			clickBoardTile(0, 6); // same white piece
 			assertTileHoveredButNotSelected(0, 6);
-			assertEquals(70, main.numChildren);
+			assertEquals(2, container.numChildren);
 		}
 		
 		public function test_legal_move_indicator_state():void {
 			clickBoardTile(0, 6); // white piece (pawn)
 			
-			var validMove1:DisplayObject = main.getChildAt(main.numChildren - 1);
+			var validMove1:DisplayObject = container.getChildAt(3);
 			assertEquals(worldPosition(0), validMove1.x);
 			assertEquals(worldPosition(5), validMove1.y);
-			var validMove2:DisplayObject = main.getChildAt(main.numChildren - 2);
+			var validMove2:DisplayObject = container.getChildAt(2);
 			assertEquals(worldPosition(0), validMove2.x);
 			assertEquals(worldPosition(4), validMove2.y);
 		}
@@ -181,13 +186,13 @@ package {
 		}
 		
 		private function moveMouse(position:Point):void {
-			main.mouseX = position.x;
-			main.mouseY = position.y;
-			main.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE));
+			container.mouseX = position.x;
+			container.mouseY = position.y;
+			container.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE));
 		}
 		
 		private function clickMouse():void {
-			main.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			container.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		}
 		
 		private function assertTileHoveredButNotSelected(rowNumber:int, columnNumber:int):void {

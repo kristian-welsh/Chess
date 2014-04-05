@@ -5,7 +5,6 @@ package test {
 	public class FakeSprite extends Sprite {
 		// mouseX and mouseY in DisplayObject are read only, workaround for testing.
 		private var mousePos:Point = new Point();
-		
 		private var fakeEnabled:Boolean = false;
 		
 		public function setMousePosition(x:Number, y:Number):void {

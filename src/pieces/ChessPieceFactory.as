@@ -4,7 +4,7 @@ package pieces {
 	/** @author Kristian Welsh */
 	public class ChessPieceFactory {
 		public static var MAIN:Main;
-		// todo: replace type with enumerated string constants
+		// TODO: replace type with enumerated string constants
 		public static function makeChessPiece(type:uint, position:Point, black:Boolean):IChessPiece {
 			switch(type) {
 				case 0:

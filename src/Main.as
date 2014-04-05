@@ -1,10 +1,10 @@
 ﻿package {
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
-	import test.FakeSprite;
 	
-	public class Main extends FakeSprite implements BoardData {
+	public class Main extends Sprite implements BoardData {
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
 		static public const TILE_WIDTH:Number = 36;
