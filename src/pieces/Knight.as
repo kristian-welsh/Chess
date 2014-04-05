@@ -24,7 +24,7 @@ package pieces {
 		}
 		
 		private function pushIfValid(list:Array, move:Point):void {
-			if (!move.equals(new Point( -1, -1)))
+			if (!move.equals(new Point(-1, -1)))
 				list.push(move);
 		}
 		

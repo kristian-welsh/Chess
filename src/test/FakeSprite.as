@@ -17,7 +17,7 @@ package test {
 		}
 		
 		public override function get mouseX():Number {
-			return fakeEnabled? mousePos.x : super.mouseX;
+			return fakeEnabled ? mousePos.x : super.mouseX;
 		}
 		
 		public function set mouseY(value:Number):void {
@@ -25,7 +25,7 @@ package test {
 		}
 		
 		public override function get mouseY():Number {
-			return fakeEnabled? mousePos.y : super.mouseY;
+			return fakeEnabled ? mousePos.y : super.mouseY;
 		}
 		
 		public function enableFakeMousePosition():void {

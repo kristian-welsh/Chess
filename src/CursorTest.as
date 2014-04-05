@@ -1,14 +1,10 @@
 package {
 	import asunit.framework.TestCase;
 	import flash.display.DisplayObject;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
+	import flash.events.*;
 	import flash.geom.Point;
 	import flash.utils.Timer;
-	import pieces.ChessPiece;
 	import pieces.IChessPiece;
-	import pieces.Pawn;
 	import test.FakeSprite;
 	
 	public class CursorTest extends TestCase {
@@ -19,6 +15,7 @@ package {
 		private var main:TestingMain;
 		private var cursor:Cursor;
 		private var container:FakeSprite;
+		private var boardData:InMemoryBoardData;
 		
 		public function CursorTest(testName:String, main:TestingMain) {
 			this.main = main;
@@ -29,9 +26,11 @@ package {
 			main.resetChessPieces();
 			//TODO: replace first main referance with an in memory board data object or some kind of fake.
 			container = new FakeSprite();
-			container.addChild(new ChessBoard());//blows up if this isn't added
+			container.addChild(new ChessBoard()); //blows up if this isn't added
 			container.enableFakeMousePosition();
-			cursor = new Cursor(main, container);
+			boardData = new InMemoryBoardData(RawTestData.data);
+			boardData.organizeRawChessData();
+			cursor = new Cursor(boardData, container);
 		}
 		
 		public function test_construction():void {
@@ -84,8 +83,8 @@ package {
 		}
 		
 		public function test_make_move():void {
-			var originalEmptySpace:DisplayObject = main.getChessPieceAt(5, 0) as DisplayObject;
-			var originalChessPiece:DisplayObject = main.getChessPieceAt(6, 0) as DisplayObject;
+			var originalEmptySpace:DisplayObject = boardData.getChessPieceAt(5, 0) as DisplayObject;
+			var originalChessPiece:DisplayObject = boardData.getChessPieceAt(6, 0) as DisplayObject;
 			assertTrue(originalChessPiece.parent);
 			
 			clickBoardTile(0, 6); // white piece (pawn)
@@ -93,8 +92,8 @@ package {
 			assertEquals(0, cursor.legalMoveIndicators.length);
 			assertFalse(originalEmptySpace.parent);
 			assertFalse(originalChessPiece.parent);
-			var newEmptySpace:IChessPiece = main.getChessPieceAt(5, 0);
-			var newChessPiece:IChessPiece = main.getChessPieceAt(6, 0);
+			var newEmptySpace:IChessPiece = boardData.getChessPieceAt(5, 0);
+			var newChessPiece:IChessPiece = boardData.getChessPieceAt(6, 0);
 			assertEquals(1, newEmptySpace.type);
 			assertEquals(0, newChessPiece.type);
 			assertFalse(newEmptySpace.black);
