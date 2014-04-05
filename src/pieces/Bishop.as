@@ -1,9 +1,10 @@
 package pieces {
+	import flash.geom.Point;
 	
 	/** @author Kristian Welsh */
 	public class Bishop extends ChessPiece implements IChessPiece {
-		public function Bishop(x:Number, y:Number, black:Boolean, parent:Main):void {
-			super(x, y, 4, black, parent);
+		public function Bishop(position:Point, black:Boolean, parent:Main):void {
+			super(position, 4, black, parent);
 		}
 		
 		public function legalMoves():Array {

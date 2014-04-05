@@ -1,25 +1,26 @@
 package pieces {
+	import flash.geom.Point;
 	
 	/** @author Kristian Welsh */
 	public class ChessPieceFactory {
-		// todo: replace type with enumerated string constants
 		public static var MAIN:Main;
-		public static function makeChessPiece(type:uint, x:Number, y:Number, black:Boolean, parent:Main = null):IChessPiece {
+		// todo: replace type with enumerated string constants
+		public static function makeChessPiece(type:uint, position:Point, black:Boolean):IChessPiece {
 			switch(type) {
 				case 0:
-					return new NullChessPiece(x, y, black, MAIN);
+					return new NullChessPiece(position, black, MAIN);
 				case 1:
-					return new Pawn(x, y, black, MAIN);
+					return new Pawn(position, black, MAIN);
 				case 2:
-					return new Rook(x, y, black, MAIN);
+					return new Rook(position, black, MAIN);
 				case 3:
-					return new Knight(x, y, black, MAIN);
+					return new Knight(position, black, MAIN);
 				case 4:
-					return new Bishop(x, y, black, MAIN);
+					return new Bishop(position, black, MAIN);
 				case 5:
-					return new Queen(x, y, black, MAIN);
+					return new Queen(position, black, MAIN);
 				case 6:
-					return new King(x, y, black, MAIN);
+					return new King(position, black, MAIN);
 				default:
 					throw new Error("Invalid value in parameter \"type\" in method makeChessPiece. Valid values are integers from 0 to 6, value found to be: " + type);
 			}
@@ -27,7 +28,7 @@ package pieces {
 		}
 		
 		public static function cloneChessPiece(source:IChessPiece, parent:Main = null):IChessPiece {
-			return makeChessPiece(source.type, source.x, source.y, source.black);
+			return makeChessPiece(source.type, new Point(source.x, source.y), source.black);
 		}
 	}
 }

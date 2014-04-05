@@ -3,8 +3,8 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Knight extends ChessPiece implements IChessPiece {
-		public function Knight(x:Number, y:Number, black:Boolean, parent:Main):void {
-			super(x, y, 3, black, parent);
+		public function Knight(position:Point, black:Boolean, parent:Main):void {
+			super(position, 3, black, parent);
 		}
 		
 		// if statements may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))

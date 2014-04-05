@@ -19,10 +19,10 @@
 		protected var _downRightTiles:int;
 		
 		//NEXT TO OPTIMISE: COMBINE ALL DIAGONAL AND NON-DIAGONAL CALCULATIONS IN ONE FUNCTION (SEPERATE) (ADDITIONAL UP FOR PAWN)
-		public function ChessPiece(x:Number, y:Number, type:int, black:Boolean, parent:Main):void {
+		public function ChessPiece(position:Point, type:int, black:Boolean, parent:Main):void {
 			super();
-			this.x = x;
-			this.y = y;
+			this.x = position.x;
+			this.y = position.y;
 			parent.addChild(this);
 			_tx = Math.floor(x / 36);
 			_ty = Math.floor(y / 36);

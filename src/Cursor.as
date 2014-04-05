@@ -1,6 +1,7 @@
 ﻿package {
 	import flash.display.*;
 	import flash.events.*;
+	import flash.geom.Point;
 	import flash.utils.Timer;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
@@ -179,7 +180,11 @@
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			_boardData.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), ChessPieceFactory.makeChessPiece(0, tile.x, tile.y, true));
+			var type:uint = 0;
+			var position:Point = new Point(tile.x, tile.y);
+			var black:Boolean = true;
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(type, position, black);
+			_boardData.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), newPiece);
 			tile.removeSelfFromStage();
 		}
 		

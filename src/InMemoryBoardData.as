@@ -1,4 +1,5 @@
 package {
+	import flash.geom.Point;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
 	
@@ -30,9 +31,8 @@ package {
 			validateTileIndexes(i, j);
 			var type:uint = _rawData[i][j][0];
 			var black:Boolean = _rawData[i][j][1];
-			var x:Number = tilePos(j);
-			var y:Number = tilePos(i);
-			_data[i].push(ChessPieceFactory.makeChessPiece(type, x, y, black));
+			var position:Point = new Point(tilePos(j), tilePos(i));
+			_data[i].push(ChessPieceFactory.makeChessPiece(type, position, black));
 		}
 		
 		private function tilePos(tileIndex:int):Number {
