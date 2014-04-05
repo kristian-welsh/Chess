@@ -79,8 +79,8 @@ package {
 		}
 		
 		public function test_make_move():void {
-			var originalEmptySpace:ChessPiece = main.chessPieces[5][0] as ChessPiece;
-			var originalChessPiece:ChessPiece = main.chessPieces[6][0] as ChessPiece;
+			var originalEmptySpace:DisplayObject = main.getChessPieceAt(5, 0) as DisplayObject;
+			var originalChessPiece:DisplayObject = main.getChessPieceAt(6, 0) as DisplayObject;
 			assertTrue(originalChessPiece.parent);
 			
 			clickBoardTile(0, 6); // white piece (pawn)
@@ -88,8 +88,8 @@ package {
 			assertEquals(0, cursor.legalMoveIndicators.length);
 			assertFalse(originalEmptySpace.parent);
 			assertFalse(originalChessPiece.parent);
-			var newEmptySpace:ChessPiece = main.chessPieces[5][0] as ChessPiece;
-			var newChessPiece:ChessPiece = main.chessPieces[6][0] as ChessPiece;
+			var newEmptySpace:IChessPiece = main.getChessPieceAt(5, 0);
+			var newChessPiece:IChessPiece = main.getChessPieceAt(6, 0);
 			assertEquals(1, newEmptySpace.type);
 			assertEquals(0, newChessPiece.type);
 			assertFalse(newEmptySpace.black);

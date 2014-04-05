@@ -10,6 +10,7 @@ package pieces {
 		// if statements may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))
 		public function legalMoves():Array {
 			var possibleMoves:Array = [];
+			//TODO: I don't understand any of this anymore! Clean this pile of mess!!
 			pushIfValid(possibleMoves, knightMove(_ty - 1, _tx - 2, _ty - 1 >= 0, _tx - 2 >= 0));
 			pushIfValid(possibleMoves, knightMove(_ty - 1, _tx + 2, _ty - 1 >= 0, true));
 			pushIfValid(possibleMoves, knightMove(_ty + 1, _tx - 2, true, _tx - 2 >= 0));
@@ -28,7 +29,7 @@ package pieces {
 		}
 		
 		private function knightMove(y:int, x:int, c:Boolean, d:Boolean):Point {
-			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _main.chessPieces[y][x].black == true)
+			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _main.getChessPieceAt(y, x).black == true)
 				return new Point(x, y);
 			return new Point(-1, -1);
 		}

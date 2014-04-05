@@ -11,7 +11,7 @@
 		static public const BORDER_WIDTH:Number = 12;
 		
 		protected var _rawBoardData:Array = RawProductionData.data;
-		private var _boardData:InMemoryBoardData;
+		protected var _boardData:InMemoryBoardData;
 		private var _cursor:Cursor;
 		
 		public function Main():void {
@@ -23,8 +23,8 @@
 		}
 		
 		protected function startGame(e:Event = null):void {
+			addChild(new ChessBoard()); // must add ChessBoard first, or all other objects will be under it.
 			organizeChessData();
-			addChild(new ChessBoard());
 			_cursor = new Cursor(_boardData, this);
 		}
 		
@@ -33,16 +33,16 @@
 			_boardData.organizeRawChessData();
 		}
 		
-		public function get chessPieces():Array {
-			return _boardData.chessPieces;
-		}
-		
 		public function getChessPieceAt(y:uint, x:uint):IChessPiece {
 			return _boardData.getChessPieceAt(y, x);
 		}
 		
 		public function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void {
 			_boardData.setChessPieceAt(y, x, newChessPiece);
+		}
+		
+		public function tileExistsAt(y:int, x:int):Boolean {
+			return _boardData.tlieExistsAt(y, x);
 		}
 	}
 }

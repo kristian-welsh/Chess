@@ -164,15 +164,15 @@
 		}
 		
 		private function tileExistsAt(point:Point):Boolean {
-			return _main.chessPieces[point.y] != null && _main.chessPieces[point.y][point.x] != null;
+			return _main.tileExistsAt(point.y, point.x);
 		}
 		
 		protected function tileIsWhiteAt(point:Point):Boolean {
-			return tileExistsAt(point) && _main.chessPieces[point.y][point.x].black == 0
+			return tileExistsAt(point) && _main.getChessPieceAt(point.y, point.x).black == 0
 		}
 		
 		protected function tileIsOccupiedAt(point:Point):Boolean {
-			return tileExistsAt(point) && _main.chessPieces[point.y][point.x].type != 0;
+			return tileExistsAt(point) && _main.getChessPieceAt(point.y, point.x).type != 0;
 		}
 		
 		public function removeSelfFromStage():void {

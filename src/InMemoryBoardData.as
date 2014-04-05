@@ -1,8 +1,7 @@
-package  {
+package {
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
-	import pieces.NullChessPiece;
-
+	
 	public class InMemoryBoardData implements BoardData {
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
@@ -41,7 +40,7 @@ package  {
 		}
 		
 		private function validateTileIndexes(y:uint, x:uint):void {
-			assert(y < BOARD_HEIGHT && x < BOARD_WIDTH, invalidInputsMessage(y, x))
+			assert(tlieExistsAt(y, x), invalidInputsMessage(y, x))
 		}
 		
 		private function invalidInputsMessage(y:uint, x:uint):String {
@@ -58,6 +57,14 @@ package  {
 		
 		public function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void {
 			_data[y][x] = newChessPiece;
+		}
+		
+		public function tlieExistsAt(y:int, x:int):Boolean {
+			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH)
+				return false
+			if (y < 0 || x < 0)
+				return false;
+			return true;
 		}
 	}
 }

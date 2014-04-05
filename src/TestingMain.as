@@ -2,7 +2,6 @@ package  {
 	import asunit.textui.TestRunner;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
-	import pieces.IChessPiece;
 	import test.AllTests;
 	
 	public class TestingMain extends Main {
@@ -17,7 +16,7 @@ package  {
 		}
 		
 		public function resetChessPieces():void {
-			for each(var row:Array in chessPieces)
+			for each(var row:Array in _boardData.chessPieces)
 				for each (var piece:DisplayObject in row)
 					removeChild(piece);
 			super.organizeChessData()
@@ -28,10 +27,6 @@ package  {
 			var testRunner:TestRunner = new TestRunner();
 			stage.addChild(testRunner)
 			testRunner.start(AllTests);
-		}
-		
-		public function get rawData():Array {
-			return _rawBoardData;
 		}
 	}
 }

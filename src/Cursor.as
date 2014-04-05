@@ -2,7 +2,6 @@
 	import flash.display.*;
 	import flash.events.*;
 	import flash.utils.Timer;
-	import pieces.ChessPiece;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
 	
@@ -54,7 +53,7 @@
 		
 		private function moveFreelyIfNoSelection():void {
 			if (pieceSelected())
-				return
+				return;
 			freelyMoveCursor();
 		}
 		
@@ -72,10 +71,14 @@
 		}
 		
 		private function cursorIsOnBoard():Boolean {
-			if (_hoveredTileIndexX < 0) return false;
-			if (_hoveredTileIndexY < 0) return false;
-			if (_hoveredTileIndexX >= BOARD_WIDTH) return false;
-			if (_hoveredTileIndexY >= BOARD_WIDTH) return false;
+			if (_hoveredTileIndexX < 0)
+				return false;
+			if (_hoveredTileIndexY < 0)
+				return false;
+			if (_hoveredTileIndexX >= BOARD_WIDTH)
+				return false;
+			if (_hoveredTileIndexY >= BOARD_WIDTH)
+				return false;
 			return true;
 		}
 		
