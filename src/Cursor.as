@@ -16,10 +16,6 @@
 		private var _container:DisplayObjectContainer;
 		private var _selectedTile:IChessPiece;
 		private var _legalMoveIndicators:Array = [];
-		private var _hoveredTileX:int;
-		private var _hoveredTileY:int;
-		private var _hoveredTileIndexY:int;
-		private var _hoveredTileIndexX:int;
 		private var _stopReselectTimer:Timer = new Timer(1, 1);
 		
 		public function Cursor(boardData:BoardData, container:DisplayObjectContainer):void {
@@ -32,27 +28,11 @@
 		}
 		
 		private function addListeners():void {
-			_container.addEventListener(MouseEvent.MOUSE_MOVE, moveCursor);
+			_container.addEventListener(MouseEvent.MOUSE_MOVE, moveCursorIfNoPieceSelected);
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
 		
-		private function moveCursor(event:MouseEvent):void {
-			updatePositionVariables();
-			moveFreelyIfNoSelection();
-		}
-		
-		private function updatePositionVariables():void {
-			_hoveredTileIndexX = tileIndexAt(_container.mouseX - BORDER_SIZE);
-			_hoveredTileIndexY = tileIndexAt(_container.mouseY - BORDER_SIZE);
-			_hoveredTileX = _hoveredTileIndexX * TILE_WIDTH + BORDER_SIZE;
-			_hoveredTileY = _hoveredTileIndexY * TILE_WIDTH + BORDER_SIZE;
-		}
-		
-		private function tileIndexAt(number:Number):int {
-			return Math.floor(number / TILE_WIDTH);
-		}
-		
-		private function moveFreelyIfNoSelection():void {
+		private function moveCursorIfNoPieceSelected(event:MouseEvent):void {
 			if (pieceSelected())
 				return;
 			freelyMoveCursor();
@@ -72,20 +52,40 @@
 		}
 		
 		private function cursorIsOnBoard():Boolean {
-			if (_hoveredTileIndexX < 0)
+			if (hoveredTileIndexX() < 0)
 				return false;
-			if (_hoveredTileIndexY < 0)
+			if (hoveredTileIndexY() < 0)
 				return false;
-			if (_hoveredTileIndexX >= BOARD_WIDTH)
+			if (hoveredTileIndexX() >= BOARD_WIDTH)
 				return false;
-			if (_hoveredTileIndexY >= BOARD_WIDTH)
+			if (hoveredTileIndexY() >= BOARD_WIDTH)
 				return false;
 			return true;
 		}
 		
+		private function hoveredTileIndexX():Number {
+			return tileIndexAt(_container.mouseX - BORDER_SIZE);
+		}
+		
+		private function hoveredTileIndexY():Number {
+			return tileIndexAt(_container.mouseY - BORDER_SIZE);
+		}
+		
+		private function hoveredTileX():Number {
+			return hoveredTileIndexX() * TILE_WIDTH + BORDER_SIZE;
+		}
+		
+		private function hoveredTileY():Number {
+			return hoveredTileIndexY() * TILE_WIDTH + BORDER_SIZE;
+		}
+		
+		private function tileIndexAt(number:Number):int {
+			return Math.floor(number / TILE_WIDTH);
+		}
+		
 		private function updatePos():void {
-			this.x = _hoveredTileX;
-			this.y = _hoveredTileY;
+			this.x = hoveredTileX();
+			this.y = hoveredTileY();
 		}
 		
 		private function selectHoveredWhitePiece(event:MouseEvent):void {
@@ -106,7 +106,7 @@
 		}
 		
 		private function hoveredChessPieceIsBlack():Boolean {
-			return _boardData.getChessPieceAt(_hoveredTileIndexY, _hoveredTileIndexX).black;
+			return _boardData.getChessPieceAt(hoveredTileIndexY(), hoveredTileIndexX()).black;
 		}
 		
 		private function selectHoveredPiece():void {
@@ -144,7 +144,7 @@
 		}
 		
 		private function selectHoveredTile():void {
-			_selectedTile = _boardData.getChessPieceAt(_hoveredTileIndexY, _hoveredTileIndexX);
+			_selectedTile = _boardData.getChessPieceAt(hoveredTileIndexY(), hoveredTileIndexX());
 			this.gotoAndStop(2);
 		}
 		
