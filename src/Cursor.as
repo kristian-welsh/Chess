@@ -199,14 +199,5 @@
 			_stopReselectTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, replenishClickListener);
 			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
 		}
-		
-		//////////////////////
-		/**
-		 * WARNING: DO NOT USE, this variable only exposed for ease of testing, delete as soon as possible.
-		 */
-		public function get legalMoveIndicators():Array {
-			return _legalMoveIndicators;
-		}
-		//////////////////////
 	}
 }

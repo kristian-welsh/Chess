@@ -88,8 +88,8 @@ package {
 			assertTrue(originalChessPiece.parent);
 			
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(cursor.legalMoveIndicators[1]); // one space in front
-			assertEquals(0, cursor.legalMoveIndicators.length);
+			click(container.getChildAt(3)); // legal move indicator one space in front of pawn
+			assertEquals(2, container.numChildren);
 			assertFalse(originalEmptySpace.parent);
 			assertFalse(originalChessPiece.parent);
 			var newEmptySpace:IChessPiece = boardData.getChessPieceAt(5, 0);
@@ -129,14 +129,14 @@ package {
 		// This is a bug, but is here for characterization perposes.
 		public function test_soon_after_movement_select_piece_fails():void {
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(cursor.legalMoveIndicators[1]); // one space in front
+			click(container.getChildAt(3)); // legal move indicator one space in front of pawn
 			clickBoardTile(0, 5); // white piece (pawn)
 			assertNoPieceSelected();
 		}
 		
 		public function test_second_move_after_while_succeeds():void {
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(cursor.legalMoveIndicators[1]); // one space in front
+			click(container.getChildAt(3)); // legal move indicator one space in front of pawn
 			
 			callFunctionAfterTimeout(1, function() {
 					clickBoardTile(0, 5); // white piece (pawn)
