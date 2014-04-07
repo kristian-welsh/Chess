@@ -7,7 +7,7 @@ package  {
 	public class TestingMain extends Main {
 		protected override function startGame(e:Event = null):void {
 			initTestingData();
-			organizeChessData();
+			loadBoardData();
 			runTests();
 		}
 		
@@ -19,7 +19,7 @@ package  {
 			for each(var row:Array in _boardData.chessPieces)
 				for each (var piece:DisplayObject in row)
 					removeChild(piece);
-			super.organizeChessData()
+			super.loadBoardData()
 		}
 		
 		private function runTests():void {

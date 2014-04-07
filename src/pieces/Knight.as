@@ -1,10 +1,11 @@
 package pieces {
+	import flash.display.DisplayObjectContainer;
 	import flash.geom.Point;
 	
 	/** @author Kristian Welsh */
 	public class Knight extends ChessPiece implements IChessPiece {
-		public function Knight(position:Point, black:Boolean, parent:Main):void {
-			super(position, 3, black, parent);
+		public function Knight(position:Point, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
+			super(position, 3, black, container, boardData);
 		}
 		
 		// if statements may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))
@@ -29,7 +30,7 @@ package pieces {
 		}
 		
 		private function knightMove(y:int, x:int, c:Boolean, d:Boolean):Point {
-			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _main.getChessPieceAt(y, x).black == true)
+			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _boardData.getChessPieceAt(y, x).black == true)
 				return new Point(x, y);
 			return new Point(-1, -1);
 		}

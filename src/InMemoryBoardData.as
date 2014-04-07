@@ -32,7 +32,7 @@ package {
 			var type:uint = _rawData[i][j][0];
 			var black:Boolean = _rawData[i][j][1];
 			var position:Point = new Point(tilePos(j), tilePos(i));
-			_data[i].push(ChessPieceFactory.makeChessPiece(type, position, black));
+			_data[i].push(ChessPieceFactory.makeChessPiece(type, position, black, this));
 		}
 		
 		private function tilePos(tileIndex:int):Number {
@@ -40,7 +40,7 @@ package {
 		}
 		
 		private function validateTileIndexes(y:uint, x:uint):void {
-			assert(tlieExistsAt(y, x), invalidInputsMessage(y, x))
+			assert(tileExistsAt(y, x), invalidInputsMessage(y, x))
 		}
 		
 		private function invalidInputsMessage(y:uint, x:uint):String {
@@ -59,7 +59,7 @@ package {
 			_data[y][x] = newChessPiece;
 		}
 		
-		public function tlieExistsAt(y:int, x:int):Boolean {
+		public function tileExistsAt(y:int, x:int):Boolean {
 			if (y >= BOARD_HEIGHT || x >= BOARD_WIDTH)
 				return false
 			if (y < 0 || x < 0)

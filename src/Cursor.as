@@ -29,7 +29,7 @@
 		
 		private function addListeners():void {
 			_container.addEventListener(MouseEvent.MOUSE_MOVE, moveCursorIfNoPieceSelected);
-			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
+			_container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 		}
 		
 		private function moveCursorIfNoPieceSelected(event:MouseEvent):void {
@@ -88,7 +88,7 @@
 			this.y = hoveredTileY();
 		}
 		
-		private function selectHoveredWhitePiece(event:MouseEvent):void {
+		private function selectHoveredValidPiece(event:MouseEvent):void {
 			if (!canInteractWithTile())
 				return;
 			if (pieceSelected())
@@ -176,28 +176,28 @@
 			var newPositionPiece:IChessPiece = _boardData.getChessPieceAt(yIndex, xIndex);
 			newPositionPiece.updatePiece(_selectedTile.type, _selectedTile.black);
 			newPositionPiece.removeSelfFromStage();
-			_boardData.setChessPieceAt(yIndex, xIndex, ChessPieceFactory.cloneChessPiece(newPositionPiece));
+			_boardData.setChessPieceAt(yIndex, xIndex, ChessPieceFactory.cloneChessPiece(newPositionPiece, _boardData));
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
 			var type:uint = 0;
 			var position:Point = new Point(tile.x, tile.y);
 			var black:Boolean = true;
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(type, position, black);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(type, position, black, _boardData);
 			_boardData.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), newPiece);
 			tile.removeSelfFromStage();
 		}
 		
 		// delayNextClick() and replenishClickListener() are a workaround for a bug that re-selects chess-pieces after you move them.
 		private function delayNextClick():void {
-			_container.removeEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
+			_container.removeEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 			_stopReselectTimer.addEventListener(TimerEvent.TIMER_COMPLETE, replenishClickListener);
 			_stopReselectTimer.start();
 		}
 		
 		private function replenishClickListener(event:TimerEvent):void {
 			_stopReselectTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, replenishClickListener);
-			_container.addEventListener(MouseEvent.CLICK, selectHoveredWhitePiece);
+			_container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 		}
 	}
 }

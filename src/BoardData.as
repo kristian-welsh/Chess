@@ -3,5 +3,6 @@ package {
 	public interface BoardData {
 		function getChessPieceAt(y:uint, x:uint):IChessPiece;
 		function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void;
+		function tileExistsAt(y:int, x:int):Boolean;
 	}
 }

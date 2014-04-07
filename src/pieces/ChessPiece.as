@@ -1,4 +1,5 @@
 ﻿package pieces {
+	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
 	
@@ -8,7 +9,7 @@
 		public var _tx:int;
 		public var _ty:int;
 		
-		protected var _main:Main;
+		protected var _boardData:BoardData;
 		protected var _upTiles:int;
 		protected var _downTiles:int;
 		protected var _leftTiles:int;
@@ -19,14 +20,14 @@
 		protected var _downRightTiles:int;
 		
 		//NEXT TO OPTIMISE: COMBINE ALL DIAGONAL AND NON-DIAGONAL CALCULATIONS IN ONE FUNCTION (SEPERATE) (ADDITIONAL UP FOR PAWN)
-		public function ChessPiece(position:Point, type:int, black:Boolean, parent:Main):void {
+		public function ChessPiece(position:Point, type:int, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
 			super();
 			this.x = position.x;
 			this.y = position.y;
-			parent.addChild(this);
 			_tx = Math.floor(x / 36);
 			_ty = Math.floor(y / 36);
-			_main = parent as Main;
+			container.addChild(this);
+			_boardData = boardData;
 			updatePiece(type, black);
 		}
 		
@@ -164,15 +165,15 @@
 		}
 		
 		private function tileExistsAt(point:Point):Boolean {
-			return _main.tileExistsAt(point.y, point.x);
+			return _boardData.tileExistsAt(point.y, point.x);
 		}
 		
 		protected function tileIsWhiteAt(point:Point):Boolean {
-			return tileExistsAt(point) && _main.getChessPieceAt(point.y, point.x).black == 0
+			return tileExistsAt(point) && _boardData.getChessPieceAt(point.y, point.x).black == 0
 		}
 		
 		protected function tileIsOccupiedAt(point:Point):Boolean {
-			return tileExistsAt(point) && _main.getChessPieceAt(point.y, point.x).type != 0;
+			return tileExistsAt(point) && _boardData.getChessPieceAt(point.y, point.x).type != 0;
 		}
 		
 		public function removeSelfFromStage():void {

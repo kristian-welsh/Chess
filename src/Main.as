@@ -4,7 +4,7 @@
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
 	
-	public class Main extends Sprite implements BoardData {
+	public class Main extends Sprite {
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
 		static public const TILE_WIDTH:Number = 36;
@@ -24,25 +24,13 @@
 		
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard()); // must add ChessBoard first, or all other objects will be under it.
-			organizeChessData();
+			loadBoardData();
 			_cursor = new Cursor(_boardData, this);
 		}
 		
-		protected function organizeChessData():void {
+		protected function loadBoardData():void {
 			_boardData = new InMemoryBoardData(_rawBoardData);
 			_boardData.organizeRawChessData();
-		}
-		
-		public function getChessPieceAt(y:uint, x:uint):IChessPiece {
-			return _boardData.getChessPieceAt(y, x);
-		}
-		
-		public function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void {
-			_boardData.setChessPieceAt(y, x, newChessPiece);
-		}
-		
-		public function tileExistsAt(y:int, x:int):Boolean {
-			return _boardData.tlieExistsAt(y, x);
 		}
 	}
 }
