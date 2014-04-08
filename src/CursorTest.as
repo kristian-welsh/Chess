@@ -14,19 +14,15 @@ package {
 		private static const TILE_SIZE:Number = 36
 		private static const BORDER_WIDTH:Number = 12
 		
-		private var main:TestingMain;
 		private var cursor:Cursor;
 		private var container:FakeSprite;
 		private var boardData:InMemoryBoardData;
 		
-		public function CursorTest(testName:String, main:TestingMain) {
-			this.main = main;
+		public function CursorTest(testName:String) {
 			super(testName);
 		}
 		
 		protected override function setUp():void {
-			main.resetChessPieces();
-			//TODO: replace first main referance with an in memory board data object or some kind of fake.
 			container = new FakeSprite();
 			container.addChild(new ChessBoard()); //blows up if this isn't added
 			container.enableFakeMousePosition();

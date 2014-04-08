@@ -3,7 +3,6 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import pieces.ChessPieceFactory;
-	import pieces.IChessPiece;
 	import rawdata.RawProductionData;
 	
 	public class Main extends Sprite {
@@ -12,12 +11,12 @@
 		static public const TILE_WIDTH:Number = 36;
 		static public const BORDER_WIDTH:Number = 12;
 		
-		protected var _rawBoardData:Array = RawProductionData.data;
-		protected var _boardData:InMemoryBoardData;
+		private var _rawBoardData:Array = RawProductionData.data;
+		private var _boardData:InMemoryBoardData;
 		private var _cursor:Cursor;
 		
 		public function Main():void {
-			ChessPieceFactory.MAIN = this;
+			ChessPieceFactory.CONTAINER = this;
 			if (stage)
 				startGame();
 			else
