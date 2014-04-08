@@ -29,7 +29,7 @@ package board {
 		
 		private function addPiece(i:int, j:int):void {
 			validateTileIndexes(i, j);
-			var type:uint = _rawData[i][j][0];
+			var type:Class = _rawData[i][j][0];
 			var black:Boolean = _rawData[i][j][1];
 			var position:Point = new Point(tilePos(j), tilePos(i));
 			_data[i].push(ChessPieceFactory.makeChessPiece(type, position, black, this));

@@ -6,7 +6,7 @@
 	
 	public class ChessPiece extends MovieClip {
 		public var _black:Boolean;
-		public var _type:int;
+		public var _type:Class;
 		public var _tx:int;
 		public var _ty:int;
 		
@@ -21,10 +21,9 @@
 		protected var _downRightTiles:int;
 		
 		//NEXT TO OPTIMISE: COMBINE ALL DIAGONAL AND NON-DIAGONAL CALCULATIONS IN ONE FUNCTION (SEPERATE) (ADDITIONAL UP FOR PAWN)
-		public function ChessPiece(position:Point, type:int, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
+		public function ChessPiece(position:Point, type:Class, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
 			super();
-			this.x = position.x;
-			this.y = position.y;
+			updatePosition(position);
 			_tx = Math.floor(x / 36);
 			_ty = Math.floor(y / 36);
 			container.addChild(this);
@@ -32,7 +31,12 @@
 			updatePiece(type, black);
 		}
 		
-		public function updatePiece(type:int, black:Boolean):void {
+		private function updatePosition(position:Point):void {
+			this.x = position.x;
+			this.y = position.y;
+		}
+		
+		public function updatePiece(type:Class, black:Boolean):void {
 			setType(type);
 			if (black)
 				setBlack();
@@ -41,15 +45,15 @@
 		}
 		
 		/// would idealy be a set fuction, but a bug in flashplayer means you can't have a private setter and public getter or vice versa
-		protected function setType(value:int):void {
+		protected function setType(value:Class):void {
 			_type = value;
-			if (value == 0)
+			if (value == NullChessPiece)
 				this.visible = false;
 			else
 				this.visible = true;
 		}
 		
-		public function get type():int {
+		public function get type():Class {
 			return _type
 		}
 		
@@ -57,14 +61,22 @@
 			return _black
 		}
 		
-		protected function setBlack():void {
+		private function setBlack():void {
 			_black = true;
-			this.gotoAndStop(_type * 2);
+			displayBlack();
+		}
+		
+		protected function displayBlack():void {
+			throw new Error("Should only be called on a sub-class");
 		}
 		
 		protected function setWhite():void {
 			_black = false;
-			this.gotoAndStop(_type * 2 - 1)
+			displayWhite();
+		}
+		
+		protected function displayWhite():void {
+			throw new Error("Should only be called on a sub-class");
 		}
 		
 		protected function nonDiagonalMovement(limit:int):Array {
@@ -170,11 +182,11 @@
 		}
 		
 		protected function tileIsWhiteAt(point:Point):Boolean {
-			return tileExistsAt(point) && _boardData.getChessPieceAt(point.y, point.x).black == 0
+			return tileExistsAt(point) && !_boardData.getChessPieceAt(point.y, point.x).black;
 		}
 		
 		protected function tileIsOccupiedAt(point:Point):Boolean {
-			return tileExistsAt(point) && _boardData.getChessPieceAt(point.y, point.x).type != 0;
+			return tileExistsAt(point) && _boardData.getChessPieceAt(point.y, point.x).type != NullChessPiece;
 		}
 		
 		public function removeSelfFromStage():void {

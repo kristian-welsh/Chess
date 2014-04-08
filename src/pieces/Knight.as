@@ -6,7 +6,7 @@ package pieces {
 	/** @author Kristian Welsh */
 	public class Knight extends ChessPiece implements IChessPiece {
 		public function Knight(position:Point, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
-			super(position, 3, black, container, boardData);
+			super(position, Knight, black, container, boardData);
 		}
 		
 		// if statements may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))
@@ -34,6 +34,14 @@ package pieces {
 			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _boardData.getChessPieceAt(y, x).black == true)
 				return new Point(x, y);
 			return new Point(-1, -1);
+		}
+		
+		protected override function displayWhite():void {
+			this.gotoAndStop(6 - 1)
+		}
+		
+		protected override function displayBlack():void {
+			this.gotoAndStop(6);
 		}
 	}
 }

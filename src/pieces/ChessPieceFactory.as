@@ -7,22 +7,30 @@ package pieces {
 	public class ChessPieceFactory {
 		public static var CONTAINER:DisplayObjectContainer;
 		
+		public static var NULL:Class = NullChessPiece;
+		public static var PAWN:Class = Pawn;
+		public static var ROOK:Class = Rook;
+		public static var KNIGHT:Class = Knight;
+		public static var BISHOP:Class = Bishop;
+		public static var QUEEN:Class = Queen;
+		public static var KING:Class = King;
+		
 		// TODO: replace type with enumerated string constants
-		public static function makeChessPiece(type:uint, position:Point, black:Boolean, boardData:BoardData):IChessPiece {
+		public static function makeChessPiece(type:Class, position:Point, black:Boolean, boardData:BoardData):IChessPiece {
 			switch (type) {
-				case 0:
+				case NULL:
 					return new NullChessPiece(position, black, CONTAINER, boardData);
-				case 1:
+				case PAWN:
 					return new Pawn(position, black, CONTAINER, boardData);
-				case 2:
+				case ROOK:
 					return new Rook(position, black, CONTAINER, boardData);
-				case 3:
+				case KNIGHT:
 					return new Knight(position, black, CONTAINER, boardData);
-				case 4:
+				case BISHOP:
 					return new Bishop(position, black, CONTAINER, boardData);
-				case 5:
+				case QUEEN:
 					return new Queen(position, black, CONTAINER, boardData);
-				case 6:
+				case KING:
 					return new King(position, black, CONTAINER, boardData);
 				default:
 					throw new Error("Invalid value in parameter \"type\" in method makeChessPiece. Valid values are integers from 0 to 6, value found to be: " + type);

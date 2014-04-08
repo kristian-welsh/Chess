@@ -181,7 +181,7 @@
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var type:uint = 0;
+			var type:Class = ChessPieceFactory.NULL;
 			var position:Point = new Point(tile.x, tile.y);
 			var black:Boolean = true;
 			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(type, position, black, _boardData);
