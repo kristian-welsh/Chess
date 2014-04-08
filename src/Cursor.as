@@ -1,4 +1,5 @@
 ﻿package {
+	import board.BoardData;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;

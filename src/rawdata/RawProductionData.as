@@ -1,4 +1,4 @@
-package {
+package rawdata {
 	public class RawProductionData extends RawChessPieceDefinitions {
 		public static const data:Array = [
 			[p08, p09, p10, p11, p12, p10, p09, p08],

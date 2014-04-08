@@ -2,6 +2,7 @@ package  {
 	import asunit.textui.TestRunner;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import rawdata.RawTestData;
 	import test.AllTests;
 	
 	public class TestingMain extends Main {

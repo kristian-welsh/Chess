@@ -1,4 +1,5 @@
 package pieces {
+	import board.BoardData;
 	import flash.geom.Point;
 	
 	/** @author Kristian Welsh */

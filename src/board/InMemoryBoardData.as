@@ -1,4 +1,4 @@
-package {
+package board {
 	import flash.geom.Point;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;

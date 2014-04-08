@@ -1,4 +1,5 @@
 ﻿package pieces {
+	import board.BoardData;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.geom.Point;

@@ -1,4 +1,4 @@
-package {
+package rawdata {
 	public class RawChessPieceDefinitions {
 		protected static var p00:Array = [0, true];
 		protected static var p01:Array = [1, false];

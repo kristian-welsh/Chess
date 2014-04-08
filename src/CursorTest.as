@@ -1,10 +1,12 @@
 package {
 	import asunit.framework.TestCase;
+	import board.InMemoryBoardData;
 	import flash.display.DisplayObject;
 	import flash.events.*;
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	import pieces.IChessPiece;
+	import rawdata.RawTestData;
 	import test.FakeSprite;
 	
 	public class CursorTest extends TestCase {

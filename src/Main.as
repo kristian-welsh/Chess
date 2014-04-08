@@ -1,8 +1,10 @@
 ﻿package {
+	import board.InMemoryBoardData;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
+	import rawdata.RawProductionData;
 	
 	public class Main extends Sprite {
 		static public const BOARD_WIDTH:uint = 8;
