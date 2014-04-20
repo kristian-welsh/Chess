@@ -5,21 +5,15 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class NullChessPiece extends ChessPiece implements IChessPiece {
-		public function NullChessPiece(position:Point, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
-			super(position, NullChessPiece, black, container, boardData);
+		public function NullChessPiece(position:Point, black:Boolean, boardData:BoardData):void {
+			_type = NullChessPiece;
+			_blackFrameNumber = 0;
+			super(position, black, boardData);
 			this.visible = false;
 		}
 		
-		public function legalMoves():Array {
+		public override function legalMoves():Array {
 			return [];
-		}
-		
-		protected override function displayWhite():void {
-			
-		}
-		
-		protected override function displayBlack():void {
-			
 		}
 	}
 }

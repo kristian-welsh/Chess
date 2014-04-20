@@ -5,12 +5,14 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Knight extends ChessPiece implements IChessPiece {
-		public function Knight(position:Point, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
-			super(position, Knight, black, container, boardData);
+		public function Knight(position:Point, black:Boolean, boardData:BoardData):void {
+			_type = Knight;
+			_blackFrameNumber = 6
+			super(position, black, boardData);
 		}
 		
 		// if statements may be optimizeable ((true,false,false,true) as opposed to (_ty+2>=0,_tx-1>=0,true,false))
-		public function legalMoves():Array {
+		public override function legalMoves():Array {
 			var possibleMoves:Array = [];
 			//TODO: I don't understand any of this anymore! Clean this pile of mess!!
 			pushIfValid(possibleMoves, knightMove(_ty - 1, _tx - 2, _ty - 1 >= 0, _tx - 2 >= 0));
@@ -34,14 +36,6 @@ package pieces {
 			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _boardData.getChessPieceAt(y, x).black == true)
 				return new Point(x, y);
 			return new Point(-1, -1);
-		}
-		
-		protected override function displayWhite():void {
-			this.gotoAndStop(6 - 1)
-		}
-		
-		protected override function displayBlack():void {
-			this.gotoAndStop(6);
 		}
 	}
 }

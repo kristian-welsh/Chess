@@ -4,53 +4,27 @@
 	import flash.display.MovieClip;
 	import flash.geom.Point;
 	
-	public class ChessPiece extends MovieClip {
-		public var _black:Boolean;
-		public var _type:Class;
-		public var _tx:int;
-		public var _ty:int;
-		
+	public class ChessPiece extends MovieClip implements IChessPiece {
+		protected var _blackFrameNumber:uint;
+		private var _isBlack:Boolean;
+		protected var _type:Class;
+		protected var _tx:int;
+		protected var _ty:int;
 		protected var _boardData:BoardData;
-		protected var _upTiles:int;
-		protected var _downTiles:int;
-		protected var _leftTiles:int;
-		protected var _rightTiles:int;
-		protected var _upLeftTiles:int;
-		protected var _upRightTiles:int;
-		protected var _downLeftTiles:int;
-		protected var _downRightTiles:int;
 		
-		//NEXT TO OPTIMISE: COMBINE ALL DIAGONAL AND NON-DIAGONAL CALCULATIONS IN ONE FUNCTION (SEPERATE) (ADDITIONAL UP FOR PAWN)
-		public function ChessPiece(position:Point, type:Class, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
+		public function ChessPiece(position:Point, isBlack:Boolean, boardData:BoardData):void {
 			super();
-			updatePosition(position);
-			_tx = Math.floor(x / 36);
-			_ty = Math.floor(y / 36);
-			container.addChild(this);
-			_boardData = boardData;
-			updatePiece(type, black);
-		}
-		
-		private function updatePosition(position:Point):void {
 			this.x = position.x;
 			this.y = position.y;
+			_tx = Math.floor(x / 36);
+			_ty = Math.floor(y / 36);
+			_boardData = boardData;
+			setColour(isBlack);
 		}
 		
-		public function updatePiece(type:Class, black:Boolean):void {
-			setType(type);
-			if (black)
-				setBlack();
-			else
-				setWhite();
-		}
-		
-		/// would idealy be a set fuction, but a bug in flashplayer means you can't have a private setter and public getter or vice versa
-		protected function setType(value:Class):void {
-			_type = value;
-			if (value == NullChessPiece)
-				this.visible = false;
-			else
-				this.visible = true;
+		public function setColour(isBlack:Boolean):void {
+			_isBlack = isBlack;
+			(isBlack) ? gotoAndStop(_blackFrameNumber) : gotoAndStop(_blackFrameNumber - 1);
 		}
 		
 		public function get type():Class {
@@ -58,60 +32,34 @@
 		}
 		
 		public function get black():Boolean {
-			return _black
-		}
-		
-		private function setBlack():void {
-			_black = true;
-			displayBlack();
-		}
-		
-		protected function displayBlack():void {
-			throw new Error("Should only be called on a sub-class");
-		}
-		
-		protected function setWhite():void {
-			_black = false;
-			displayWhite();
-		}
-		
-		protected function displayWhite():void {
-			throw new Error("Should only be called on a sub-class");
+			return _isBlack
 		}
 		
 		protected function nonDiagonalMovement(limit:int):Array {
-			var upTiles:uint = upMovement(limit);
-			var downTiles:uint = downMovement(limit);
-			var leftTiles:uint = leftMovement(limit);
-			var rightTiles:uint = rightMovement(limit);
 			var returnMe:Array = []
 			for (var i:uint = 1; i < limit + 1; i++) {
-				if (leftTiles >= i)
+				if (leftMovement(limit) >= i)
 					returnMe.push(new Point(_tx - i, _ty));
-				if (upTiles >= i)
+				if (upMovement(limit) >= i)
 					returnMe.push(new Point(_tx, _ty - i));
-				if (rightTiles >= i)
+				if (rightMovement(limit) >= i)
 					returnMe.push(new Point(_tx + i, _ty));
-				if (downTiles >= i)
+				if (downMovement(limit) >= i)
 					returnMe.push(new Point(_tx, _ty + i));
 			}
 			return returnMe;
 		}
 		
 		protected function diagonalMovement(limit:int):Array {
-			var upLeftTiles:uint = upLeftMovement(limit);
-			var upRightTiles:uint = upRightMovement(limit);
-			var downLeftTiles:uint = downLeftMovement(limit);
-			var downRightTiles:uint = downRightMovement(limit);
 			var returnMe:Array = []
 			for (var i:uint = 1; i < limit + 1; i++) {
-				if (upLeftTiles >= i)
+				if (upLeftMovement(limit) >= i)
 					returnMe.push(new Point(_tx - i, _ty - i));
-				if (upRightTiles >= i)
+				if (upRightMovement(limit) >= i)
 					returnMe.push(new Point(_tx + i, _ty - i));
-				if (downLeftTiles >= i)
+				if (downLeftMovement(limit) >= i)
 					returnMe.push(new Point(_tx - i, _ty + i));
-				if (downRightTiles >= i)
+				if (downRightMovement(limit) >= i)
 					returnMe.push(new Point(_tx + i, _ty + i));
 			}
 			return returnMe;
@@ -191,6 +139,10 @@
 		
 		public function removeSelfFromStage():void {
 			parent.removeChild(this);
+		}
+		
+		public function legalMoves():Array {
+			throw new Error("Method should only be called on subclass");
 		}
 	}
 }

@@ -5,20 +5,14 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class King extends ChessPiece implements IChessPiece {
-		public function King(position:Point, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
-			super(position, King, black, container, boardData);
+		public function King(position:Point, black:Boolean, boardData:BoardData):void {
+			_type = King;
+			_blackFrameNumber = 12
+			super(position, black, boardData);
 		}
 		
-		public function legalMoves():Array {
+		public override function legalMoves():Array {
 			return nonDiagonalMovement(1).concat(diagonalMovement(1));
-		}
-		
-		protected override function displayWhite():void {
-			this.gotoAndStop(12 - 1)
-		}
-		
-		protected override function displayBlack():void {
-			this.gotoAndStop(12);
 		}
 	}
 }

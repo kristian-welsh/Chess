@@ -6,6 +6,8 @@ package {
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	import pieces.IChessPiece;
+	import pieces.NullChessPiece;
+	import pieces.Pawn;
 	import rawdata.RawTestData;
 	import test.FakeSprite;
 	
@@ -92,8 +94,8 @@ package {
 			assertFalse(originalChessPiece.parent);
 			var newEmptySpace:IChessPiece = boardData.getChessPieceAt(5, 0);
 			var newChessPiece:IChessPiece = boardData.getChessPieceAt(6, 0);
-			assertEquals(1, newEmptySpace.type);
-			assertEquals(0, newChessPiece.type);
+			assertEquals(Pawn, newEmptySpace.type);
+			assertEquals(NullChessPiece, newChessPiece.type);
 			assertFalse(newEmptySpace.black);
 			assertTrue(newChessPiece.black);
 		}

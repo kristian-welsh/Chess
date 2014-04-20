@@ -7,6 +7,7 @@ package pieces {
 	public class ChessPieceFactory {
 		public static var CONTAINER:DisplayObjectContainer;
 		
+		// TODO: move these declarations to a dedicated constant class
 		public static var NULL:Class = NullChessPiece;
 		public static var PAWN:Class = Pawn;
 		public static var ROOK:Class = Rook;
@@ -17,29 +18,30 @@ package pieces {
 		
 		// TODO: replace type with enumerated string constants
 		public static function makeChessPiece(type:Class, position:Point, black:Boolean, boardData:BoardData):IChessPiece {
-			switch (type) {
-				case NULL:
-					return new NullChessPiece(position, black, CONTAINER, boardData);
-				case PAWN:
-					return new Pawn(position, black, CONTAINER, boardData);
-				case ROOK:
-					return new Rook(position, black, CONTAINER, boardData);
-				case KNIGHT:
-					return new Knight(position, black, CONTAINER, boardData);
-				case BISHOP:
-					return new Bishop(position, black, CONTAINER, boardData);
-				case QUEEN:
-					return new Queen(position, black, CONTAINER, boardData);
-				case KING:
-					return new King(position, black, CONTAINER, boardData);
-				default:
-					throw new Error("Invalid value in parameter \"type\" in method makeChessPiece. Valid values are integers from 0 to 6, value found to be: " + type);
-			}
-			throw new Error("Should not reach this statement in method makeChessPiece");
+			var piece:ChessPiece = createChessPiece(type, position, black, boardData);
+			CONTAINER.addChild(piece);
+			return piece;
 		}
 		
-		public static function cloneChessPiece(source:IChessPiece, boardData:BoardData):IChessPiece {
-			return makeChessPiece(source.type, new Point(source.x, source.y), source.black, boardData);
+		private static function createChessPiece(type:Class, position:Point, black:Boolean, boardData:BoardData):ChessPiece {
+			switch (type) {
+				case NULL:
+					return new NullChessPiece(position, black, boardData);
+				case PAWN:
+					return new Pawn(position, black, boardData);
+				case ROOK:
+					return new Rook(position, black, boardData);
+				case KNIGHT:
+					return new Knight(position, black, boardData);
+				case BISHOP:
+					return new Bishop(position, black, boardData);
+				case QUEEN:
+					return new Queen(position, black, boardData);
+				case KING:
+					return new King(position, black, boardData);
+				default:
+					throw new Error("Invalid value in parameter \"type\" in method createChessPiece. Valid values are subclasses of ChessPiece, value found to be: " + type);
+			}
 		}
 	}
 }
