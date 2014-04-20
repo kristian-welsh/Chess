@@ -1,0 +1,27 @@
+Must:
+Check
+Checkmate
+2 Player mode
+
+Should:
+Castling
+En passant
+Pawn promotion piece selection
+Game Timer
+Keyboard Control
+
+Could:
+Black AI (A*, heuristics, neural networks)
+Automated game rcording & playback
+Stalemate detection
+Chess game rule variants
+
+Would:
+Online multiplayer
+3D chess graphics
+
+Errors:
+Find a better work around for single click re-selection in cursor class
+
+Optimisation:
+Piece movement functions
