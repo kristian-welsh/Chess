@@ -16,7 +16,7 @@
 			super();
 			this.x = position.x;
 			this.y = position.y;
-			_tx = Math.floor(x / 36);
+			_tx = Math.floor(x / 36); // currently finding tile index position via the display x and y, should be other way arround.
 			_ty = Math.floor(y / 36);
 			_boardData = boardData;
 			setColour(isBlack);
@@ -104,7 +104,7 @@
 		 * @return The number of spaces that can be moved by this peice in that direction,
 		 * @example pathLength(3, 1, -1); looks 3 spaces towards the upper-right of the piece's position.
 		 */
-		private function pathLength(limit:uint, xDirection:Number, yDirection:Number):uint {
+		protected function pathLength(limit:uint, xDirection:Number, yDirection:Number):uint {
 			invalidatePathLengthInputs(xDirection, yDirection);
 			for (var i:int = 0; i < limit; i++) {
 				var inspectedPosition:Point = new Point(_tx + i * xDirection + xDirection, _ty + i * yDirection + yDirection);

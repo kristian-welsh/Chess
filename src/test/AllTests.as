@@ -1,5 +1,6 @@
 package test {
 	import asunit.framework.TestSuite;
+	import pieces.ChessPieceTest;
 	
 	public class AllTests extends TestSuite {
 		public function AllTests() {
@@ -13,6 +14,10 @@ package test {
 			addTest(new CursorTest("test_invalid_piece_selection"));
 			addTest(new CursorTest("test_soon_after_movement_select_piece_fails"));
 			addTest(new CursorTest("test_second_move_after_while_succeeds"));
+			addTest(new ChessPieceTest("characterisation"));
+			addTest(new ChessPieceTest("proper_frame_selection"));
+			addTest(new ChessPieceTest("constructor_positions_piece_correctly"));
+			addTest(new ChessPieceTest("should_return_type_and_black_correctly_before_input"));
 		}
 	}
 }
