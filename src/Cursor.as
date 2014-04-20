@@ -16,8 +16,7 @@
 		private var _boardData:BoardData;
 		private var _container:DisplayObjectContainer;
 		private var _selectedTile:IChessPiece;
-		private var _legalMoveIndicators:Array = [];
-		private var _stopReselectTimer:Timer = new Timer(1, 1);
+		private var _legalMoveIndicators:Vector.<LegalMoveIndicator> = new Vector.<LegalMoveIndicator>();
 		
 		public function Cursor(boardData:BoardData, container:DisplayObjectContainer):void {
 			super();
@@ -125,7 +124,7 @@
 		}
 		
 		private function showLegalMove(index:uint):void {
-			_legalMoveIndicators[index] = new validMove();
+			_legalMoveIndicators[index] = new LegalMoveIndicator();
 			positionLegalMove(index);
 			enableLegalMove(index);
 			displayLegalMove(index);
@@ -163,7 +162,7 @@
 		private function removeLegalMoveIndicators():void {
 			for (var i:int = 0; i < _legalMoveIndicators.length; i++)
 				_container.removeChild(_legalMoveIndicators[i]);
-			_legalMoveIndicators = [];
+			_legalMoveIndicators = new Vector.<LegalMoveIndicator>();
 		}
 		
 		private function makeMove(event:MouseEvent):void {
@@ -174,31 +173,25 @@
 		
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
 			clearOldTile(_selectedTile);
-			var newPositionPiece:IChessPiece = _boardData.getChessPieceAt(yIndex, xIndex);
-			newPositionPiece.updatePiece(_selectedTile.type, _selectedTile.black);
-			newPositionPiece.removeSelfFromStage();
-			_boardData.setChessPieceAt(yIndex, xIndex, ChessPieceFactory.cloneChessPiece(newPositionPiece, _boardData));
+			var movedToPiece:IChessPiece = _boardData.getChessPieceAt(yIndex, xIndex);
+			movedToPiece.removeSelfFromStage();
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(_selectedTile.type, new Point(movedToPiece.x, movedToPiece.y), _selectedTile.black, _boardData);
+			_boardData.setChessPieceAt(yIndex, xIndex, newPiece);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var type:Class = ChessPieceFactory.NULL;
-			var position:Point = new Point(tile.x, tile.y);
-			var black:Boolean = true;
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(type, position, black, _boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceFactory.NULL, new Point(tile.x, tile.y), true, _boardData);
 			_boardData.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), newPiece);
 			tile.removeSelfFromStage();
 		}
 		
-		// delayNextClick() and replenishClickListener() are a workaround for a bug that re-selects chess-pieces after you move them.
+		// delayNextClick() is a workaround for a bug that re-selects chess-pieces after you move them.
 		private function delayNextClick():void {
 			_container.removeEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
-			_stopReselectTimer.addEventListener(TimerEvent.TIMER_COMPLETE, replenishClickListener);
-			_stopReselectTimer.start();
-		}
-		
-		private function replenishClickListener(event:TimerEvent):void {
-			_stopReselectTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, replenishClickListener);
-			_container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
+			var replenishClickListener:Function = function() {
+				_container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
+			}
+			Util.delayCall(replenishClickListener, 1);
 		}
 	}
 }

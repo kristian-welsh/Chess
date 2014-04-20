@@ -5,11 +5,13 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Pawn extends ChessPiece implements IChessPiece {
-		public function Pawn(position:Point, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
-			super(position, Pawn, black, container, boardData);
+		public function Pawn(position:Point, black:Boolean, boardData:BoardData):void {
+			_type = Pawn;
+			_blackFrameNumber = 2;
+			super(position, black, boardData);
 		}
 		
-		public function legalMoves():Array {
+		public override function legalMoves():Array {
 			var returnMe:Array = [];
 			if (upMovement(2) == 2 && !tileIsOccupiedAt(new Point(_tx, _ty - upMovement(2))) && _ty == 6)
 				returnMe.push(new Point(_tx, _ty - upMovement(2)));
@@ -28,14 +30,6 @@ package pieces {
 		
 		private function shouldHaveTopRightLegalMove():Boolean {
 			return tileIsOccupiedAt(new Point(_tx + 1, _ty - 1)) && !tileIsWhiteAt(new Point(_tx + 1, _ty - 1));
-		}
-		
-		protected override function displayWhite():void {
-			this.gotoAndStop(2 - 1)
-		}
-		
-		protected override function displayBlack():void {
-			this.gotoAndStop(2);
 		}
 	}
 }

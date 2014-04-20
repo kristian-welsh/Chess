@@ -5,20 +5,14 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Bishop extends ChessPiece implements IChessPiece {
-		public function Bishop(position:Point, black:Boolean, container:DisplayObjectContainer, boardData:BoardData):void {
-			super(position, Bishop, black, container, boardData);
+		public function Bishop(position:Point, black:Boolean, boardData:BoardData):void {
+			_type = Bishop;
+			_blackFrameNumber = 8;
+			super(position, black, boardData);
 		}
 		
-		public function legalMoves():Array {
+		public override function legalMoves():Array {
 			return diagonalMovement(7);
-		}
-		
-		protected override function displayWhite():void {
-			this.gotoAndStop(8 - 1)
-		}
-		
-		protected override function displayBlack():void {
-			this.gotoAndStop(8);
 		}
 	}
 }
