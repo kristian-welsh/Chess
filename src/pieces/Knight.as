@@ -1,6 +1,6 @@
 package pieces {
 	import board.BoardData;
-	import flash.display.DisplayObjectContainer;
+	import board.InMemoryBoardData;
 	import flash.geom.Point;
 	
 	/** @author Kristian Welsh */
@@ -33,7 +33,7 @@ package pieces {
 		}
 		
 		private function knightMove(y:int, x:int, c:Boolean, d:Boolean):Point {
-			if (Main.BOARD_HEIGHT - 1 >= y && Main.BOARD_WIDTH - 1 >= x && c && d && _boardData.getChessPieceAt(y, x).black == true)
+			if (InMemoryBoardData.BOARD_HEIGHT - 1 >= y && InMemoryBoardData.BOARD_WIDTH - 1 >= x && c && d && _boardData.getChessPieceAt(y, x).black == true)
 				return new Point(x, y);
 			return new Point(-1, -1);
 		}

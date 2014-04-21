@@ -6,11 +6,6 @@
 	import rawdata.RawProductionData;
 	
 	public class Main extends Sprite {
-		static public const BOARD_WIDTH:uint = 8;
-		static public const BOARD_HEIGHT:uint = 8;
-		static public const TILE_WIDTH:Number = 36;
-		static public const BORDER_WIDTH:Number = 12;
-		
 		private var _rawBoardData:Array = RawProductionData.data;
 		private var _boardData:InMemoryBoardData;
 		private var _cursor:Cursor;
@@ -25,13 +20,8 @@
 		
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard()); // must add ChessBoard first, or all other objects will be under it.
-			loadBoardData();
-			_cursor = new Cursor(_boardData, this);
-		}
-		
-		protected function loadBoardData():void {
 			_boardData = new InMemoryBoardData(_rawBoardData);
-			_boardData.organizeRawChessData();
+			_cursor = new Cursor(_boardData, this);
 		}
 	}
 }

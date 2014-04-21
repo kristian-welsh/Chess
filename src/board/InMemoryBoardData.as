@@ -4,6 +4,7 @@ package board {
 	import pieces.IChessPiece;
 	
 	public class InMemoryBoardData implements BoardData {
+		// TODO: move these to a new class
 		static public const BOARD_WIDTH:uint = 8;
 		static public const BOARD_HEIGHT:uint = 8;
 		static public const TILE_WIDTH:Number = 36;
@@ -14,6 +15,7 @@ package board {
 		
 		public function InMemoryBoardData(rawBoardData:Array) {
 			_rawData = rawBoardData
+			organizeRawChessData();
 		}
 		
 		public function organizeRawChessData():void {

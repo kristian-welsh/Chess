@@ -14,7 +14,6 @@ package pieces {
 		
 		override protected function setUp():void {
 			var boardData:InMemoryBoardData = new InMemoryBoardData(RawTestData.data);
-			boardData.organizeRawChessData();
 			piece = new TestableChessPiece(new Point(1, 2), true, boardData);
 		}
 		

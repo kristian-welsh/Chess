@@ -1,17 +1,18 @@
 ﻿package {
 	import board.BoardData;
+	import board.InMemoryBoardData;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
 	import flash.utils.Timer;
-	import pieces.ChessPieceFactory;
-	import pieces.IChessPiece;
+	import pieces.*;
 	
 	// BUG: you can deselect a piece by clicking on another firendly piece
 	public class Cursor extends MovieClip {
-		private static const BORDER_SIZE:Number = Main.BORDER_WIDTH;
-		private static const TILE_WIDTH:Number = Main.TILE_WIDTH;
-		private static const BOARD_WIDTH:Number = 8;
+		private static const BORDER_SIZE:Number = InMemoryBoardData.BORDER_WIDTH;
+		private static const TILE_WIDTH:Number = InMemoryBoardData.TILE_WIDTH;
+		private static const BOARD_WIDTH:Number = InMemoryBoardData.BOARD_WIDTH;
+		private static const BOARD_HEIGHT:Number = InMemoryBoardData.BOARD_HEIGHT;
 		
 		private var _boardData:BoardData;
 		private var _container:DisplayObjectContainer;
@@ -58,7 +59,7 @@
 				return false;
 			if (hoveredTileIndexX() >= BOARD_WIDTH)
 				return false;
-			if (hoveredTileIndexY() >= BOARD_WIDTH)
+			if (hoveredTileIndexY() >= BOARD_HEIGHT)
 				return false;
 			return true;
 		}
@@ -180,7 +181,7 @@
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceFactory.NULL, new Point(tile.tileX, tile.tileY), true, _boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), true, _boardData);
 			_boardData.setChessPieceAt(tile.tileY, tile.tileX, newPiece);
 			tile.removeSelfFromStage();
 		}

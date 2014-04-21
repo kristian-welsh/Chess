@@ -5,16 +5,14 @@ package {
 	import flash.events.*;
 	import flash.geom.Point;
 	import flash.utils.Timer;
-	import pieces.IChessPiece;
-	import pieces.NullChessPiece;
-	import pieces.Pawn;
+	import pieces.*;
 	import rawdata.RawTestData;
 	import test.FakeSprite;
 	
 	public class CursorTest extends TestCase {
-		private static const TILE_QUANTATY_WIDTH:Number = 8
-		private static const TILE_SIZE:Number = 36
-		private static const BORDER_WIDTH:Number = 12
+		private static const BOARD_WIDTH:Number = InMemoryBoardData.BOARD_WIDTH;
+		private static const TILE_WIDTH:Number = InMemoryBoardData.TILE_WIDTH;
+		private static const BORDER_WIDTH:Number = InMemoryBoardData.BORDER_WIDTH;
 		
 		private var cursor:Cursor;
 		private var container:FakeSprite;
@@ -29,7 +27,6 @@ package {
 			container.addChild(new ChessBoard()); //blows up if this isn't added
 			container.enableFakeMousePosition();
 			boardData = new InMemoryBoardData(RawTestData.data);
-			boardData.organizeRawChessData();
 			cursor = new Cursor(boardData, container);
 		}
 		
@@ -43,14 +40,14 @@ package {
 			assertMouseMoveVisibility(false, new Point(BORDER_WIDTH, BORDER_WIDTH - 1));
 			assertMouseMoveVisibility(true, new Point(BORDER_WIDTH, BORDER_WIDTH));
 			
-			var justInsideBoard:Number = TILE_QUANTATY_WIDTH * TILE_SIZE + BORDER_WIDTH - 1
+			var justInsideBoard:Number = BOARD_WIDTH * TILE_WIDTH + BORDER_WIDTH - 1
 			assertMouseMoveVisibility(true, new Point(justInsideBoard, justInsideBoard));
 			assertMouseMoveVisibility(false, new Point(justInsideBoard + 1, justInsideBoard));
 			assertMouseMoveVisibility(false, new Point(justInsideBoard, justInsideBoard + 1));
 		}
 		
 		public function test_moving_mouse_changes_cursor_position_properly():void {
-			assertMouseMovePosition(worldPositionOfTile(0, 0), new Point(BORDER_WIDTH + TILE_SIZE - 1, BORDER_WIDTH + TILE_SIZE - 1));
+			assertMouseMovePosition(worldPositionOfTile(0, 0), new Point(BORDER_WIDTH + TILE_WIDTH - 1, BORDER_WIDTH + TILE_WIDTH - 1));
 			assertMouseMovePosition(worldPositionOfTile(1, 1), worldPositionOfTile(1, 1));
 			
 			cursor.gotoAndStop(2);
@@ -181,7 +178,7 @@ package {
 		}
 		
 		private function worldPosition(tileNumber:int):int {
-			return BORDER_WIDTH + tileNumber * TILE_SIZE;
+			return BORDER_WIDTH + tileNumber * TILE_WIDTH;
 		}
 		
 		private function moveMouse(position:Point):void {
@@ -213,8 +210,8 @@ package {
 		}
 		
 		private function assertCursorOverTile(rowNumber:int, columnNumber:int):void {
-			assertEquals(BORDER_WIDTH + rowNumber * TILE_SIZE, cursor.x);
-			assertEquals(BORDER_WIDTH + columnNumber * TILE_SIZE, cursor.y);
+			assertEquals(BORDER_WIDTH + rowNumber * TILE_WIDTH, cursor.x);
+			assertEquals(BORDER_WIDTH + columnNumber * TILE_WIDTH, cursor.y);
 		}
 		
 		private function assertMouseMoveVisibility(expectedState:Boolean, position:Point = null) {
