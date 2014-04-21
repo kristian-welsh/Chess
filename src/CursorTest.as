@@ -1,5 +1,6 @@
 package {
 	import asunit.framework.TestCase;
+	import board.BoardInfo;
 	import board.InMemoryBoardData;
 	import flash.display.DisplayObject;
 	import flash.events.*;
@@ -10,9 +11,9 @@ package {
 	import test.FakeSprite;
 	
 	public class CursorTest extends TestCase {
-		private static const BOARD_WIDTH:Number = InMemoryBoardData.BOARD_WIDTH;
-		private static const TILE_WIDTH:Number = InMemoryBoardData.TILE_WIDTH;
-		private static const BORDER_WIDTH:Number = InMemoryBoardData.BORDER_WIDTH;
+		private static const BOARD_WIDTH:Number = BoardInfo.BOARD_WIDTH;
+		private static const TILE_WIDTH:Number = BoardInfo.TILE_WIDTH;
+		private static const BORDER_WIDTH:Number = BoardInfo.BORDER_WIDTH;
 		
 		private var cursor:Cursor;
 		private var container:FakeSprite;
@@ -26,12 +27,11 @@ package {
 			container = new FakeSprite();
 			container.addChild(new ChessBoard()); //blows up if this isn't added
 			container.enableFakeMousePosition();
-			boardData = new InMemoryBoardData(RawTestData.data);
+			boardData = new InMemoryBoardData(RawTestData.data); // TODO: substitute in a fake BoardData object
 			cursor = new Cursor(boardData, container);
 		}
 		
 		public function test_construction():void {
-			assertTrue(container.contains(cursor));
 			assertFalse(cursor.visible);
 		}
 		
@@ -47,8 +47,8 @@ package {
 		}
 		
 		public function test_moving_mouse_changes_cursor_position_properly():void {
-			assertMouseMovePosition(worldPositionOfTile(0, 0), new Point(BORDER_WIDTH + TILE_WIDTH - 1, BORDER_WIDTH + TILE_WIDTH - 1));
-			assertMouseMovePosition(worldPositionOfTile(1, 1), worldPositionOfTile(1, 1));
+			assertMouseMoves(worldPositionOfTile(0, 0), new Point(BORDER_WIDTH + TILE_WIDTH - 1, BORDER_WIDTH + TILE_WIDTH - 1));
+			assertMouseMoves(worldPositionOfTile(1, 1), worldPositionOfTile(1, 1));
 			
 			cursor.gotoAndStop(2);
 			cursor.x = 0;
@@ -62,35 +62,35 @@ package {
 			setPieceSelectedFalse();
 			clickBoardTile(0, 6); // white piece
 			assertTileSelected(0, 6);
-			assertEquals(4, container.numChildren);
+			assertEquals(3, container.numChildren);
 			clickBoardTile(0, 6); // same white piece
 			assertTileHoveredButNotSelected(0, 6);
-			assertEquals(2, container.numChildren);
+			assertEquals(1, container.numChildren);
 		}
 		
 		public function test_legal_move_indicator_state():void {
 			clickBoardTile(0, 6); // white piece (pawn)
 			
-			var validMove1:DisplayObject = container.getChildAt(3);
+			var validMove1:DisplayObject = container.getChildAt(2);
 			assertEquals(worldPosition(0), validMove1.x);
 			assertEquals(worldPosition(5), validMove1.y);
-			var validMove2:DisplayObject = container.getChildAt(2);
+			var validMove2:DisplayObject = container.getChildAt(1);
 			assertEquals(worldPosition(0), validMove2.x);
 			assertEquals(worldPosition(4), validMove2.y);
 		}
 		
 		public function test_make_move():void {
-			var originalEmptySpace:DisplayObject = boardData.getChessPieceAt(5, 0) as DisplayObject;
-			var originalChessPiece:DisplayObject = boardData.getChessPieceAt(6, 0) as DisplayObject;
+			var originalEmptySpace:DisplayObject = boardData.getChessPieceAt(0, 5) as DisplayObject;
+			var originalChessPiece:DisplayObject = boardData.getChessPieceAt(0, 6) as DisplayObject;
 			assertTrue(originalChessPiece.parent);
 			
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(container.getChildAt(3)); // legal move indicator one space in front of pawn
-			assertEquals(2, container.numChildren);
+			click(container.getChildAt(2)); // legal move indicator one space in front of pawn
+			assertEquals(1, container.numChildren);
 			assertFalse(originalEmptySpace.parent);
 			assertFalse(originalChessPiece.parent);
-			var newEmptySpace:IChessPiece = boardData.getChessPieceAt(5, 0);
-			var newChessPiece:IChessPiece = boardData.getChessPieceAt(6, 0);
+			var newEmptySpace:IChessPiece = boardData.getChessPieceAt(0, 5);
+			var newChessPiece:IChessPiece = boardData.getChessPieceAt(0, 6);
 			assertEquals(Pawn, newEmptySpace.type);
 			assertEquals(NullChessPiece, newChessPiece.type);
 			assertFalse(newEmptySpace.black);
@@ -123,17 +123,17 @@ package {
 			assertNoPieceSelected();
 		}
 		
-		// This is a bug, but is here for characterization perposes.
+		// BUG: This test documents a current bug in the system. Inspect this behaviorur further if this test fails, as the bug may be gone.
 		public function test_soon_after_movement_select_piece_fails():void {
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(container.getChildAt(3)); // legal move indicator one space in front of pawn
+			click(container.getChildAt(2)); // legal move indicator one space in front of pawn
 			clickBoardTile(0, 5); // white piece (pawn)
 			assertNoPieceSelected();
 		}
 		
 		public function test_second_move_after_while_succeeds():void {
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(container.getChildAt(3)); // legal move indicator one space in front of pawn
+			click(container.getChildAt(2)); // legal move indicator one space in front of pawn
 			
 			callFunctionAfterTimeout(1, function() {
 					clickBoardTile(0, 5); // white piece (pawn)
@@ -141,6 +141,7 @@ package {
 				});
 		}
 		
+		// TODO: Refactor to use Util::delayCall
 		private function callFunctionAfterTimeout(timeout:uint, functionToCall:Function):void {
 			var timer:Timer = new Timer(timeout, 1);
 			var callIt:Function = function(e:Event) {
@@ -220,10 +221,10 @@ package {
 			assertTrue(cursor.visible == expectedState);
 		}
 		
-		private function assertMouseMovePosition(expectedPos:Point, moveTo:Point = null) {
+		private function assertMouseMoves(expectedPos:Point, moveTo:Point) {
 			var prevX:Number = cursor.x;
 			var prevY:Number = cursor.y;
-			//set position no NaN to make sure that cursor didn't happen to already be in the right position.
+			//set position no NaN to make sure that cursor didn't just happen to already be in the right position.
 			cursor.x = NaN;
 			cursor.y = NaN;
 			

@@ -1,18 +1,18 @@
 ﻿package {
 	import board.BoardData;
-	import board.InMemoryBoardData;
+	import board.BoardInfo;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
-	import flash.utils.Timer;
 	import pieces.*;
 	
 	// BUG: you can deselect a piece by clicking on another firendly piece
+	// TODO: keep a referance to the currently hovered tile then use hoveredTile.tileX instead of the current math based sollution
 	public class Cursor extends MovieClip {
-		private static const BORDER_SIZE:Number = InMemoryBoardData.BORDER_WIDTH;
-		private static const TILE_WIDTH:Number = InMemoryBoardData.TILE_WIDTH;
-		private static const BOARD_WIDTH:Number = InMemoryBoardData.BOARD_WIDTH;
-		private static const BOARD_HEIGHT:Number = InMemoryBoardData.BOARD_HEIGHT;
+		private static const BORDER_SIZE:Number = BoardInfo.BORDER_WIDTH;
+		private static const TILE_WIDTH:Number = BoardInfo.TILE_WIDTH;
+		private static const BOARD_WIDTH:Number = BoardInfo.BOARD_WIDTH;
+		private static const BOARD_HEIGHT:Number = BoardInfo.BOARD_HEIGHT;
 		
 		private var _boardData:BoardData;
 		private var _container:DisplayObjectContainer;
@@ -23,7 +23,6 @@
 			super();
 			_boardData = boardData;
 			_container = container;
-			_container.addChild(this);
 			visible = false;
 			addListeners();
 		}
@@ -53,13 +52,9 @@
 		}
 		
 		private function cursorIsOnBoard():Boolean {
-			if (hoveredTileIndexX() < 0)
+			if (0 > hoveredTileIndexX() || hoveredTileIndexX() >= BOARD_WIDTH)
 				return false;
-			if (hoveredTileIndexY() < 0)
-				return false;
-			if (hoveredTileIndexX() >= BOARD_WIDTH)
-				return false;
-			if (hoveredTileIndexY() >= BOARD_HEIGHT)
+			if (0 > hoveredTileIndexY() || hoveredTileIndexY() >= BOARD_HEIGHT)
 				return false;
 			return true;
 		}
@@ -90,12 +85,12 @@
 		}
 		
 		private function selectHoveredValidPiece(event:MouseEvent):void {
-			if (!canInteractWithTile())
-				return;
-			if (pieceSelected())
-				deselectSelectedPiece();
-			else
-				selectHoveredPiece();
+			if (canInteractWithTile()) {
+				if (pieceSelected())
+					deselectSelectedPiece();
+				else
+					selectHoveredPiece();
+			}
 		}
 		
 		private function canInteractWithTile():Boolean {
@@ -107,7 +102,7 @@
 		}
 		
 		private function hoveredChessPieceIsBlack():Boolean {
-			return _boardData.getChessPieceAt(hoveredTileIndexY(), hoveredTileIndexX()).black;
+			return _boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY()).black;
 		}
 		
 		private function selectHoveredPiece():void {
@@ -125,27 +120,28 @@
 		}
 		
 		private function showLegalMove(index:uint):void {
-			_legalMoveIndicators[index] = new LegalMoveIndicator();
-			positionLegalMove(index);
-			enableLegalMove(index);
-			displayLegalMove(index);
+			var currentLegalMove:LegalMoveIndicator = new LegalMoveIndicator();
+			_legalMoveIndicators[index] = currentLegalMove;
+			positionMoveIndicator(currentLegalMove, index);
+			enableMoveIndicator(currentLegalMove);
+			displayMoveIndicator(currentLegalMove);
 		}
 		
-		private function positionLegalMove(index:uint):void {
-			_legalMoveIndicators[index].x = legalMoves()[index].x * TILE_WIDTH + BORDER_SIZE;
-			_legalMoveIndicators[index].y = legalMoves()[index].y * TILE_WIDTH + BORDER_SIZE;
+		private function positionMoveIndicator(indicator:LegalMoveIndicator, index:uint):void {
+			indicator.x = legalMoves()[index].x * TILE_WIDTH + BORDER_SIZE;
+			indicator.y = legalMoves()[index].y * TILE_WIDTH + BORDER_SIZE;
 		}
 		
-		private function enableLegalMove(index:uint):void {
-			_legalMoveIndicators[index].addEventListener(MouseEvent.CLICK, makeMove);
+		private function enableMoveIndicator(indicator:LegalMoveIndicator):void {
+			indicator.addEventListener(MouseEvent.CLICK, makeMove);
 		}
 		
-		private function displayLegalMove(index:uint):void {
-			_container.addChild(_legalMoveIndicators[index]);
+		private function displayMoveIndicator(indicator:LegalMoveIndicator):void {
+			_container.addChild(indicator);
 		}
 		
 		private function selectHoveredTile():void {
-			_selectedTile = _boardData.getChessPieceAt(hoveredTileIndexY(), hoveredTileIndexX());
+			_selectedTile = _boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY());
 			this.gotoAndStop(2);
 		}
 		
@@ -174,15 +170,15 @@
 		
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
 			clearOldTile(_selectedTile);
-			var movedToPiece:IChessPiece = _boardData.getChessPieceAt(yIndex, xIndex);
+			var movedToPiece:IChessPiece = _boardData.getChessPieceAt(xIndex, yIndex);
 			movedToPiece.removeSelfFromStage();
 			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(_selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), _selectedTile.black, _boardData);
-			_boardData.setChessPieceAt(yIndex, xIndex, newPiece);
+			_boardData.setChessPieceAt(xIndex, yIndex, newPiece);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
 			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), true, _boardData);
-			_boardData.setChessPieceAt(tile.tileY, tile.tileX, newPiece);
+			_boardData.setChessPieceAt(tile.tileX, tile.tileY, newPiece);
 			tile.removeSelfFromStage();
 		}
 		

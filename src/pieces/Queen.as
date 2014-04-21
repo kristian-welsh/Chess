@@ -5,10 +5,10 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Queen extends ChessPiece implements IChessPiece {
-		public function Queen(position:Point, black:Boolean, boardData:BoardData):void {
+		public function Queen(tileCoordinates:Point, black:Boolean, boardData:BoardData):void {
 			_type = Queen;
 			_blackFrameNumber = 10;
-			super(position, black, boardData);
+			super(tileCoordinates, black, boardData);
 		}
 		
 		public override function legalMoves():Array {

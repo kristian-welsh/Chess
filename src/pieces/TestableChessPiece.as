@@ -14,9 +14,9 @@ package pieces {
 			return _functionLog[index];
 		}
 		
-		public function TestableChessPiece(position:Point, black:Boolean, boardData:BoardData):void {
+		public function TestableChessPiece(tileCoordinates:Point, black:Boolean, boardData:BoardData):void {
 			_blackFrameNumber = 2;
-			super(position, black, boardData);
+			super(tileCoordinates, black, boardData);
 		}
 		
 		public override function legalMoves():Array {

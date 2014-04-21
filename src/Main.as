@@ -5,6 +5,7 @@
 	import pieces.ChessPieceFactory;
 	import rawdata.RawProductionData;
 	
+	/** @author Kristian Welsh */
 	public class Main extends Sprite {
 		private var _rawBoardData:Array = RawProductionData.data;
 		private var _boardData:InMemoryBoardData;
@@ -22,6 +23,7 @@
 			addChild(new ChessBoard()); // must add ChessBoard first, or all other objects will be under it.
 			_boardData = new InMemoryBoardData(_rawBoardData);
 			_cursor = new Cursor(_boardData, this);
+			addChild(_cursor);
 		}
 	}
 }

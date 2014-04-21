@@ -1,8 +1,8 @@
 package board {
 	import pieces.IChessPiece;
 	public interface BoardData {
-		function getChessPieceAt(y:uint, x:uint):IChessPiece;
-		function setChessPieceAt(y:uint, x:uint, newChessPiece:IChessPiece):void;
-		function tileExistsAt(y:int, x:int):Boolean;
+		function getChessPieceAt(x:uint, y:uint):IChessPiece;
+		function setChessPieceAt(x:uint, y:uint, newChessPiece:IChessPiece):void;
+		function tileExistsAt(x:int, y:int):Boolean;
 	}
 }

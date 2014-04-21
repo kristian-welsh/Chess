@@ -5,10 +5,10 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Rook extends ChessPiece implements IChessPiece {
-		public function Rook(position:Point, black:Boolean, boardData:BoardData):void {
+		public function Rook(tileCoordinates:Point, black:Boolean, boardData:BoardData):void {
 			_type = Rook;
 			_blackFrameNumber = 4;
-			super(position, black, boardData);
+			super(tileCoordinates, black, boardData);
 		}
 		
 		public override function legalMoves():Array {

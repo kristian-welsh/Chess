@@ -1,7 +1,6 @@
 ﻿package pieces {
 	import board.BoardData;
-	import board.InMemoryBoardData;
-	import flash.display.DisplayObjectContainer;
+	import board.BoardInfo;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
 	
@@ -24,7 +23,7 @@
 		}
 		
 		private function tilePos(tileIndex:int):Number {
-			return tileIndex * InMemoryBoardData.TILE_WIDTH + InMemoryBoardData.BORDER_WIDTH;
+			return tileIndex * BoardInfo.TILE_WIDTH + BoardInfo.BORDER_WIDTH;
 		}
 		
 		public function setColour(isBlack:Boolean):void {
@@ -110,14 +109,15 @@
 		 * @example pathLength(3, 1, -1); looks 3 spaces towards the upper-right of the piece's position.
 		 */
 		protected function pathLength(limit:uint, xDirection:Number, yDirection:Number):uint {
+			//TODO: think about refactoring to use moveIsValidAt()
 			invalidatePathLengthInputs(xDirection, yDirection);
 			for (var i:int = 0; i < limit; i++) {
 				var inspectedPosition:Point = new Point(_tx + i * xDirection + xDirection, _ty + i * yDirection + yDirection);
 				if (!tileExistsAt(inspectedPosition))
 					return i;
-				if (tileIsWhiteAt(inspectedPosition))
+				else if (tileIsWhiteAt(inspectedPosition))
 					return i;
-				if (tileIsOccupiedAt(inspectedPosition))
+				else if (tileIsOccupiedAt(inspectedPosition))
 					return i + 1;
 			}
 			return limit;
@@ -131,15 +131,19 @@
 		}
 		
 		private function tileExistsAt(point:Point):Boolean {
-			return _boardData.tileExistsAt(point.y, point.x);
+			return _boardData.tileExistsAt(point.x, point.y);
 		}
 		
 		protected function tileIsWhiteAt(point:Point):Boolean {
-			return tileExistsAt(point) && !_boardData.getChessPieceAt(point.y, point.x).black;
+			return tileExistsAt(point) && !_boardData.getChessPieceAt(point.x, point.y).black;
 		}
 		
 		protected function tileIsOccupiedAt(point:Point):Boolean {
-			return tileExistsAt(point) && _boardData.getChessPieceAt(point.y, point.x).type != NullChessPiece;
+			return tileExistsAt(point) && _boardData.getChessPieceAt(point.x, point.y).type != NullChessPiece;
+		}
+		
+		protected function moveIsValidAt(x:int, y:int):Boolean {
+			return _boardData.tileExistsAt(x, y) && _boardData.getChessPieceAt(x, y).black == true;
 		}
 		
 		public function removeSelfFromStage():void {
