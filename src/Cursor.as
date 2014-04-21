@@ -175,13 +175,13 @@
 			clearOldTile(_selectedTile);
 			var movedToPiece:IChessPiece = _boardData.getChessPieceAt(yIndex, xIndex);
 			movedToPiece.removeSelfFromStage();
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(_selectedTile.type, new Point(movedToPiece.x, movedToPiece.y), _selectedTile.black, _boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(_selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), _selectedTile.black, _boardData);
 			_boardData.setChessPieceAt(yIndex, xIndex, newPiece);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceFactory.NULL, new Point(tile.x, tile.y), true, _boardData);
-			_boardData.setChessPieceAt(tileIndexAt(tile.y), tileIndexAt(tile.x), newPiece);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceFactory.NULL, new Point(tile.tileX, tile.tileY), true, _boardData);
+			_boardData.setChessPieceAt(tile.tileY, tile.tileX, newPiece);
 			tile.removeSelfFromStage();
 		}
 		

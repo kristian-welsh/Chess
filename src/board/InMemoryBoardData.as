@@ -31,12 +31,8 @@ package board {
 			validateTileIndexes(i, j);
 			var type:Class = _rawData[i][j][0];
 			var black:Boolean = _rawData[i][j][1];
-			var position:Point = new Point(tilePos(j), tilePos(i));
+			var position:Point = new Point(j, i);
 			_data[i].push(ChessPieceFactory.makeChessPiece(type, position, black, this));
-		}
-		
-		private function tilePos(tileIndex:int):Number {
-			return tileIndex * TILE_WIDTH + BORDER_WIDTH;
 		}
 		
 		private function validateTileIndexes(y:uint, x:uint):void {

@@ -15,18 +15,18 @@ package pieces {
 		override protected function setUp():void {
 			var boardData:InMemoryBoardData = new InMemoryBoardData(RawTestData.data);
 			boardData.organizeRawChessData();
-			piece = new TestableChessPiece(new Point(100, 200), true, boardData);
+			piece = new TestableChessPiece(new Point(1, 2), true, boardData);
 		}
 		
 		public function proper_frame_selection():void {
 			assertEquals(2, piece.getFunctionCallAt(0).getArgByPosition(0));
-			piece = new TestableChessPiece(new Point(100, 200), false, new InMemoryBoardData(RawTestData.data));
+			piece = new TestableChessPiece(new Point(1, 2), false, new InMemoryBoardData(RawTestData.data));
 			assertEquals(1, piece.getFunctionCallAt(0).getArgByPosition(0));
 		}
 		
 		public function constructor_positions_piece_correctly():void {
-			assertEquals(100, piece.x);
-			assertEquals(200, piece.y);
+			assertEquals(1, piece.tileX);
+			assertEquals(2, piece.tileY);
 		}
 		
 		public function should_return_type_and_black_correctly_before_input():void {

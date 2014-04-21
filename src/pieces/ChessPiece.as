@@ -1,5 +1,6 @@
 ﻿package pieces {
 	import board.BoardData;
+	import board.InMemoryBoardData;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
@@ -12,14 +13,18 @@
 		protected var _ty:int;
 		protected var _boardData:BoardData;
 		
-		public function ChessPiece(position:Point, isBlack:Boolean, boardData:BoardData):void {
+		public function ChessPiece(tileCoordinates:Point, isBlack:Boolean, boardData:BoardData):void {
 			super();
-			this.x = position.x;
-			this.y = position.y;
-			_tx = Math.floor(x / 36); // currently finding tile index position via the display x and y, should be other way arround.
-			_ty = Math.floor(y / 36);
+			this.x = tilePos(tileCoordinates.x);
+			this.y = tilePos(tileCoordinates.y);
+			_tx = tileCoordinates.x;
+			_ty = tileCoordinates.y;
 			_boardData = boardData;
 			setColour(isBlack);
+		}
+		
+		private function tilePos(tileIndex:int):Number {
+			return tileIndex * InMemoryBoardData.TILE_WIDTH + InMemoryBoardData.BORDER_WIDTH;
 		}
 		
 		public function setColour(isBlack:Boolean):void {
@@ -143,6 +148,14 @@
 		
 		public function legalMoves():Array {
 			throw new Error("Method should only be called on subclass");
+		}
+		
+		public function get tileX():uint {
+			return _tx;
+		}
+		
+		public function get tileY():uint {
+			return _ty;
 		}
 	}
 }

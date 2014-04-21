@@ -6,7 +6,7 @@ package pieces {
 		function removeSelfFromStage():void;
 		function get type():Class;
 		function get black():Boolean;
-		function get x():Number;
-		function get y():Number;
+		function get tileX():uint;
+		function get tileY():uint;
 	}
 }
