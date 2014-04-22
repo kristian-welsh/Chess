@@ -1,6 +1,5 @@
 package pieces {
 	
-	/** @author Kristian Welsh */
 	public interface IChessPiece {
 		function legalMoves():Array;
 		function removeSelfFromStage():void;

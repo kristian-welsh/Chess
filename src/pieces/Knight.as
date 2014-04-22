@@ -1,6 +1,5 @@
 package pieces {
 	import board.BoardData;
-	import board.InMemoryBoardData;
 	import flash.geom.Point;
 	
 	public class Knight extends ChessPiece implements IChessPiece {
@@ -15,9 +14,6 @@ package pieces {
 		public override function legalMoves():Array {
 			_currentLegalMoves = [];
 			
-			/* TODO: think about sperating all legal relative knight move locations
-			 * into their own array at creation time and looping through them here.
-			 */
 			addMoveIfValid(_tx - 2, _ty - 1);
 			addMoveIfValid(_tx + 2, _ty - 1);
 			addMoveIfValid(_tx - 2, _ty + 1);
