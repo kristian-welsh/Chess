@@ -14,35 +14,34 @@
 		private static const BOARD_WIDTH:Number = BoardInfo.BOARD_WIDTH;
 		private static const BOARD_HEIGHT:Number = BoardInfo.BOARD_HEIGHT;
 		
-		private var _boardData:BoardData;
-		private var _container:DisplayObjectContainer;
-		private var _selectedTile:IChessPiece;
-		private var _legalMoveIndicators:Vector.<LegalMoveIndicator> = new Vector.<LegalMoveIndicator>();
+		private var boardData:BoardData;
+		private var container:DisplayObjectContainer;
+		private var selectedTile:IChessPiece;
+		private var legalMoveIndicators:Vector.<LegalMoveIndicator> = new Vector.<LegalMoveIndicator>();
 		
 		public function Cursor(boardData:BoardData, container:DisplayObjectContainer):void {
 			super();
-			_boardData = boardData;
-			_container = container;
+			this.boardData = boardData;
+			this.container = container;
 			visible = false;
 			addListeners();
 		}
 		
 		private function addListeners():void {
-			_container.addEventListener(MouseEvent.MOUSE_MOVE, moveCursorIfNoPieceSelected);
-			_container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
+			container.addEventListener(MouseEvent.MOUSE_MOVE, moveCursorIfNoPieceSelected);
+			container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 		}
 		
 		private function moveCursorIfNoPieceSelected(event:MouseEvent):void {
-			if (pieceSelected())
-				return;
-			freelyMoveCursor();
+			if (!pieceSelected())
+				moveCursor();
 		}
 		
 		private function pieceSelected():Boolean {
 			return this.currentFrame != 1;
 		}
 		
-		private function freelyMoveCursor():void {
+		private function moveCursor():void {
 			updateCursorVisibility();
 			updatePos();
 		}
@@ -60,11 +59,11 @@
 		}
 		
 		private function hoveredTileIndexX():Number {
-			return tileIndexAt(_container.mouseX - BORDER_SIZE);
+			return tileIndexAt(container.mouseX - BORDER_SIZE);
 		}
 		
 		private function hoveredTileIndexY():Number {
-			return tileIndexAt(_container.mouseY - BORDER_SIZE);
+			return tileIndexAt(container.mouseY - BORDER_SIZE);
 		}
 		
 		private function hoveredTileX():Number {
@@ -102,7 +101,7 @@
 		}
 		
 		private function hoveredChessPieceIsBlack():Boolean {
-			return _boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY()).black;
+			return boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY()).black;
 		}
 		
 		private function selectHoveredPiece():void {
@@ -112,24 +111,24 @@
 		
 		private function showLegalMoves():void {
 			for (var i:uint = 0; i < legalMoves().length; i++)
-				showLegalMove(i);
+				showLegalMove(legalMoves()[i] as Point);
 		}
 		
 		private function legalMoves():Array {
-			return _selectedTile.legalMoves();
+			return selectedTile.legalMoves();
 		}
 		
-		private function showLegalMove(index:uint):void {
+		private function showLegalMove(move:Point):void {
 			var currentLegalMove:LegalMoveIndicator = new LegalMoveIndicator();
-			_legalMoveIndicators[index] = currentLegalMove;
-			positionMoveIndicator(currentLegalMove, index);
+			legalMoveIndicators.push(currentLegalMove);
+			positionMoveIndicator(currentLegalMove, move);
 			enableMoveIndicator(currentLegalMove);
 			displayMoveIndicator(currentLegalMove);
 		}
 		
-		private function positionMoveIndicator(indicator:LegalMoveIndicator, index:uint):void {
-			indicator.x = legalMoves()[index].x * TILE_WIDTH + BORDER_SIZE;
-			indicator.y = legalMoves()[index].y * TILE_WIDTH + BORDER_SIZE;
+		private function positionMoveIndicator(indicator:LegalMoveIndicator, tilePosition:Point):void {
+			indicator.x = tilePosition.x * TILE_WIDTH + BORDER_SIZE;
+			indicator.y = tilePosition.y * TILE_WIDTH + BORDER_SIZE;
 		}
 		
 		private function enableMoveIndicator(indicator:LegalMoveIndicator):void {
@@ -137,11 +136,11 @@
 		}
 		
 		private function displayMoveIndicator(indicator:LegalMoveIndicator):void {
-			_container.addChild(indicator);
+			container.addChild(indicator);
 		}
 		
 		private function selectHoveredTile():void {
-			_selectedTile = _boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY());
+			selectedTile = boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY());
 			this.gotoAndStop(2);
 		}
 		
@@ -151,15 +150,15 @@
 		}
 		
 		private function deselectTile():void {
-			_selectedTile = null;
+			selectedTile = null;
 			this.gotoAndStop(1);
 			updatePos();
 		}
 		
 		private function removeLegalMoveIndicators():void {
-			for (var i:int = 0; i < _legalMoveIndicators.length; i++)
-				_container.removeChild(_legalMoveIndicators[i]);
-			_legalMoveIndicators = new Vector.<LegalMoveIndicator>();
+			for (var i:int = 0; i < legalMoveIndicators.length; i++)
+				container.removeChild(legalMoveIndicators[i]);
+			legalMoveIndicators = new Vector.<LegalMoveIndicator>();
 		}
 		
 		private function makeMove(event:MouseEvent):void {
@@ -169,24 +168,24 @@
 		}
 		
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
-			clearOldTile(_selectedTile);
-			var movedToPiece:IChessPiece = _boardData.getChessPieceAt(xIndex, yIndex);
+			clearOldTile(selectedTile);
+			var movedToPiece:IChessPiece = boardData.getChessPieceAt(xIndex, yIndex);
 			movedToPiece.removeSelfFromStage();
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(_selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), _selectedTile.black, _boardData);
-			_boardData.setChessPieceAt(xIndex, yIndex, newPiece);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), selectedTile.black, boardData);
+			boardData.setChessPieceAt(xIndex, yIndex, newPiece);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), true, _boardData);
-			_boardData.setChessPieceAt(tile.tileX, tile.tileY, newPiece);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), true, boardData);
+			boardData.setChessPieceAt(tile.tileX, tile.tileY, newPiece);
 			tile.removeSelfFromStage();
 		}
 		
 		// delayNextClick() is a workaround for a bug that re-selects chess-pieces after you move them.
 		private function delayNextClick():void {
-			_container.removeEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
+			container.removeEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 			var replenishClickListener:Function = function() {
-				_container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
+				container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 			}
 			Util.delayCall(replenishClickListener, 1);
 		}
