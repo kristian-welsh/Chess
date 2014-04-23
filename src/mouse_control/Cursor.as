@@ -1,4 +1,4 @@
-﻿package {
+﻿package mouse_control {
 	import board.BoardData;
 	import board.BoardInfo;
 	import flash.display.*;
@@ -8,12 +8,13 @@
 	
 	// BUG: you can deselect a piece by clicking on another firendly piece
 	// TODO: keep a referance to the currently hovered tile then use hoveredTile.tileX instead of the current math based sollution
-	public class Cursor extends MovieClip {
+	public class Cursor {
 		private static const BORDER_SIZE:Number = BoardInfo.BORDER_WIDTH;
 		private static const TILE_WIDTH:Number = BoardInfo.TILE_WIDTH;
 		private static const BOARD_WIDTH:Number = BoardInfo.BOARD_WIDTH;
 		private static const BOARD_HEIGHT:Number = BoardInfo.BOARD_HEIGHT;
 		
+		private var _graphics:CursorGraphics;
 		private var boardData:BoardData;
 		private var container:DisplayObjectContainer;
 		private var selectedTile:IChessPiece;
@@ -21,9 +22,10 @@
 		
 		public function Cursor(boardData:BoardData, container:DisplayObjectContainer):void {
 			super();
+			_graphics = new CursorGraphics();
 			this.boardData = boardData;
 			this.container = container;
-			visible = false;
+			_graphics.visible = false;
 			addListeners();
 		}
 		
@@ -38,7 +40,7 @@
 		}
 		
 		private function pieceSelected():Boolean {
-			return this.currentFrame != 1;
+			return _graphics.currentFrame != 1;
 		}
 		
 		private function moveCursor():void {
@@ -47,7 +49,7 @@
 		}
 		
 		private function updateCursorVisibility():void {
-			this.visible = cursorIsOnBoard() ? true : false;
+			_graphics.visible = cursorIsOnBoard() ? true : false;
 		}
 		
 		private function cursorIsOnBoard():Boolean {
@@ -79,8 +81,8 @@
 		}
 		
 		private function updatePos():void {
-			this.x = hoveredTileX();
-			this.y = hoveredTileY();
+			_graphics.x = hoveredTileX();
+			_graphics.y = hoveredTileY();
 		}
 		
 		private function selectHoveredValidPiece(event:MouseEvent):void {
@@ -141,7 +143,7 @@
 		
 		private function selectHoveredTile():void {
 			selectedTile = boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY());
-			this.gotoAndStop(2);
+			_graphics.gotoAndStop(2);
 		}
 		
 		private function deselectSelectedPiece():void {
@@ -151,7 +153,7 @@
 		
 		private function deselectTile():void {
 			selectedTile = null;
-			this.gotoAndStop(1);
+			_graphics.gotoAndStop(1);
 			updatePos();
 		}
 		
@@ -188,6 +190,10 @@
 				container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 			}
 			Util.delayCall(replenishClickListener, 1);
+		}
+		
+		public function get graphics():CursorGraphics {
+			return _graphics;
 		}
 	}
 }

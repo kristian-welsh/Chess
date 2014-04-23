@@ -1,4 +1,4 @@
-package {
+package mouse_control {
 	import asunit.framework.TestCase;
 	import board.BoardInfo;
 	import board.InMemoryBoardData;
@@ -32,7 +32,7 @@ package {
 		}
 		
 		public function test_construction():void {
-			assertFalse(cursor.visible);
+			assertFalse(cursor.graphics.visible);
 		}
 		
 		public function test_moving_mouse_off_board_makes_cursor_invisible():void {
@@ -50,12 +50,12 @@ package {
 			assertMouseMoves(worldPositionOfTile(0, 0), new Point(BORDER_WIDTH + TILE_WIDTH - 1, BORDER_WIDTH + TILE_WIDTH - 1));
 			assertMouseMoves(worldPositionOfTile(1, 1), worldPositionOfTile(1, 1));
 			
-			cursor.gotoAndStop(2);
-			cursor.x = 0;
-			cursor.y = 0;
+			cursor.graphics.gotoAndStop(2);
+			cursor.graphics.x = 0;
+			cursor.graphics.y = 0;
 			moveMouse(new Point(123, 123));
-			assertEquals(0, cursor.x);
-			assertEquals(0, cursor.y);
+			assertEquals(0, cursor.graphics.x);
+			assertEquals(0, cursor.graphics.y);
 		}
 		
 		public function test_clicking_on_white_piece_twice():void {
@@ -154,7 +154,7 @@ package {
 		}
 		
 		private function cursorPieceSelected():Boolean {
-			return (cursor.currentFrame == 2) ? true : false;
+			return (cursor.graphics.currentFrame == 2) ? true : false;
 		}
 		
 		private function clickBoardTile(rowNumber:int, columnNumber:int):void {
@@ -167,11 +167,11 @@ package {
 		}
 		
 		private function setPieceSelectedFalse():void {
-			cursor.gotoAndStop(1);
+			cursor.graphics.gotoAndStop(1);
 		}
 		
 		private function setPieceSelectedTrue():void {
-			cursor.gotoAndStop(2);
+			cursor.graphics.gotoAndStop(2);
 		}
 		
 		private function worldPositionOfTile(rowNumber:int, columnNumber:int):Point {
@@ -211,29 +211,29 @@ package {
 		}
 		
 		private function assertCursorOverTile(rowNumber:int, columnNumber:int):void {
-			assertEquals(BORDER_WIDTH + rowNumber * TILE_WIDTH, cursor.x);
-			assertEquals(BORDER_WIDTH + columnNumber * TILE_WIDTH, cursor.y);
+			assertEquals(BORDER_WIDTH + rowNumber * TILE_WIDTH, cursor.graphics.x);
+			assertEquals(BORDER_WIDTH + columnNumber * TILE_WIDTH, cursor.graphics.y);
 		}
 		
 		private function assertMouseMoveVisibility(expectedState:Boolean, position:Point = null) {
-			cursor.visible = !expectedState
+			cursor.graphics.visible = !expectedState
 			moveMouse(position);
-			assertTrue(cursor.visible == expectedState);
+			assertTrue(cursor.graphics.visible == expectedState);
 		}
 		
 		private function assertMouseMoves(expectedPos:Point, moveTo:Point) {
-			var prevX:Number = cursor.x;
-			var prevY:Number = cursor.y;
+			var prevX:Number = cursor.graphics.x;
+			var prevY:Number = cursor.graphics.y;
 			//set position no NaN to make sure that cursor didn't just happen to already be in the right position.
-			cursor.x = NaN;
-			cursor.y = NaN;
+			cursor.graphics.x = NaN;
+			cursor.graphics.y = NaN;
 			
 			moveMouse(moveTo);
-			assertEquals(expectedPos.x, cursor.x);
-			assertEquals(expectedPos.y, cursor.y);
+			assertEquals(expectedPos.x, cursor.graphics.x);
+			assertEquals(expectedPos.y, cursor.graphics.y);
 			
-			cursor.x = prevX;
-			cursor.y = prevY;
+			cursor.graphics.x = prevX;
+			cursor.graphics.y = prevY;
 		}
 	}
 }
