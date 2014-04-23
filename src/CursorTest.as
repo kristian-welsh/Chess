@@ -93,8 +93,8 @@ package {
 			var newChessPiece:IChessPiece = boardData.getChessPieceAt(0, 6);
 			assertEquals(Pawn, newEmptySpace.type);
 			assertEquals(NullChessPiece, newChessPiece.type);
-			assertFalse(newEmptySpace.black);
-			assertTrue(newChessPiece.black);
+			assertFalse(newEmptySpace.colour == ChessPieceColours.BLACK);
+			assertTrue(newChessPiece.colour == ChessPieceColours.BLACK);
 		}
 		
 		private function click(object:DisplayObject):void {

@@ -6,7 +6,7 @@
 	
 	public class ChessPiece extends MovieClip implements IChessPiece {
 		protected var _blackFrameNumber:uint;
-		private var colour:String;
+		private var _colour:String;
 		protected var _type:Class;
 		protected var _tx:int;
 		protected var _ty:int;
@@ -27,7 +27,7 @@
 		}
 		
 		public function setColour(colour:String):void {
-			this.colour = colour;
+			this._colour = colour;
 			var displayFrame:uint = (colour == ChessPieceColours.BLACK) ? _blackFrameNumber : _blackFrameNumber - 1;
 			gotoAndStop(displayFrame);
 		}
@@ -36,8 +36,8 @@
 			return _type
 		}
 		
-		public function get black():Boolean {
-			return colour == ChessPieceColours.BLACK;
+		public function get colour():String {
+			return _colour;
 		}
 		
 		protected function nonDiagonalMovement(limit:int):Array {
@@ -136,15 +136,15 @@
 		}
 		
 		protected function tileIsWhiteAt(point:Point):Boolean {
-			return tileExistsAt(point) && !_boardData.getChessPieceAt(point.x, point.y).black;
+			return tileExistsAt(point) && _boardData.getChessPieceAt(point.x, point.y).colour == ChessPieceColours.WHITE;
 		}
-		
+		// need to change this to use ChessPieceColours.NONE in the future
 		protected function tileIsOccupiedAt(point:Point):Boolean {
 			return tileExistsAt(point) && _boardData.getChessPieceAt(point.x, point.y).type != NullChessPiece;
 		}
 		
 		protected function moveIsValidAt(x:int, y:int):Boolean {
-			return _boardData.tileExistsAt(x, y) && _boardData.getChessPieceAt(x, y).black == true;
+			return _boardData.tileExistsAt(x, y) && _boardData.getChessPieceAt(x, y).colour == ChessPieceColours.BLACK;
 		}
 		
 		public function removeSelfFromStage():void {

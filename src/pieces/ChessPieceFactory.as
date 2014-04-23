@@ -6,8 +6,7 @@ package pieces {
 	public class ChessPieceFactory {
 		public static var CONTAINER:DisplayObjectContainer;
 		
-		public static function makeChessPiece(type:Class, position:Point, black:Boolean, boardData:BoardData):IChessPiece {
-			var colour:String = (black) ? ChessPieceColours.BLACK : ChessPieceColours.WHITE;
+		public static function makeChessPiece(type:Class, position:Point, colour:String, boardData:BoardData):IChessPiece {
 			var piece:ChessPiece = createChessPiece(type, position, colour, boardData);
 			CONTAINER.addChild(piece);
 			return piece;

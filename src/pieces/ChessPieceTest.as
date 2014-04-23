@@ -30,7 +30,7 @@ package pieces {
 		
 		public function should_return_type_and_black_correctly_before_input():void {
 			assertEquals(null, piece.type);
-			assertTrue(piece.black);
+			assertTrue(piece.colour == ChessPieceColours.BLACK);
 		}
 		
 		public function characterisation():void {
