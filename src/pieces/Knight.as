@@ -5,10 +5,10 @@ package pieces {
 	public class Knight extends ChessPiece implements IChessPiece {
 		private var _currentLegalMoves:Array;
 		
-		public function Knight(tileCoordinates:Point, black:Boolean, boardData:BoardData):void {
+		public function Knight(tileCoordinates:Point, colour:String, boardData:BoardData):void {
 			_type = Knight;
 			_blackFrameNumber = 6
-			super(tileCoordinates, black, boardData);
+			super(tileCoordinates, colour, boardData);
 		}
 		
 		public override function legalMoves():Array {

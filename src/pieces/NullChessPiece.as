@@ -5,10 +5,10 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class NullChessPiece extends ChessPiece implements IChessPiece {
-		public function NullChessPiece(position:Point, black:Boolean, boardData:BoardData):void {
+		public function NullChessPiece(position:Point, colour:String, boardData:BoardData):void {
 			_type = NullChessPiece;
 			_blackFrameNumber = 0;
-			super(position, black, boardData);
+			super(position, colour, boardData);
 			this.visible = false;
 		}
 		

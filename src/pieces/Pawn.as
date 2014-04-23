@@ -5,10 +5,10 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Pawn extends ChessPiece implements IChessPiece {
-		public function Pawn(tileCoordinates:Point, black:Boolean, boardData:BoardData):void {
+		public function Pawn(tileCoordinates:Point, colour:String, boardData:BoardData):void {
 			_type = Pawn;
 			_blackFrameNumber = 2;
-			super(tileCoordinates, black, boardData);
+			super(tileCoordinates, colour, boardData);
 		}
 		
 		public override function legalMoves():Array {

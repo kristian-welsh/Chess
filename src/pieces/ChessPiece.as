@@ -6,29 +6,30 @@
 	
 	public class ChessPiece extends MovieClip implements IChessPiece {
 		protected var _blackFrameNumber:uint;
-		private var _isBlack:Boolean;
+		private var colour:String;
 		protected var _type:Class;
 		protected var _tx:int;
 		protected var _ty:int;
 		protected var _boardData:BoardData;
 		
-		public function ChessPiece(tileCoordinates:Point, isBlack:Boolean, boardData:BoardData):void {
+		public function ChessPiece(tileCoordinates:Point, colour:String, boardData:BoardData):void {
 			super();
 			this.x = tilePos(tileCoordinates.x);
 			this.y = tilePos(tileCoordinates.y);
 			_tx = tileCoordinates.x;
 			_ty = tileCoordinates.y;
 			_boardData = boardData;
-			setColour(isBlack);
+			setColour(colour);
 		}
 		
 		private function tilePos(tileIndex:int):Number {
 			return tileIndex * BoardInfo.TILE_WIDTH + BoardInfo.BORDER_WIDTH;
 		}
 		
-		public function setColour(isBlack:Boolean):void {
-			_isBlack = isBlack;
-			(isBlack) ? gotoAndStop(_blackFrameNumber) : gotoAndStop(_blackFrameNumber - 1);
+		public function setColour(colour:String):void {
+			this.colour = colour;
+			var displayFrame:uint = (colour == ChessPieceColours.BLACK) ? _blackFrameNumber : _blackFrameNumber - 1;
+			gotoAndStop(displayFrame);
 		}
 		
 		public function get type():Class {
@@ -36,7 +37,7 @@
 		}
 		
 		public function get black():Boolean {
-			return _isBlack
+			return colour == ChessPieceColours.BLACK;
 		}
 		
 		protected function nonDiagonalMovement(limit:int):Array {

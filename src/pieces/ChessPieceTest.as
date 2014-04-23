@@ -14,12 +14,12 @@ package pieces {
 		
 		override protected function setUp():void {
 			var boardData:InMemoryBoardData = new InMemoryBoardData(RawTestData.data);
-			piece = new TestableChessPiece(new Point(1, 2), true, boardData);
+			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColours.BLACK, boardData);
 		}
 		
 		public function proper_frame_selection():void {
 			assertEquals(2, piece.getFunctionCallAt(0).getArgByPosition(0));
-			piece = new TestableChessPiece(new Point(1, 2), false, new InMemoryBoardData(RawTestData.data));
+			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColours.WHITE, new InMemoryBoardData(RawTestData.data));
 			assertEquals(1, piece.getFunctionCallAt(0).getArgByPosition(0));
 		}
 		
