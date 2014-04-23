@@ -5,7 +5,7 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Rook extends ChessPiece implements IChessPiece {
-		public function Rook(tileCoordinates:Point, colour:String, boardData:BoardData):void {
+		public function Rook(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Rook;
 			_blackFrameNumber = 4;
 			super(tileCoordinates, colour, boardData);

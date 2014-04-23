@@ -14,12 +14,12 @@ package pieces {
 		
 		override protected function setUp():void {
 			var boardData:InMemoryBoardData = new InMemoryBoardData(RawTestData.data);
-			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColours.BLACK, boardData);
+			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColour.BLACK, boardData);
 		}
 		
 		public function proper_frame_selection():void {
 			assertEquals(2, piece.getFunctionCallAt(0).getArgByPosition(0));
-			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColours.WHITE, new InMemoryBoardData(RawTestData.data));
+			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColour.WHITE, new InMemoryBoardData(RawTestData.data));
 			assertEquals(1, piece.getFunctionCallAt(0).getArgByPosition(0));
 		}
 		
@@ -28,9 +28,9 @@ package pieces {
 			assertEquals(2, piece.tileY);
 		}
 		
-		public function should_return_type_and_black_correctly_before_input():void {
+		public function should_return_type_and_colour_correctly_before_input():void {
 			assertEquals(null, piece.type);
-			assertTrue(piece.colour == ChessPieceColours.BLACK);
+			assertTrue(piece.colour == ChessPieceColour.BLACK);
 		}
 		
 		public function characterisation():void {

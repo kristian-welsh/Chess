@@ -6,13 +6,13 @@ package pieces {
 	public class ChessPieceFactory {
 		public static var CONTAINER:DisplayObjectContainer;
 		
-		public static function makeChessPiece(type:Class, position:Point, colour:String, boardData:BoardData):IChessPiece {
+		public static function makeChessPiece(type:Class, position:Point, colour:ChessPieceColour, boardData:BoardData):IChessPiece {
 			var piece:ChessPiece = createChessPiece(type, position, colour, boardData);
 			CONTAINER.addChild(piece);
 			return piece;
 		}
 		
-		private static function createChessPiece(type:Class, position:Point, colour:String, boardData:BoardData):ChessPiece {
+		private static function createChessPiece(type:Class, position:Point, colour:ChessPieceColour, boardData:BoardData):ChessPiece {
 			switch (type) {
 				case ChessPieceTypes.NULL:
 					return new NullChessPiece(position, colour, boardData);

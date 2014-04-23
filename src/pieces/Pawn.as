@@ -5,7 +5,7 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Pawn extends ChessPiece implements IChessPiece {
-		public function Pawn(tileCoordinates:Point, colour:String, boardData:BoardData):void {
+		public function Pawn(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Pawn;
 			_blackFrameNumber = 2;
 			super(tileCoordinates, colour, boardData);
@@ -17,19 +17,27 @@ package pieces {
 				returnMe.push(new Point(_tx, _ty - upMovement(2)));
 			if (upMovement(1) > 0 && !tileIsOccupiedAt(new Point(_tx, _ty - upMovement(1))))
 				returnMe.push(new Point(_tx, _ty - upMovement(1)));
-			if (shouldHaveTopLeftLegalMove())
-				returnMe.push(new Point(_tx - 1, _ty - 1));
-			if (shouldHaveTopRightLegalMove())
-				returnMe.push(new Point(_tx + 1, _ty - 1));
+			if (topLeftIsBlack())
+				returnMe.push(topLeftTilePosition());
+			if (topRightIsBlack())
+				returnMe.push(topRightTilePosition());
 			return returnMe;
 		}
 		
-		private function shouldHaveTopLeftLegalMove():Boolean {
-			return tileIsOccupiedAt(new Point(_tx - 1, _ty - 1)) && !tileIsWhiteAt(new Point(_tx - 1, _ty - 1));
+		private function topLeftIsBlack():Boolean {
+			return tileIsBlackAt(topLeftTilePosition());
 		}
 		
-		private function shouldHaveTopRightLegalMove():Boolean {
-			return tileIsOccupiedAt(new Point(_tx + 1, _ty - 1)) && !tileIsWhiteAt(new Point(_tx + 1, _ty - 1));
+		private function topLeftTilePosition():Point {
+			return new Point(_tx - 1, _ty - 1);
+		}
+		
+		private function topRightIsBlack():Boolean {
+			return tileIsBlackAt(topRightTilePosition());
+		}
+		
+		private function topRightTilePosition():Point {
+			return new Point(_tx + 1, _ty - 1);
 		}
 	}
 }

@@ -5,7 +5,7 @@ package pieces {
 	public class Knight extends ChessPiece implements IChessPiece {
 		private var _currentLegalMoves:Array;
 		
-		public function Knight(tileCoordinates:Point, colour:String, boardData:BoardData):void {
+		public function Knight(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Knight;
 			_blackFrameNumber = 6
 			super(tileCoordinates, colour, boardData);

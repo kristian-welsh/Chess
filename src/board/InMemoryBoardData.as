@@ -1,5 +1,6 @@
 package board {
 	import flash.geom.Point;
+	import pieces.ChessPieceColour;
 	import pieces.ChessPieceFactory;
 	import pieces.IChessPiece;
 	
@@ -26,7 +27,7 @@ package board {
 		private function addPiece(i:int, j:int):void {
 			validateTileIndexes(i, j);
 			var type:Class = _rawData[i][j][0];
-			var colour:String = _rawData[i][j][1];
+			var colour:ChessPieceColour = _rawData[i][j][1];
 			var position:Point = new Point(j, i);
 			_data[i].push(ChessPieceFactory.makeChessPiece(type, position, colour, this));
 		}

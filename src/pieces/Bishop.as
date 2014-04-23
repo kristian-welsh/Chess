@@ -4,7 +4,7 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Bishop extends ChessPiece implements IChessPiece {
-		public function Bishop(tileCoordinates:Point, colour:String, boardData:BoardData):void {
+		public function Bishop(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Bishop;
 			_blackFrameNumber = 8;
 			super(tileCoordinates, colour, boardData);

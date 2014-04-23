@@ -95,13 +95,13 @@
 		private function canInteractWithTile():Boolean {
 			if (!cursorIsOnBoard())
 				return false;
-			if (hoveredChessPieceIsBlack())
+			if (hoveredChessPieceIsNotWhite())
 				return false;
 			return true;
 		}
 		
-		private function hoveredChessPieceIsBlack():Boolean {
-			return boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY()).colour == ChessPieceColours.BLACK;
+		private function hoveredChessPieceIsNotWhite():Boolean {
+			return boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY()).colour != ChessPieceColour.WHITE;
 		}
 		
 		private function selectHoveredPiece():void {
@@ -176,7 +176,7 @@
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColours.BLACK, boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColour.NONE, boardData);
 			boardData.setChessPieceAt(tile.tileX, tile.tileY, newPiece);
 			tile.removeSelfFromStage();
 		}

@@ -17,7 +17,7 @@ package test {
 			addTest(new ChessPieceTest("characterisation"));
 			addTest(new ChessPieceTest("proper_frame_selection"));
 			addTest(new ChessPieceTest("constructor_positions_piece_correctly"));
-			addTest(new ChessPieceTest("should_return_type_and_black_correctly_before_input"));
+			addTest(new ChessPieceTest("should_return_type_and_colour_correctly_before_input"));
 		}
 	}
 }

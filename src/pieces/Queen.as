@@ -5,7 +5,7 @@ package pieces {
 	
 	/** @author Kristian Welsh */
 	public class Queen extends ChessPiece implements IChessPiece {
-		public function Queen(tileCoordinates:Point, colour:String, boardData:BoardData):void {
+		public function Queen(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Queen;
 			_blackFrameNumber = 10;
 			super(tileCoordinates, colour, boardData);

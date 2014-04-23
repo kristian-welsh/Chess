@@ -14,7 +14,7 @@ package pieces {
 			return _functionLog[index];
 		}
 		
-		public function TestableChessPiece(tileCoordinates:Point, colour:String, boardData:BoardData):void {
+		public function TestableChessPiece(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_blackFrameNumber = 2;
 			super(tileCoordinates, colour, boardData);
 		}
