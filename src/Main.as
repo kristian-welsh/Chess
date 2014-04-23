@@ -2,6 +2,7 @@
 	import board.InMemoryBoardData;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import mouse_control.Cursor;
 	import pieces.ChessPieceFactory;
 	import rawdata.RawProductionData;
 	
@@ -23,7 +24,7 @@
 			addChild(new ChessBoard()); // must add ChessBoard first, or all other objects will be under it.
 			_boardData = new InMemoryBoardData(_rawBoardData);
 			_cursor = new Cursor(_boardData, this);
-			addChild(_cursor);
+			addChild(_cursor.graphics);
 		}
 	}
 }
