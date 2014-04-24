@@ -140,8 +140,7 @@ package mouse_control {
 					assertTrue(cursorPieceSelected());
 				});
 		}
-		
-		// TODO: Refactor to use Util::delayCall
+		// very similar to, but incompatable with Util.delayCall, as i need to pass the evnt to handler, which delayCall shouldn't do.
 		private function callFunctionAfterTimeout(timeout:uint, functionToCall:Function):void {
 			var timer:Timer = new Timer(timeout, 1);
 			var callIt:Function = function(e:Event) {
