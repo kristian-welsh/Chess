@@ -15,6 +15,7 @@ package mouse_control {
 		private static const TILE_WIDTH:Number = BoardInfo.TILE_WIDTH;
 		private static const BORDER_WIDTH:Number = BoardInfo.BORDER_WIDTH;
 		
+		private var cursorView:CursorView;
 		private var cursor:Cursor;
 		private var container:FakeSprite;
 		private var boardData:InMemoryBoardData;
@@ -25,14 +26,15 @@ package mouse_control {
 		
 		protected override function setUp():void {
 			container = new FakeSprite();
-			container.addChild(new ChessBoard()); //blows up if this isn't added
+			container.addChild(new ChessBoard()); //TODO: blows up if this isn't added, remove this dependancy
 			container.enableFakeMousePosition();
 			boardData = new InMemoryBoardData(RawTestData.data); // TODO: substitute in a fake BoardData object
-			cursor = new Cursor(boardData, container);
+			cursorView = new CursorMovieClipView(new CursorGraphics());
+			cursor = new Cursor(boardData, container, cursorView);
 		}
 		
 		public function test_construction():void {
-			assertFalse(cursor.graphics.visible);
+			assertFalse(cursorView.visible);
 		}
 		
 		public function test_moving_mouse_off_board_makes_cursor_invisible():void {
@@ -50,12 +52,12 @@ package mouse_control {
 			assertMouseMoves(worldPositionOfTile(0, 0), new Point(BORDER_WIDTH + TILE_WIDTH - 1, BORDER_WIDTH + TILE_WIDTH - 1));
 			assertMouseMoves(worldPositionOfTile(1, 1), worldPositionOfTile(1, 1));
 			
-			cursor.graphics.gotoAndStop(2);
-			cursor.graphics.x = 0;
-			cursor.graphics.y = 0;
+			cursorView.setSelected();
+			cursorView.x = 0;
+			cursorView.y = 0;
 			moveMouse(new Point(123, 123));
-			assertEquals(0, cursor.graphics.x);
-			assertEquals(0, cursor.graphics.y);
+			assertEquals(0, cursorView.x);
+			assertEquals(0, cursorView.y);
 		}
 		
 		public function test_clicking_on_white_piece_twice():void {
@@ -140,6 +142,7 @@ package mouse_control {
 					assertTrue(cursorPieceSelected());
 				});
 		}
+		
 		// very similar to, but incompatable with Util.delayCall, as i need to pass the evnt to handler, which delayCall shouldn't do.
 		private function callFunctionAfterTimeout(timeout:uint, functionToCall:Function):void {
 			var timer:Timer = new Timer(timeout, 1);
@@ -147,13 +150,13 @@ package mouse_control {
 				timer.removeEventListener(TimerEvent.TIMER_COMPLETE, handler);
 				functionToCall();
 			}
-			var handler:Function = addAsync(callIt, timeout + 10);
+			var handler:Function = addAsync(callIt, timeout + 100);
 			timer.addEventListener(TimerEvent.TIMER_COMPLETE, handler);
 			timer.start();
 		}
 		
 		private function cursorPieceSelected():Boolean {
-			return (cursor.graphics.currentFrame == 2) ? true : false;
+			return cursorView.pieceSelected();
 		}
 		
 		private function clickBoardTile(rowNumber:int, columnNumber:int):void {
@@ -166,11 +169,11 @@ package mouse_control {
 		}
 		
 		private function setPieceSelectedFalse():void {
-			cursor.graphics.gotoAndStop(1);
+			cursorView.setNotSelected();
 		}
 		
 		private function setPieceSelectedTrue():void {
-			cursor.graphics.gotoAndStop(2);
+			cursorView.setSelected();
 		}
 		
 		private function worldPositionOfTile(rowNumber:int, columnNumber:int):Point {
@@ -210,29 +213,29 @@ package mouse_control {
 		}
 		
 		private function assertCursorOverTile(rowNumber:int, columnNumber:int):void {
-			assertEquals(BORDER_WIDTH + rowNumber * TILE_WIDTH, cursor.graphics.x);
-			assertEquals(BORDER_WIDTH + columnNumber * TILE_WIDTH, cursor.graphics.y);
+			assertEquals(BORDER_WIDTH + rowNumber * TILE_WIDTH, cursorView.x);
+			assertEquals(BORDER_WIDTH + columnNumber * TILE_WIDTH, cursorView.y);
 		}
 		
 		private function assertMouseMoveVisibility(expectedState:Boolean, position:Point = null) {
-			cursor.graphics.visible = !expectedState
+			(expectedState) ? cursorView.hide() : cursorView.show();
 			moveMouse(position);
-			assertTrue(cursor.graphics.visible == expectedState);
+			assertTrue(cursorView.visible == expectedState);
 		}
 		
 		private function assertMouseMoves(expectedPos:Point, moveTo:Point) {
-			var prevX:Number = cursor.graphics.x;
-			var prevY:Number = cursor.graphics.y;
+			var prevX:Number = cursorView.x;
+			var prevY:Number = cursorView.y;
 			//set position no NaN to make sure that cursor didn't just happen to already be in the right position.
-			cursor.graphics.x = NaN;
-			cursor.graphics.y = NaN;
+			cursorView.x = NaN;
+			cursorView.y = NaN;
 			
 			moveMouse(moveTo);
-			assertEquals(expectedPos.x, cursor.graphics.x);
-			assertEquals(expectedPos.y, cursor.graphics.y);
+			assertEquals(expectedPos.x, cursorView.x);
+			assertEquals(expectedPos.y, cursorView.y);
 			
-			cursor.graphics.x = prevX;
-			cursor.graphics.y = prevY;
+			cursorView.x = prevX;
+			cursorView.y = prevY;
 		}
 	}
 }

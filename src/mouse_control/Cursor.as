@@ -14,18 +14,18 @@
 		private static const BOARD_WIDTH:Number = BoardInfo.BOARD_WIDTH;
 		private static const BOARD_HEIGHT:Number = BoardInfo.BOARD_HEIGHT;
 		
-		private var _graphics:CursorGraphics;
+		private var view:CursorView
 		private var boardData:BoardData;
 		private var container:DisplayObjectContainer;
 		private var selectedTile:IChessPiece;
 		private var legalMoveIndicators:Vector.<LegalMoveIndicator> = new Vector.<LegalMoveIndicator>();
 		
-		public function Cursor(boardData:BoardData, container:DisplayObjectContainer):void {
+		public function Cursor(boardData:BoardData, container:DisplayObjectContainer, view:CursorView):void {
 			super();
-			_graphics = new CursorGraphics();
 			this.boardData = boardData;
 			this.container = container;
-			_graphics.visible = false;
+			this.view = view;
+			view.hide();
 			addListeners();
 		}
 		
@@ -40,7 +40,7 @@
 		}
 		
 		private function pieceSelected():Boolean {
-			return _graphics.currentFrame != 1;
+			return view.pieceSelected();
 		}
 		
 		private function moveCursor():void {
@@ -49,7 +49,7 @@
 		}
 		
 		private function updateCursorVisibility():void {
-			_graphics.visible = cursorIsOnBoard() ? true : false;
+			cursorIsOnBoard() ? view.show() : view.hide();
 		}
 		
 		private function cursorIsOnBoard():Boolean {
@@ -81,8 +81,8 @@
 		}
 		
 		private function updatePos():void {
-			_graphics.x = hoveredTileX();
-			_graphics.y = hoveredTileY();
+			view.x = hoveredTileX();
+			view.y = hoveredTileY();
 		}
 		
 		private function selectHoveredValidPiece(event:MouseEvent):void {
@@ -143,7 +143,7 @@
 		
 		private function selectHoveredTile():void {
 			selectedTile = boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY());
-			_graphics.gotoAndStop(2);
+			view.setSelected();
 		}
 		
 		private function deselectSelectedPiece():void {
@@ -153,7 +153,7 @@
 		
 		private function deselectTile():void {
 			selectedTile = null;
-			_graphics.gotoAndStop(1);
+			view.setNotSelected();
 			updatePos();
 		}
 		
@@ -173,12 +173,14 @@
 			clearOldTile(selectedTile);
 			var movedToPiece:IChessPiece = boardData.getChessPieceAt(xIndex, yIndex);
 			movedToPiece.removeSelfFromStage();
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), selectedTile.colour, boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.
+				makeChessPiece(selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), selectedTile.colour, boardData);
 			boardData.setChessPieceAt(xIndex, yIndex, newPiece);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColour.NONE, boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.
+				makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColour.NONE, boardData);
 			boardData.setChessPieceAt(tile.tileX, tile.tileY, newPiece);
 			tile.removeSelfFromStage();
 		}
@@ -190,10 +192,6 @@
 				container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
 			}
 			Util.delayCall(replenishClickListener, 1);
-		}
-		
-		public function get graphics():CursorGraphics {
-			return _graphics;
 		}
 	}
 }

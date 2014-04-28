@@ -2,7 +2,7 @@
 	import board.InMemoryBoardData;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import mouse_control.Cursor;
+	import mouse_control.*;
 	import pieces.ChessPieceFactory;
 	import rawdata.RawProductionData;
 	
@@ -23,8 +23,13 @@
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard()); // must add ChessBoard first, or all other objects will be under it.
 			_boardData = new InMemoryBoardData(_rawBoardData);
-			_cursor = new Cursor(_boardData, this);
-			addChild(_cursor.graphics);
+			addCursor();
+		}
+		
+		private function addCursor():void {
+			var cursorView:CursorView = new CursorMovieClipView(new CursorGraphics());
+			new Cursor(_boardData, this, cursorView);
+			cursorView.displayOnto(this);
 		}
 	}
 }
