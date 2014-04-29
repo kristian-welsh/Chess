@@ -1,9 +1,8 @@
-package pieces {
+package pieces.specified {
 	import board.BoardData;
-	import flash.display.DisplayObjectContainer;
 	import flash.geom.Point;
+	import pieces.*;
 	
-	/** @author Kristian Welsh */
 	public class Rook extends ChessPiece implements IChessPiece {
 		public function Rook(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Rook;

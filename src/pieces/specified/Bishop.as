@@ -1,8 +1,8 @@
-package pieces {
+package pieces.specified {
 	import board.BoardData;
 	import flash.geom.Point;
+	import pieces.*;
 	
-	/** @author Kristian Welsh */
 	public class Bishop extends ChessPiece implements IChessPiece {
 		public function Bishop(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Bishop;

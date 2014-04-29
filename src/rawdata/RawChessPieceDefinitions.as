@@ -1,6 +1,5 @@
 package rawdata {
-	import pieces.ChessPieceColour;
-	import pieces.ChessPieceTypes;
+	import pieces.*;
 	
 	public class RawChessPieceDefinitions {
 		protected static var p00:Array = [ChessPieceTypes.NULL, ChessPieceColour.NONE];

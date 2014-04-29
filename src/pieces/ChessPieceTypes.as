@@ -1,6 +1,6 @@
 package pieces {
+	import pieces.specified.*;
 	public class ChessPieceTypes {
-		// TODO: replace type with enumerated string constants
 		public static var NULL:Class = NullChessPiece;
 		public static var PAWN:Class = Pawn;
 		public static var ROOK:Class = Rook;

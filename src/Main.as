@@ -2,8 +2,8 @@
 	import board.InMemoryBoardData;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import mouse_control.Cursor;
-	import mouse_control.view.*;
+	import mouse_control.cursor.Cursor;
+	import mouse_control.cursor.view.*;
 	import pieces.ChessPieceFactory;
 	import rawdata.RawProductionData;
 	

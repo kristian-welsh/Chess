@@ -1,10 +1,10 @@
 package pieces {
 	import asunit.framework.TestCase;
-	import board.BoardData;
 	import board.InMemoryBoardData;
 	import flash.geom.Point;
+	import pieces.specified.TestableChessPiece;
 	import rawdata.RawTestData;
-
+	
 	public class ChessPieceTest extends TestCase {
 		private var piece:TestableChessPiece;
 		

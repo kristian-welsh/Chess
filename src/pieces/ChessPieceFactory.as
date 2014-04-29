@@ -2,6 +2,7 @@ package pieces {
 	import board.BoardData;
 	import flash.display.DisplayObjectContainer;
 	import flash.geom.Point;
+	import pieces.specified.*;
 	
 	public class ChessPieceFactory {
 		public static var CONTAINER:DisplayObjectContainer;

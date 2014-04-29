@@ -1,5 +1,5 @@
 package test {
-
+	
 	public class FunctionRecord {
 		private var _name:String;
 		private var _args:Array;

@@ -1,8 +1,6 @@
 package board {
 	import flash.geom.Point;
-	import pieces.ChessPieceColour;
-	import pieces.ChessPieceFactory;
-	import pieces.IChessPiece;
+	import pieces.*;
 	
 	public class InMemoryBoardData implements BoardData {
 		private var _data:Array = [];

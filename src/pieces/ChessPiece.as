@@ -1,6 +1,5 @@
 ﻿package pieces {
-	import board.BoardData;
-	import board.BoardInfo;
+	import board.*;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
 	
@@ -152,7 +151,7 @@
 		}
 		
 		public function removeSelfFromStage():void {
-			parent.removeChild(this);
+			Util.orphanDisplayObject(this);
 		}
 		
 		public function legalMoves():Array {

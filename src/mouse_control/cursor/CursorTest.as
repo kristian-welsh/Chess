@@ -1,14 +1,13 @@
-package mouse_control {
+package mouse_control.cursor {
 	import asunit.framework.TestCase;
-	import board.BoardInfo;
-	import board.InMemoryBoardData;
+	import board.*;
 	import flash.display.DisplayObject;
 	import flash.events.*;
 	import flash.geom.Point;
 	import flash.utils.Timer;
-	import mouse_control.view.CursorBitmapView;
-	import mouse_control.view.CursorView;
+	import mouse_control.cursor.view.*;
 	import pieces.*;
+	import pieces.specified.*;
 	import rawdata.RawTestData;
 	import test.FakeSprite;
 	
@@ -102,7 +101,7 @@ package mouse_control {
 		}
 		
 		private function click(object:DisplayObject):void {
-			object.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			Util.click(object);
 		}
 		
 		public function test_mid_selection_interactions():void {
@@ -145,7 +144,8 @@ package mouse_control {
 				});
 		}
 		
-		// very similar to, but incompatable with Util.delayCall, as i need to pass the evnt to handler, which delayCall shouldn't do.
+		// very similar to, but incompatable with Util.delayCall, as i need to pass the event to handler, which delayCall shouldn't do.
+		// possibly try to merge the two in the future?
 		private function callFunctionAfterTimeout(timeout:uint, functionToCall:Function):void {
 			var timer:Timer = new Timer(timeout, 1);
 			var callIt:Function = function(e:Event) {
@@ -163,7 +163,7 @@ package mouse_control {
 		
 		private function clickBoardTile(rowNumber:int, columnNumber:int):void {
 			moveMouseToTile(rowNumber, columnNumber);
-			clickMouse();
+			click(container);
 		}
 		
 		private function moveMouseToTile(rowNumber:int, columnNumber:int):void {
@@ -190,10 +190,6 @@ package mouse_control {
 			container.mouseX = position.x;
 			container.mouseY = position.y;
 			container.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE));
-		}
-		
-		private function clickMouse():void {
-			container.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		}
 		
 		private function assertTileHoveredButNotSelected(rowNumber:int, columnNumber:int):void {

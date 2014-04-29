@@ -1,14 +1,15 @@
-package mouse_control.view {
+package mouse_control.cursor.view {
 	import flash.display.*;
-
+	
 	public class CursorBitmapView implements CursorView {
 		private static const CURSOR_WIDTH:Number = 38;
 		private static const CURSOR_HEIGHT:Number = CURSOR_WIDTH;
 		
-		[Embed(source="../../../assets/cursor-unselected.png")]
+		// if the number of Embed tags grow, think about grouping them together in an Assets class.
+		[Embed(source="../../../../assets/cursor-unselected.png")]
 		private static const UnselectedImage:Class;
 		
-		[Embed(source="../../../assets/cursor-selected.png")]
+		[Embed(source="../../../../assets/cursor-selected.png")]
 		private static const SelectedImage:Class;
 		
 		private var selected:Boolean;

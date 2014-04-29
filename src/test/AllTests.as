@@ -1,6 +1,6 @@
 package test {
 	import asunit.framework.TestSuite;
-	import mouse_control.CursorTest;
+	import mouse_control.cursor.CursorTest;
 	import pieces.ChessPieceTest;
 	
 	public class AllTests extends TestSuite {

@@ -1,9 +1,8 @@
-package pieces {
+package pieces.specified {
 	import board.BoardData;
-	import flash.display.DisplayObjectContainer;
 	import flash.geom.Point;
+	import pieces.*;
 	
-	/** @author Kristian Welsh */
 	public class Queen extends ChessPiece implements IChessPiece {
 		public function Queen(tileCoordinates:Point, colour:ChessPieceColour, boardData:BoardData):void {
 			_type = Queen;

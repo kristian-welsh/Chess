@@ -1,9 +1,11 @@
-package pieces {
+package pieces.specified {
 	import board.BoardData;
 	import flash.geom.Point;
+	import pieces.*;
 	import test.FunctionRecord;
-
+	
 	public class TestableChessPiece extends ChessPiece {
+		// consider pulling out a function logging superclass, or function logger object
 		private var _functionLog:Vector.<FunctionRecord> = new Vector.<FunctionRecord>();
 		
 		private function logFunctionCall(functionName:String, args:Array):void {

@@ -1,10 +1,10 @@
-﻿package mouse_control {
+﻿package mouse_control.cursor {
 	import board.BoardData;
 	import board.BoardInfo;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
-	import mouse_control.view.CursorView;
+	import mouse_control.cursor.view.CursorView;
 	import pieces.*;
 	
 	// BUG: you can deselect a piece by clicking on another firendly piece
@@ -15,7 +15,7 @@
 		private static const BOARD_WIDTH:Number = BoardInfo.BOARD_WIDTH;
 		private static const BOARD_HEIGHT:Number = BoardInfo.BOARD_HEIGHT;
 		
-		private var view:CursorView
+		private var view:CursorView;
 		private var boardData:BoardData;
 		private var container:DisplayObjectContainer;
 		private var selectedTile:IChessPiece;
@@ -174,14 +174,12 @@
 			clearOldTile(selectedTile);
 			var movedToPiece:IChessPiece = boardData.getChessPieceAt(xIndex, yIndex);
 			movedToPiece.removeSelfFromStage();
-			var newPiece:IChessPiece = ChessPieceFactory.
-				makeChessPiece(selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), selectedTile.colour, boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), selectedTile.colour, boardData);
 			boardData.setChessPieceAt(xIndex, yIndex, newPiece);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
-			var newPiece:IChessPiece = ChessPieceFactory.
-				makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColour.NONE, boardData);
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColour.NONE, boardData);
 			boardData.setChessPieceAt(tile.tileX, tile.tileY, newPiece);
 			tile.removeSelfFromStage();
 		}

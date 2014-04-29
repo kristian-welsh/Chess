@@ -1,6 +1,7 @@
-package pieces {
+package pieces.specified {
 	import board.BoardData;
 	import flash.geom.Point;
+	import pieces.*;
 	
 	public class Knight extends ChessPiece implements IChessPiece {
 		private var _currentLegalMoves:Array;
