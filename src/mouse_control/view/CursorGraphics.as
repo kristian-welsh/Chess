@@ -1,4 +1,4 @@
-package mouse_control {
+package mouse_control.view {
 	import flash.display.MovieClip;
 	
 	public class CursorGraphics extends MovieClip {

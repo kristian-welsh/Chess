@@ -4,6 +4,7 @@
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
+	import mouse_control.view.CursorView;
 	import pieces.*;
 	
 	// BUG: you can deselect a piece by clicking on another firendly piece

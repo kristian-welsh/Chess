@@ -2,7 +2,8 @@
 	import board.InMemoryBoardData;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import mouse_control.*;
+	import mouse_control.Cursor;
+	import mouse_control.view.*;
 	import pieces.ChessPieceFactory;
 	import rawdata.RawProductionData;
 	
@@ -27,7 +28,7 @@
 		}
 		
 		private function addCursor():void {
-			var cursorView:CursorView = new CursorMovieClipView(new CursorGraphics());
+			var cursorView:CursorView = new CursorBitmapView();
 			new Cursor(_boardData, this, cursorView);
 			cursorView.displayOnto(this);
 		}

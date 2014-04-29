@@ -6,6 +6,8 @@ package mouse_control {
 	import flash.events.*;
 	import flash.geom.Point;
 	import flash.utils.Timer;
+	import mouse_control.view.CursorBitmapView;
+	import mouse_control.view.CursorView;
 	import pieces.*;
 	import rawdata.RawTestData;
 	import test.FakeSprite;
@@ -29,7 +31,7 @@ package mouse_control {
 			container.addChild(new ChessBoard()); //TODO: blows up if this isn't added, remove this dependancy
 			container.enableFakeMousePosition();
 			boardData = new InMemoryBoardData(RawTestData.data); // TODO: substitute in a fake BoardData object
-			cursorView = new CursorMovieClipView(new CursorGraphics());
+			cursorView = new CursorBitmapView();
 			cursor = new Cursor(boardData, container, cursorView);
 		}
 		
