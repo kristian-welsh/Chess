@@ -2,7 +2,9 @@ package pieces {
 	import asunit.framework.TestCase;
 	import board.InMemoryBoardData;
 	import flash.geom.Point;
+	import pieces.specified.Pawn;
 	import pieces.specified.TestableChessPiece;
+	import rawdata.EmptyBoard;
 	import rawdata.RawTestData;
 	
 	public class ChessPieceTest extends TestCase {
@@ -13,13 +15,19 @@ package pieces {
 		}
 		
 		override protected function setUp():void {
-			var boardData:InMemoryBoardData = new InMemoryBoardData(RawTestData.data);
+			var boardData:InMemoryBoardData = new InMemoryBoardData();
+			boardData.organizeRawChessData(EmptyBoard.data);
+			boardData.addPieceToBoard(new Pawn(new Point(0, 0), ChessPieceColour.BLACK, boardData));
+			boardData.addPieceToBoard(new Pawn(new Point(0, 6), ChessPieceColour.WHITE, boardData));
+			boardData.addPieceToBoard(new Pawn(new Point(1, 6), ChessPieceColour.WHITE, boardData));
 			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColour.BLACK, boardData);
 		}
 		
 		public function proper_frame_selection():void {
 			assertEquals(2, piece.getFunctionCallAt(0).getArgByPosition(0));
-			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColour.WHITE, new InMemoryBoardData(RawTestData.data));
+			var boardData:InMemoryBoardData = new InMemoryBoardData();
+			boardData.organizeRawChessData(RawTestData.data);
+			piece = new TestableChessPiece(new Point(1, 2), ChessPieceColour.WHITE, boardData);
 			assertEquals(1, piece.getFunctionCallAt(0).getArgByPosition(0));
 		}
 		

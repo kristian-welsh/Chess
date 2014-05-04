@@ -6,12 +6,8 @@ package board {
 		private var _data:Array = [];
 		private var _rawData:Array;
 		
-		public function InMemoryBoardData(rawBoardData:Array) {
+		public function organizeRawChessData(rawBoardData:Array):void {
 			_rawData = rawBoardData
-			organizeRawChessData();
-		}
-		
-		private function organizeRawChessData():void {
 			for (var i:int = 0; i < _rawData.length; i++)
 				addRowOfPieces(i);
 		}
@@ -23,7 +19,7 @@ package board {
 		}
 		
 		private function addPiece(i:int, j:int):void {
-			validateTileIndexes(i, j);
+			validateTileIndexes(j, i);
 			var type:Class = _rawData[i][j][0];
 			var colour:ChessPieceColour = _rawData[i][j][1];
 			var position:Point = new Point(j, i);
@@ -31,16 +27,16 @@ package board {
 		}
 		
 		public function getChessPieceAt(x:uint, y:uint):IChessPiece {
-			validateTileIndexes(y, x);
+			validateTileIndexes(x, y);
 			return _data[y][x] as IChessPiece;
 		}
 		
-		public function setChessPieceAt(x:uint, y:uint, newChessPiece:IChessPiece):void {
-			validateTileIndexes(y, x);
-			_data[y][x] = newChessPiece;
+		public function addPieceToBoard(newChessPiece:IChessPiece):void {
+			validateTileIndexes(newChessPiece.tileX, newChessPiece.tileY);
+			_data[newChessPiece.tileY][newChessPiece.tileX] = newChessPiece;
 		}
 		
-		private function validateTileIndexes(y:uint, x:uint):void {
+		private function validateTileIndexes(x:uint, y:uint):void {
 			assert(tileExistsAt(x, y), invalidInputsMessage(y, x))
 		}
 		

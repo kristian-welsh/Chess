@@ -170,27 +170,27 @@
 			delayNextClick();
 		}
 		
+		//TODO: wat iz dis? clean plz
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
 			clearOldTile(selectedTile);
 			var movedToPiece:IChessPiece = boardData.getChessPieceAt(xIndex, yIndex);
 			movedToPiece.removeSelfFromStage();
 			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), selectedTile.colour, boardData);
-			boardData.setChessPieceAt(xIndex, yIndex, newPiece);
+			boardData.addPieceToBoard(newPiece);
 		}
 		
 		private function clearOldTile(tile:IChessPiece):void {
 			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColour.NONE, boardData);
-			boardData.setChessPieceAt(tile.tileX, tile.tileY, newPiece);
+			boardData.addPieceToBoard(newPiece);
 			tile.removeSelfFromStage();
 		}
 		
 		// delayNextClick() is a workaround for a bug that re-selects chess-pieces after you move them.
 		private function delayNextClick():void {
 			container.removeEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
-			var replenishClickListener:Function = function() {
+			Util.delayCall(1, function() {
 				container.addEventListener(MouseEvent.CLICK, selectHoveredValidPiece);
-			}
-			Util.delayCall(replenishClickListener, 1);
+			});
 		}
 	}
 }

@@ -27,9 +27,9 @@ package mouse_control.cursor {
 		
 		protected override function setUp():void {
 			container = new FakeSprite();
-			container.addChild(new ChessBoard()); //TODO: blows up if this isn't added, remove this dependancy
 			container.enableFakeMousePosition();
-			boardData = new InMemoryBoardData(RawTestData.data); // TODO: substitute in a fake BoardData object
+			boardData = new InMemoryBoardData(); // TODO: substitute in a fake BoardData object
+			boardData.organizeRawChessData(RawTestData.data);
 			cursorView = new CursorBitmapView();
 			cursor = new Cursor(boardData, container, cursorView);
 		}
@@ -65,19 +65,19 @@ package mouse_control.cursor {
 			setPieceSelectedFalse();
 			clickBoardTile(0, 6); // white piece
 			assertTileSelected(0, 6);
-			assertEquals(3, container.numChildren);
+			assertEquals(2, container.numChildren);
 			clickBoardTile(0, 6); // same white piece
 			assertTileHoveredButNotSelected(0, 6);
-			assertEquals(1, container.numChildren);
+			assertEquals(0, container.numChildren);
 		}
 		
 		public function test_legal_move_indicator_state():void {
 			clickBoardTile(0, 6); // white piece (pawn)
 			
-			var validMove1:DisplayObject = container.getChildAt(2);
+			var validMove1:DisplayObject = container.getChildAt(1);
 			assertEquals(worldPosition(0), validMove1.x);
 			assertEquals(worldPosition(5), validMove1.y);
-			var validMove2:DisplayObject = container.getChildAt(1);
+			var validMove2:DisplayObject = container.getChildAt(0);
 			assertEquals(worldPosition(0), validMove2.x);
 			assertEquals(worldPosition(4), validMove2.y);
 		}
@@ -88,8 +88,8 @@ package mouse_control.cursor {
 			assertTrue(originalChessPiece.parent);
 			
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(container.getChildAt(2)); // legal move indicator one space in front of pawn
-			assertEquals(1, container.numChildren);
+			click(container.getChildAt(1)); // legal move indicator one space in front of pawn
+			assertEquals(0, container.numChildren);
 			assertFalse(originalEmptySpace.parent);
 			assertFalse(originalChessPiece.parent);
 			var newEmptySpace:IChessPiece = boardData.getChessPieceAt(0, 5);
@@ -129,14 +129,14 @@ package mouse_control.cursor {
 		// BUG: This test documents a current bug in the system. Inspect this behaviorur further if this test fails, as the bug may be gone.
 		public function test_soon_after_movement_select_piece_fails():void {
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(container.getChildAt(2)); // legal move indicator one space in front of pawn
+			click(container.getChildAt(1)); // legal move indicator one space in front of pawn
 			clickBoardTile(0, 5); // white piece (pawn)
 			assertNoPieceSelected();
 		}
 		
 		public function test_second_move_after_while_succeeds():void {
 			clickBoardTile(0, 6); // white piece (pawn)
-			click(container.getChildAt(2)); // legal move indicator one space in front of pawn
+			click(container.getChildAt(1)); // legal move indicator one space in front of pawn
 			
 			callFunctionAfterTimeout(1, function() {
 					clickBoardTile(0, 5); // white piece (pawn)

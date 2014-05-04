@@ -23,7 +23,8 @@
 		
 		protected function startGame(e:Event = null):void {
 			addChild(new ChessBoard()); // must add ChessBoard first, or all other objects will be under it.
-			_boardData = new InMemoryBoardData(_rawBoardData);
+			_boardData = new InMemoryBoardData();
+			_boardData.organizeRawChessData(_rawBoardData);
 			addCursor();
 		}
 		

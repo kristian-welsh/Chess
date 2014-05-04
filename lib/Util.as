@@ -5,7 +5,7 @@ package {
 	
 	public class Util {
 		/// Calls the first argument after a delay of the seccond argument in milliseconds
-		public static function delayCall(functionToCall:Function, delay:uint):void {
+		public static function delayCall(delay:uint, functionToCall:Function):void {
 			var timer:Timer = new Timer(delay, 1);
 			var handler:Function = function(e:Event) {
 				timer.removeEventListener(TimerEvent.TIMER_COMPLETE, handler);
