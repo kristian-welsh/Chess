@@ -98,13 +98,17 @@
 		private function canInteractWithTile():Boolean {
 			if (!cursorIsOnBoard())
 				return false;
-			if (hoveredChessPieceIsNotWhite())
+			if (!isWhite(hoveredChessPiece()))
 				return false;
 			return true;
 		}
 		
-		private function hoveredChessPieceIsNotWhite():Boolean {
-			return boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY()).colour != ChessPieceColour.WHITE;
+		private function isWhite(chessPiece:IChessPiece):Boolean {
+			return chessPiece.colour == ChessPieceColour.WHITE;
+		}
+		
+		private function hoveredChessPiece():IChessPiece {
+			return boardData.getChessPieceAt(hoveredTileIndexX(), hoveredTileIndexY());
 		}
 		
 		private function selectHoveredPiece():void {
@@ -172,17 +176,17 @@
 		
 		//TODO: wat iz dis? clean plz
 		private function updateNewTile(xIndex:uint, yIndex:uint):void {
-			clearOldTile(selectedTile);
-			var movedToPiece:IChessPiece = boardData.getChessPieceAt(xIndex, yIndex);
-			movedToPiece.removeSelfFromStage();
-			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(selectedTile.type, new Point(movedToPiece.tileX, movedToPiece.tileY), selectedTile.colour, boardData);
+			var clickedTile:IChessPiece = boardData.getChessPieceAt(xIndex, yIndex);
+			clearTile(selectedTile);
+			clickedTile.removeSelfFromParent();
+			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(selectedTile.type, new Point(xIndex, yIndex), selectedTile.colour, boardData);
 			boardData.addPieceToBoard(newPiece);
 		}
 		
-		private function clearOldTile(tile:IChessPiece):void {
+		private function clearTile(tile:IChessPiece):void {
 			var newPiece:IChessPiece = ChessPieceFactory.makeChessPiece(ChessPieceTypes.NULL, new Point(tile.tileX, tile.tileY), ChessPieceColour.NONE, boardData);
 			boardData.addPieceToBoard(newPiece);
-			tile.removeSelfFromStage();
+			tile.removeSelfFromParent();
 		}
 		
 		// delayNextClick() is a workaround for a bug that re-selects chess-pieces after you move them.

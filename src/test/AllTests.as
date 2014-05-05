@@ -15,10 +15,14 @@ package test {
 			addTest(new CursorTest("test_invalid_piece_selection"));
 			addTest(new CursorTest("test_soon_after_movement_select_piece_fails"));
 			addTest(new CursorTest("test_second_move_after_while_succeeds"));
-			addTest(new ChessPieceTest("characterisation"));
 			addTest(new ChessPieceTest("proper_frame_selection"));
 			addTest(new ChessPieceTest("constructor_positions_piece_correctly"));
-			addTest(new ChessPieceTest("should_return_type_and_colour_correctly_before_input"));
+			addTest(new ChessPieceTest("should_return_colour_correctly_before_input"));
+			addTest(new ChessPieceTest("pathLengh_doesnt_extend_past_board_end"));
+			addTest(new ChessPieceTest("pathLength_limits_its_return_to_the_passed_in_limit"));
+			addTest(new ChessPieceTest("pathLength_stops_before_white_pieces"));
+			addTest(new ChessPieceTest("pathLength_stops_on_black_pieces"));
+			addTest(new ChessPieceTest("pathLength_rejects_invalid_input"));
 		}
 	}
 }

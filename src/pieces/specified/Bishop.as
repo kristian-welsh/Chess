@@ -11,7 +11,7 @@ package pieces.specified {
 		}
 		
 		public override function legalMoves():Array {
-			return diagonalMovement(7);
+			return diagonalMovement(9);
 		}
 	}
 }

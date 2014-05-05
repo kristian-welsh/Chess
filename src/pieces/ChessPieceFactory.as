@@ -17,6 +17,8 @@ package pieces {
 			switch (type) {
 				case ChessPieceTypes.NULL:
 					return new NullChessPiece(position, colour, boardData);
+				case ChessPieceTypes.TESTABLE:
+					return new TestableChessPiece(position, colour, boardData);
 				case ChessPieceTypes.PAWN:
 					return new Pawn(position, colour, boardData);
 				case ChessPieceTypes.ROOK:

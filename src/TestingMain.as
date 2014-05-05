@@ -16,7 +16,7 @@ package {
 		}
 		
 		private function runTests():void {
-			testRunner.start(AllTests);
+			testRunner.start(AllTests, null, true);
 		}
 	}
 }
