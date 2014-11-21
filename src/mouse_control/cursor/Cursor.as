@@ -121,17 +121,14 @@
 		}
 
 		private function showLegalMoves():void {
-			for each (var point:Object in legalMoves())
-				showLegalMove(point as Point);
-		}
-
-		private function legalMoves():Array {
-			return selectedTile.legalMoves();
+			for each (var point:Point in selectedTile.legalMoves())
+				showLegalMove(point);
 		}
 
 		private function showLegalMove(move:Point):void {
 			var currentLegalMove:LegalMoveIndicator = new LegalMoveIndicator();
 			legalMoveIndicators.push(currentLegalMove);
+
 			positionMoveIndicator(currentLegalMove, move);
 			enableMoveIndicator(currentLegalMove);
 			displayMoveIndicator(currentLegalMove);

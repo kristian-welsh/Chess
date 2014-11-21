@@ -1,6 +1,8 @@
 package pieces {
+	import flash.geom.Point;
+
 	public interface IChessPiece {
-		function legalMoves():Array; // move to a vector of points in the future
+		function legalMoves():Vector.<Point>;
 		function removeSelfFromParent():void;
 		function get type():Class;
 		function get colour():ChessPieceColour;
