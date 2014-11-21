@@ -121,8 +121,8 @@
 		}
 
 		private function showLegalMoves():void {
-			for (var i:uint = 0; i < legalMoves().length; i++)
-				showLegalMove(legalMoves()[i] as Point);
+			for each (var point:Object in legalMoves())
+				showLegalMove(point as Point);
 		}
 
 		private function legalMoves():Array {
